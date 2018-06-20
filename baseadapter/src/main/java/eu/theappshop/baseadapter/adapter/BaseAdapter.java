@@ -9,12 +9,13 @@ import java.util.List;
 
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
-public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Observable<VMObserver> implements ViewModelAdapter<VM> {
+public class BaseAdapter<V extends VM> extends Observable<VMObserver> implements ViewModelAdapter<V> {
 
-    private List<VM> vms;
+    private List<V> vms;
 
-    public BaseAdapter(List<VM> vms) {
+    public BaseAdapter(List<V> vms) {
         this.vms = vms;
     }
 
@@ -28,7 +29,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void bindViewHolder(BaseViewHolder<VM> viewHolder, int position) {
+    public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
         viewHolder.bindViewModel(vms.get(position));
     }
 
@@ -45,8 +46,8 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     @Override
     public <T extends eu.theappshop.baseadapter.vm.VM> int getCountItemType(Class<T> clazz) {
         int count = 0;
-        for (VM vm : vms) {
-            if (clazz.isAssignableFrom(vm.getClass())) {
+        for (V v : vms) {
+            if (clazz.isAssignableFrom(v.getClass())) {
                 count++;
             }
         }
@@ -59,7 +60,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void add(VM item) {
+    public void add(V item) {
         vms.add(item);
         for (VMObserver observer : mObservers) {
             observer.notifyItemInserted(vms.size());
@@ -67,7 +68,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void add(int position, VM item) {
+    public void add(int position, V item) {
         vms.add(position, item);
         for (VMObserver observer : mObservers) {
             observer.notifyItemInserted(position);
@@ -75,7 +76,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void addAll(List<? extends VM> list) {
+    public void addAll(List<? extends V> list) {
         int previousLength = getItemCount();
         vms.addAll(list);
         for (VMObserver observer : mObservers) {
@@ -84,7 +85,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void addAll(List<? extends VM> list, int position) {
+    public void addAll(List<? extends V> list, int position) {
         vms.addAll(position, list);
         for (VMObserver observer : mObservers) {
             observer.notifyItemRangeInserted(position, list.size());
@@ -92,28 +93,28 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public List<VM> getItems() {
+    public List<V> getItems() {
         return vms;
     }
 
     @Override
-    public VM getItem(int position) {
+    public V getItem(int position) {
         return vms.get(position);
     }
 
     @Override
-    public int indexOf(VM o) {
+    public int indexOf(V o) {
         return vms.indexOf(o);
     }
 
     @NonNull
     @Override
-    public Iterator<VM> iterator() {
+    public Iterator<V> iterator() {
         return vms.iterator();
     }
 
     @Override
-    public int findFirstIndexOf(Class<? extends VM> cls) {
+    public int findFirstIndexOf(Class<? extends V> cls) {
         int index = 0;
         for (int i = 0; i < getItemCount(); i++) {
             if (getItem(i).getClass() == cls) {
@@ -125,8 +126,8 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public void remove(VM vm) {
-        int index = vms.indexOf(vm);
+    public void remove(V v) {
+        int index = vms.indexOf(v);
         if (index != -1) {
             vms.remove(index);
             for (VMObserver observer : mObservers) {
@@ -136,13 +137,13 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
     }
 
     @Override
-    public VM remove(int index) {
+    public V remove(int index) {
         if (index != -1) {
-            VM vm = vms.remove(index);
+            V v = vms.remove(index);
             for (VMObserver observer : mObservers) {
                 observer.notifyItemRemoved(index);
             }
-            return vm;
+            return v;
         }
         return null;
     }
@@ -155,7 +156,7 @@ public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Obs
         }
     }
 
-    public int getVMPosition(VM vm) {
-        return vms.indexOf(vm);
+    public int getVMPosition(V v) {
+        return vms.indexOf(v);
     }
 }

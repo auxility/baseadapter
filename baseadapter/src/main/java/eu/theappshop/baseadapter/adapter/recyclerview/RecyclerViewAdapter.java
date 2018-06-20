@@ -8,23 +8,24 @@ import android.view.ViewGroup;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.recyclerview.RecyclerBindingHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
-public class RecyclerViewAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends RecyclerView.Adapter<RecyclerBindingHolder<VM>> implements VMObserver {
+public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<RecyclerBindingHolder<V>> implements VMObserver {
 
-    private BaseAdapter<VM> abstractAdapter;
+    private BaseAdapter<V> abstractAdapter;
 
-    public RecyclerViewAdapter(BaseAdapter<VM> abstractAdapter) {
+    public RecyclerViewAdapter(BaseAdapter<V> abstractAdapter) {
         this.abstractAdapter = abstractAdapter;
     }
 
     @NonNull
     @Override
-    public RecyclerBindingHolder<VM> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerBindingHolder<V> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return RecyclerBindingHolder.create(LayoutInflater.from(parent.getContext()), viewType, parent);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerBindingHolder<VM> holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerBindingHolder<V> holder, int position) {
         abstractAdapter.bindViewHolder(holder, position);
     }
 

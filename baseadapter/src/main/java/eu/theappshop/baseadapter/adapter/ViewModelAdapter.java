@@ -6,12 +6,13 @@ import java.util.List;
 
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
-public interface ViewModelAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Serializable, Iterable<VM> {
+public interface ViewModelAdapter<V extends VM> extends Serializable, Iterable<V> {
 
     int getItemCount();
 
-    void bindViewHolder(BaseViewHolder<VM> viewHolder, int position);
+    void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
 
     int getItemViewType(int position);
 
@@ -21,27 +22,27 @@ public interface ViewModelAdapter<VM extends eu.theappshop.baseadapter.vm.VM> ex
 
     void clear();
 
-    void add(VM item);
+    void add(V item);
 
-    void add(int position, VM item);
+    void add(int position, V item);
 
-    void addAll(List<? extends VM> list);
+    void addAll(List<? extends V> list);
 
-    void addAll(List<? extends VM> list, int position);
+    void addAll(List<? extends V> list, int position);
 
-    List<VM> getItems();
+    List<V> getItems();
 
-    VM getItem(int index);
+    V getItem(int index);
 
-    int indexOf(VM o);
+    int indexOf(V o);
 
-    Iterator<VM> iterator();
+    Iterator<V> iterator();
 
-    int findFirstIndexOf(Class<? extends VM> cls);
+    int findFirstIndexOf(Class<? extends V> cls);
 
-    void remove(VM vm);
+    void remove(V v);
 
-    VM remove(int index);
+    V remove(int index);
 
     void removeRange(int start, int end);
 

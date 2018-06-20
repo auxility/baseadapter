@@ -16,18 +16,19 @@ import java.util.List;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.viewpager.PagerBindingHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
-public class ViewPagerAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends PagerAdapter implements VMObserver {
+public class ViewPagerAdapter<V extends VM> extends PagerAdapter implements VMObserver {
 
     private static final String STATES_COUNT_TAG = "STATES_COUNT";
     private static final String STATE_TAG = "VIEW_STATE_";
     private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
 
-    private BaseAdapter<VM> adapter;
+    private BaseAdapter<V> adapter;
     private List<SparseArray<Parcelable>> states;
 
-    public ViewPagerAdapter(BaseAdapter<VM> adapter) {
+    public ViewPagerAdapter(BaseAdapter<V> adapter) {
         this.adapter = adapter;
         this.adapter.registerObserver(this);
         states = new ArrayList<>(adapter.getItemCount());
@@ -56,7 +57,7 @@ public class ViewPagerAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extend
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         eu.theappshop.baseadapter.vm.VM VM = adapter.getItem(position);
-        PagerBindingHolder<VM> vmPagerBindingHolder = PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(), container);
+        PagerBindingHolder<V> vmPagerBindingHolder = PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(), container);
         adapter.bindViewHolder(vmPagerBindingHolder, position);
         if ((states != null) && (states.size() > position)) {
             SparseArray<Parcelable> savedState = states.get(position);
@@ -128,7 +129,7 @@ public class ViewPagerAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extend
     @Override
     public int getItemPosition(@NonNull Object object) {
         if (object instanceof PagerBindingHolder) {
-            PagerBindingHolder<VM> pagerBindingHolder = (PagerBindingHolder<VM>) object;
+            PagerBindingHolder<V> pagerBindingHolder = (PagerBindingHolder<V>) object;
             int position = adapter.indexOf(pagerBindingHolder.getVM());
             return position == -1 ? POSITION_NONE : position;
         } else {
