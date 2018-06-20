@@ -10,8 +10,9 @@ import android.view.ViewGroup;
 
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
-public class RecyclerBindingHolder<VM extends eu.theappshop.baseadapter.vm.VM> extends RecyclerView.ViewHolder implements BaseViewHolder<VM> {
+public class RecyclerBindingHolder<V extends VM> extends RecyclerView.ViewHolder implements BaseViewHolder<V> {
 
     private static final String TAG = RecyclerBindingHolder.class.getSimpleName();
     private ViewDataBinding binding;
@@ -21,7 +22,7 @@ public class RecyclerBindingHolder<VM extends eu.theappshop.baseadapter.vm.VM> e
         this.binding = binding;
     }
 
-    public static <VM extends eu.theappshop.baseadapter.vm.VM> RecyclerBindingHolder<VM> create(LayoutInflater layoutInflater, @LayoutRes int resId, ViewGroup p) {
+    public static <V extends VM> RecyclerBindingHolder<V> create(LayoutInflater layoutInflater, @LayoutRes int resId, ViewGroup p) {
         try {
             return new RecyclerBindingHolder<>(DataBindingUtil.inflate(layoutInflater, resId, p, false));
         } catch (Throwable e) {
@@ -32,7 +33,7 @@ public class RecyclerBindingHolder<VM extends eu.theappshop.baseadapter.vm.VM> e
     }
 
     @Override
-    public void bindViewModel(VM VM) {
+    public void bindViewModel(V VM) {
         binding.setVariable(BR.viewModel, VM);
     }
 

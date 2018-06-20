@@ -2,9 +2,11 @@ package eu.theappshop.baseadapter.viewholder;
 
 import android.databinding.ViewDataBinding;
 
-public interface BaseViewHolder<VM extends eu.theappshop.baseadapter.vm.VM> {
+import eu.theappshop.baseadapter.vm.VM;
 
-    void bindViewModel(VM VM);
+public interface BaseViewHolder<V extends VM> {
+
+    void bindViewModel(V VM);
 
     ViewDataBinding getBinding();
 
