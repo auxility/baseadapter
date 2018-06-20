@@ -9,9 +9,8 @@ import java.util.List;
 
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
-import eu.theappshop.baseadapter.vm.BaseVM;
 
-public class BaseAdapter<VM extends BaseVM> extends Observable<VMObserver> implements ViewModelAdapter<VM> {
+public class BaseAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Observable<VMObserver> implements ViewModelAdapter<VM> {
 
     private List<VM> vms;
 
@@ -44,7 +43,7 @@ public class BaseAdapter<VM extends BaseVM> extends Observable<VMObserver> imple
     }
 
     @Override
-    public <T extends BaseVM> int getCountItemType(Class<T> clazz) {
+    public <T extends eu.theappshop.baseadapter.vm.VM> int getCountItemType(Class<T> clazz) {
         int count = 0;
         for (VM vm : vms) {
             if (clazz.isAssignableFrom(vm.getClass())) {

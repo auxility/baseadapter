@@ -6,9 +6,8 @@ import java.util.List;
 
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
-import eu.theappshop.baseadapter.vm.BaseVM;
 
-public interface ViewModelAdapter<VM extends BaseVM> extends Serializable, Iterable<VM> {
+public interface ViewModelAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends Serializable, Iterable<VM> {
 
     int getItemCount();
 
@@ -18,7 +17,7 @@ public interface ViewModelAdapter<VM extends BaseVM> extends Serializable, Itera
 
     boolean isEmpty();
 
-    <T extends BaseVM> int getCountItemType(Class<T> clazz);
+    <T extends eu.theappshop.baseadapter.vm.VM> int getCountItemType(Class<T> clazz);
 
     void clear();
 

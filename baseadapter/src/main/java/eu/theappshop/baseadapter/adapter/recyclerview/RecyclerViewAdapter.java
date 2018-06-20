@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.recyclerview.RecyclerBindingHolder;
-import eu.theappshop.baseadapter.vm.BaseVM;
 
-public class RecyclerViewAdapter<VM extends BaseVM> extends RecyclerView.Adapter<RecyclerBindingHolder<VM>> implements VMObserver {
+public class RecyclerViewAdapter<VM extends eu.theappshop.baseadapter.vm.VM> extends RecyclerView.Adapter<RecyclerBindingHolder<VM>> implements VMObserver {
 
     private BaseAdapter<VM> abstractAdapter;
 

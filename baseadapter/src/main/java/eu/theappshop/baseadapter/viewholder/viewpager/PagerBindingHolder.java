@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
-import eu.theappshop.baseadapter.vm.BaseVM;
 
-public class PagerBindingHolder<VM extends BaseVM> implements BaseViewHolder<VM> {
+public class PagerBindingHolder<VM extends eu.theappshop.baseadapter.vm.VM> implements BaseViewHolder<VM> {
 
     private static final String TAG = PagerBindingHolder.class.getSimpleName();
 
@@ -22,7 +21,7 @@ public class PagerBindingHolder<VM extends BaseVM> implements BaseViewHolder<VM>
         this.binding = binding;
     }
 
-    public static <VM extends BaseVM> PagerBindingHolder<VM> create(LayoutInflater layoutInflater, @LayoutRes int resId, ViewGroup p) {
+    public static <VM extends eu.theappshop.baseadapter.vm.VM> PagerBindingHolder<VM> create(LayoutInflater layoutInflater, @LayoutRes int resId, ViewGroup p) {
         try {
             return new PagerBindingHolder<>(DataBindingUtil.inflate(layoutInflater, resId, p, true));
         } catch (Throwable e) {
@@ -33,9 +32,9 @@ public class PagerBindingHolder<VM extends BaseVM> implements BaseViewHolder<VM>
     }
 
     @Override
-    public void bindViewModel(VM baseVM) {
-        this.vm = baseVM;
-        binding.setVariable(BR.viewModel, baseVM);
+    public void bindViewModel(VM VM) {
+        this.vm = VM;
+        binding.setVariable(BR.viewModel, VM);
     }
 
     @Override
