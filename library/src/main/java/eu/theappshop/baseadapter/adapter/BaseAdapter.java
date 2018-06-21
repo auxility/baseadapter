@@ -2,14 +2,13 @@ package eu.theappshop.baseadapter.adapter;
 
 import android.database.Observable;
 import android.support.annotation.NonNull;
+import eu.theappshop.baseadapter.observer.VMObserver;
+import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
+import eu.theappshop.baseadapter.vm.VM;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import eu.theappshop.baseadapter.observer.VMObserver;
-import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
-import eu.theappshop.baseadapter.vm.VM;
 
 public class BaseAdapter<V extends VM> extends Observable<VMObserver> implements ViewModelAdapter<V> {
 

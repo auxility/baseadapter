@@ -9,14 +9,13 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.viewpager.PagerBindingHolder;
 import eu.theappshop.baseadapter.vm.VM;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViewPagerAdapter<V extends VM> extends PagerAdapter implements VMObserver {
 

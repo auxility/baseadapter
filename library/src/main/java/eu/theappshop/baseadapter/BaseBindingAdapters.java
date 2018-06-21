@@ -6,23 +6,29 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-
+import android.widget.LinearLayout;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.adapter.recyclerview.RecyclerViewAdapter;
 import eu.theappshop.baseadapter.adapter.viewpager.ViewPagerAdapter;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
-import eu.theappshop.baseadapter.vm.VM;
 import eu.theappshop.baseadapter.vm.SpannedVM;
+import eu.theappshop.baseadapter.vm.VM;
 
 public final class BaseBindingAdapters {
 
     @BindingAdapter(value = {"adapter", "layoutManager", "reverse", "spanCount", "orientation"}, requireAll = false)
-    public static void bindPagerAdapter(final RecyclerView recyclerView, final BaseAdapter adapter,
-                                        LayoutManagerType layoutManagerType,
-                                        boolean reverse,
-                                        int spanCount,
-                                        int orientation) {
-        recyclerView.setAdapter(new RecyclerViewAdapter(adapter));
+    public static void _bindAdapter(final RecyclerView recyclerView, final BaseAdapter adapter,
+                                    LayoutManagerType layoutManagerType,
+                                    boolean reverse,
+                                    int spanCount,
+                                    Integer orientation) {
+
+        recyclerView.setAdapter(adapter == null ? null : new RecyclerViewAdapter(adapter));
+
+        if (orientation == null) {
+            orientation = LinearLayout.VERTICAL;
+        }
+
         RecyclerView.LayoutManager lm;
         switch (layoutManagerType == null ? LayoutManagerType.LINEAR : layoutManagerType) {
             case LINEAR:
@@ -55,7 +61,7 @@ public final class BaseBindingAdapters {
     }
 
     @BindingAdapter("adapter")
-    public static void bindPagerAdapter(ViewPager viewPager, BaseAdapter abstractAdapter) {
+    public static void _bindAdapter(ViewPager viewPager, BaseAdapter abstractAdapter) {
         viewPager.setAdapter(new ViewPagerAdapter(abstractAdapter));
     }
 }

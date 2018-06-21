@@ -1,12 +1,12 @@
 package eu.theappshop.baseadapter.adapter;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.List;
-
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
+
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
 public interface ViewModelAdapter<V extends VM> extends Serializable, Iterable<V> {
 
