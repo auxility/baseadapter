@@ -187,4 +187,9 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
         super.notifyDataSetChanged();
 
     }
+
+    @Override
+    public void refresh() {
+        notifyDataSetChanged();
+    }
 }

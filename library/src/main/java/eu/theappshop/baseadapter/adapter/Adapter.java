@@ -47,4 +47,6 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
     void registerObserver(AdapterDataObserver observer);
 
     void unregisterObserver(AdapterDataObserver observer);
+
+    void refresh(List<V> newVMs);
 }

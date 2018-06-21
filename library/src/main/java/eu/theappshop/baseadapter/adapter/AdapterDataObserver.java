@@ -11,4 +11,6 @@ interface AdapterDataObserver {
     void notifyItemRemoved(int position);
 
     void notifyItemRangeRemoved(int positionStart, int itemCount);
+
+    void refresh();
 }

@@ -55,6 +55,9 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> i
     @Override
     public void clear() {
         vms.clear();
+        for (AdapterDataObserver observer : mObservers) {
+            observer.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -154,5 +157,11 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> i
         }
     }
 
+    @Override
+    public void refresh(List<V> newVMs) {
+        for (AdapterDataObserver observer : mObservers) {
+            observer.refresh();
+        }
+    }
 
 }

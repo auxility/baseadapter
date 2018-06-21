@@ -46,4 +46,9 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> im
         super.unregisterAdapterDataObserver(observer);
         abstractAdapter.unregisterObserver(this);
     }
+
+    @Override
+    public void refresh() {
+
+    }
 }
