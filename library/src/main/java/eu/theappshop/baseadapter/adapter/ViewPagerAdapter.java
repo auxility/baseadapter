@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.theappshop.baseadapter.vm.TitledVM;
+import eu.theappshop.baseadapter.vm.VM;
+
 class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
     private static final String STATES_COUNT_TAG = "STATES_COUNT";
@@ -137,7 +140,13 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return super.getPageTitle(position);
+        VM vm = adapter.getItem(position);
+        if (vm instanceof TitledVM) {
+            TitledVM tvm = (TitledVM) vm;
+            return tvm.getTitle();
+        } else {
+            throw new IllegalStateException("Only TitledVM is allowed to setup TabLayout with Viewpager");
+        }
     }
 
     @Override
