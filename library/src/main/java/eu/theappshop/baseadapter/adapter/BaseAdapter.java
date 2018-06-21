@@ -154,7 +154,5 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> i
         }
     }
 
-    public int getVMPosition(V v) {
-        return vms.indexOf(v);
-    }
+
 }
