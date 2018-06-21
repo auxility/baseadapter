@@ -7,24 +7,24 @@ import android.view.ViewGroup;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.recyclerview.RecyclerBindingHolder;
-import eu.theappshop.baseadapter.vm.VM;
 
-public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<RecyclerBindingHolder<V>> implements VMObserver {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> implements VMObserver {
 
-    private BaseAdapter<V> abstractAdapter;
+    private BaseAdapter abstractAdapter;
 
-    public RecyclerViewAdapter(BaseAdapter<V> abstractAdapter) {
+    public RecyclerViewAdapter(BaseAdapter abstractAdapter) {
         this.abstractAdapter = abstractAdapter;
     }
 
     @NonNull
     @Override
-    public RecyclerBindingHolder<V> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerBindingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return RecyclerBindingHolder.create(LayoutInflater.from(parent.getContext()), viewType, parent);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(@NonNull RecyclerBindingHolder<V> holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerBindingHolder holder, int position) {
         abstractAdapter.bindViewHolder(holder, position);
     }
 

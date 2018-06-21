@@ -12,22 +12,21 @@ import android.view.ViewGroup;
 import eu.theappshop.baseadapter.adapter.BaseAdapter;
 import eu.theappshop.baseadapter.observer.VMObserver;
 import eu.theappshop.baseadapter.viewholder.viewpager.PagerBindingHolder;
-import eu.theappshop.baseadapter.vm.VM;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerAdapter<V extends VM> extends PagerAdapter implements VMObserver {
+public class ViewPagerAdapter extends PagerAdapter implements VMObserver {
 
     private static final String STATES_COUNT_TAG = "STATES_COUNT";
     private static final String STATE_TAG = "VIEW_STATE_";
     private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
 
-    private BaseAdapter<V> adapter;
+    private BaseAdapter adapter;
     private List<SparseArray<Parcelable>> states;
 
-    public ViewPagerAdapter(BaseAdapter<V> adapter) {
+    public ViewPagerAdapter(BaseAdapter adapter) {
         this.adapter = adapter;
         this.adapter.registerObserver(this);
         states = new ArrayList<>(adapter.getItemCount());
@@ -52,11 +51,12 @@ public class ViewPagerAdapter<V extends VM> extends PagerAdapter implements VMOb
         }
     }
 
+    @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         eu.theappshop.baseadapter.vm.VM VM = adapter.getItem(position);
-        PagerBindingHolder<V> vmPagerBindingHolder = PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(), container);
+        PagerBindingHolder vmPagerBindingHolder = PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(), container);
         adapter.bindViewHolder(vmPagerBindingHolder, position);
         if ((states != null) && (states.size() > position)) {
             SparseArray<Parcelable> savedState = states.get(position);
@@ -125,10 +125,11 @@ public class ViewPagerAdapter<V extends VM> extends PagerAdapter implements VMOb
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public int getItemPosition(@NonNull Object object) {
         if (object instanceof PagerBindingHolder) {
-            PagerBindingHolder<V> pagerBindingHolder = (PagerBindingHolder<V>) object;
+            PagerBindingHolder pagerBindingHolder = (PagerBindingHolder) object;
             int position = adapter.indexOf(pagerBindingHolder.getVM());
             return position == -1 ? POSITION_NONE : position;
         } else {
