@@ -1,12 +1,12 @@
 package eu.theappshop.baseadapter.adapter;
 
-import eu.theappshop.baseadapter.vm.VM;
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-interface Adapter<V extends VM> extends Serializable, Iterable<V> {
+import eu.theappshop.baseadapter.vm.VM;
+
+public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
     int getItemCount();
 
@@ -16,7 +16,7 @@ interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
     boolean isEmpty();
 
-    <T extends eu.theappshop.baseadapter.vm.VM> int getCountItemType(Class<T> clazz);
+    <T extends VM> int getCountItemType(Class<T> clazz);
 
     void clear();
 

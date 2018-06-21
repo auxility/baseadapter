@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> implements AdapterDataObserver {
 
-    private BaseAdapter abstractAdapter;
+    private Adapter abstractAdapter;
 
     RecyclerViewAdapter(BaseAdapter abstractAdapter) {
         this.abstractAdapter = abstractAdapter;

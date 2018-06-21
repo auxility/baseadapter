@@ -20,7 +20,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
 
-    private BaseAdapter adapter;
+    private Adapter adapter;
     private List<SparseArray<Parcelable>> states;
 
     ViewPagerAdapter(BaseAdapter adapter) {
