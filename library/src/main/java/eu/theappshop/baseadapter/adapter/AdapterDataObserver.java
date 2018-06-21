@@ -1,6 +1,6 @@
-package eu.theappshop.baseadapter.observer;
+package eu.theappshop.baseadapter.adapter;
 
-public interface VMObserver {
+interface AdapterDataObserver {
 
     void notifyDataSetChanged();
 

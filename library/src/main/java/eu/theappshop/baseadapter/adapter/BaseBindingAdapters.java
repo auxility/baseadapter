@@ -1,4 +1,4 @@
-package eu.theappshop.baseadapter;
+package eu.theappshop.baseadapter.adapter;
 
 import android.databinding.BindingAdapter;
 import android.support.v4.view.ViewPager;
@@ -7,9 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.widget.LinearLayout;
-import eu.theappshop.baseadapter.adapter.BaseAdapter;
-import eu.theappshop.baseadapter.adapter.recyclerview.RecyclerViewAdapter;
-import eu.theappshop.baseadapter.adapter.viewpager.ViewPagerAdapter;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;

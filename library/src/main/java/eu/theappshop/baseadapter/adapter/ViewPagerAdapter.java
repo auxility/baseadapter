@@ -1,4 +1,4 @@
-package eu.theappshop.baseadapter.adapter.viewpager;
+package eu.theappshop.baseadapter.adapter;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,14 +9,11 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import eu.theappshop.baseadapter.adapter.BaseAdapter;
-import eu.theappshop.baseadapter.observer.VMObserver;
-import eu.theappshop.baseadapter.viewholder.viewpager.PagerBindingHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerAdapter extends PagerAdapter implements VMObserver {
+class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
     private static final String STATES_COUNT_TAG = "STATES_COUNT";
     private static final String STATE_TAG = "VIEW_STATE_";
@@ -26,7 +23,7 @@ public class ViewPagerAdapter extends PagerAdapter implements VMObserver {
     private BaseAdapter adapter;
     private List<SparseArray<Parcelable>> states;
 
-    public ViewPagerAdapter(BaseAdapter adapter) {
+    ViewPagerAdapter(BaseAdapter adapter) {
         this.adapter = adapter;
         this.adapter.registerObserver(this);
         states = new ArrayList<>(adapter.getItemCount());

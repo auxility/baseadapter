@@ -1,18 +1,15 @@
-package eu.theappshop.baseadapter.adapter.recyclerview;
+package eu.theappshop.baseadapter.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import eu.theappshop.baseadapter.adapter.BaseAdapter;
-import eu.theappshop.baseadapter.observer.VMObserver;
-import eu.theappshop.baseadapter.viewholder.recyclerview.RecyclerBindingHolder;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> implements VMObserver {
+class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> implements AdapterDataObserver {
 
     private BaseAdapter abstractAdapter;
 
-    public RecyclerViewAdapter(BaseAdapter abstractAdapter) {
+    RecyclerViewAdapter(BaseAdapter abstractAdapter) {
         this.abstractAdapter = abstractAdapter;
     }
 

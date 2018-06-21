@@ -1,14 +1,12 @@
 package eu.theappshop.baseadapter.adapter;
 
-import eu.theappshop.baseadapter.observer.VMObserver;
-import eu.theappshop.baseadapter.viewholder.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public interface ViewModelAdapter<V extends VM> extends Serializable, Iterable<V> {
+interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
     int getItemCount();
 
@@ -46,7 +44,7 @@ public interface ViewModelAdapter<V extends VM> extends Serializable, Iterable<V
 
     void removeRange(int start, int end);
 
-    void registerObserver(VMObserver observer);
+    void registerObserver(AdapterDataObserver observer);
 
-    void unregisterObserver(VMObserver observer);
+    void unregisterObserver(AdapterDataObserver observer);
 }
