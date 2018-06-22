@@ -23,7 +23,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   private Adapter<VM> adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(BaseAdapter adapter) {
+  ViewPagerAdapter(Adapter adapter) {
     this.adapter = adapter;
     this.adapter.registerObserver(this);
     states = new ArrayList<>(adapter.getItemCount());
@@ -86,29 +86,29 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     }
   }
 
-    @Nullable
-    @Override
-    public Parcelable saveState() {
-        Bundle bundle = new Bundle();
-        if (states == null) {
-            states = new ArrayList<>();
-        }
-        while (states.size() < adapter.getItemCount()) {
-            states.add(null);
-        }
-        bundle.putInt(STATES_COUNT_TAG, states.size());
-        for (int i = 0; i < activeHolders.size(); i++) {
-            int key = activeHolders.keyAt(i);
-            PagerBindingHolder holder = activeHolders.valueAt(i);
-            SparseArray<Parcelable> state = new SparseArray<>();
-            holder.getBinding().getRoot().saveHierarchyState(state);
-            states.set(key, state);
-        }
-        for (int i = 0; i < states.size(); i++) {
-            bundle.putSparseParcelableArray(STATE_TAG + i, states.get(i));
-        }
-        return bundle;
+  @Nullable
+  @Override
+  public Parcelable saveState() {
+    Bundle bundle = new Bundle();
+    if (states == null) {
+      states = new ArrayList<>();
     }
+    while (states.size() < adapter.getItemCount()) {
+      states.add(null);
+    }
+    bundle.putInt(STATES_COUNT_TAG, states.size());
+    for (int i = 0; i < activeHolders.size(); i++) {
+      int key = activeHolders.keyAt(i);
+      PagerBindingHolder holder = activeHolders.valueAt(i);
+      SparseArray<Parcelable> state = new SparseArray<>();
+      holder.getBinding().getRoot().saveHierarchyState(state);
+      states.set(key, state);
+    }
+    for (int i = 0; i < states.size(); i++) {
+      bundle.putSparseParcelableArray(STATE_TAG + i, states.get(i));
+    }
+    return bundle;
+  }
 
   @Override
   public void restoreState(@Nullable Parcelable state, @Nullable ClassLoader loader) {

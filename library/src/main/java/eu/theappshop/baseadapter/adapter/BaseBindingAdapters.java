@@ -17,7 +17,7 @@ public final class BaseBindingAdapters {
   @BindingAdapter(value = {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView, final BaseAdapter adapter,
+  public static void _bindAdapter(final RecyclerView recyclerView, final Adapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,

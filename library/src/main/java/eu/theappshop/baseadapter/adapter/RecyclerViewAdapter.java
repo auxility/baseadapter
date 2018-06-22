@@ -12,10 +12,10 @@ import java.util.List;
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
     implements AdapterDataObserver {
 
-  private Adapter<VM> abstractAdapter;
+  private Adapter<VM> adapter;
 
-  RecyclerViewAdapter(BaseAdapter abstractAdapter) {
-    this.abstractAdapter = abstractAdapter;
+  RecyclerViewAdapter(Adapter adapter) {
+    this.adapter = adapter;
   }
 
   @NonNull
@@ -27,35 +27,35 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
   @SuppressWarnings("unchecked")
   @Override
   public void onBindViewHolder(@NonNull RecyclerBindingHolder holder, int position) {
-    abstractAdapter.bindViewHolder(holder, position);
+    adapter.bindViewHolder(holder, position);
   }
 
   @Override
   public int getItemCount() {
-    return abstractAdapter.getItemCount();
+    return adapter.getItemCount();
   }
 
   @Override
   public int getItemViewType(int position) {
-    return abstractAdapter.getItemViewType(position);
+    return adapter.getItemViewType(position);
   }
 
   @Override
   public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
     super.onAttachedToRecyclerView(recyclerView);
-    abstractAdapter.registerObserver(this);
+    adapter.registerObserver(this);
   }
 
   @Override
   public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
     super.onDetachedFromRecyclerView(recyclerView);
-    abstractAdapter.unregisterObserver(this);
+    adapter.unregisterObserver(this);
   }
 
   @Override
   public void refresh(List<VM> oldItems) {
     DiffUtil.DiffResult diffResult =
-        DiffUtil.calculateDiff(new DiffVMCallback(oldItems, abstractAdapter.getItems()));
+        DiffUtil.calculateDiff(new DiffVMCallback(oldItems, adapter.getItems()));
     diffResult.dispatchUpdatesTo(this);
   }
 }
