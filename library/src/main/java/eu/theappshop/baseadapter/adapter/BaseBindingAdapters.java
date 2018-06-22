@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 import android.widget.LinearLayout;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
@@ -62,7 +63,20 @@ public final class BaseBindingAdapters {
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(ViewPager viewPager, BaseAdapter abstractAdapter) {
-    viewPager.setAdapter(new ViewPagerAdapter(abstractAdapter));
+  public static void _bindAdapter(final ViewPager viewPager, final Adapter adapter) {
+    final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
+    viewPager.setAdapter(decorator);
+
+    viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+        adapter.registerObserver(decorator);
+      }
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
+    });
   }
 }
