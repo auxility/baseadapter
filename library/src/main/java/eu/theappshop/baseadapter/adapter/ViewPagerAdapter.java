@@ -9,7 +9,6 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,20 +16,17 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
     private static final String STATES_COUNT_TAG = "STATES_COUNT";
     private static final String STATE_TAG = "VIEW_STATE_";
+
     private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
-
-
-    private BaseAdapter adapter;
+    private Adapter adapter;
     private List<SparseArray<Parcelable>> states;
 
-    ViewPagerAdapter(BaseAdapter adapter) {
+    ViewPagerAdapter(Adapter adapter) {
         this.adapter = adapter;
-        this.adapter.registerObserver(this);
-        states = new ArrayList<>(adapter.getItemCount());
+        this.states = new ArrayList<>(adapter.getItemCount());
         for (int i = 0; i < adapter.getItemCount(); i++) {
             states.add(null);
         }
-
     }
 
     @Override
@@ -88,7 +84,6 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     @Nullable
     @Override
     public Parcelable saveState() {
-        adapter.unregisterObserver(this);
         Bundle bundle = new Bundle();
         if (states == null) {
             states = new ArrayList<>();
