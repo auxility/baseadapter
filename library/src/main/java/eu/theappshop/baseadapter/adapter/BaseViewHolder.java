@@ -5,8 +5,7 @@ import eu.theappshop.baseadapter.vm.VM;
 
 interface BaseViewHolder<V extends VM> {
 
-    void bindViewModel(V VM);
+  void bindViewModel(V VM);
 
-    ViewDataBinding getBinding();
-
+  ViewDataBinding getBinding();
 }
