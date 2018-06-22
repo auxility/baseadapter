@@ -2,11 +2,12 @@ package eu.theappshop.baseadapter.adapter;
 
 import android.database.Observable;
 import android.support.annotation.NonNull;
-import eu.theappshop.baseadapter.vm.VM;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import eu.theappshop.baseadapter.vm.VM;
 
 public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> implements Adapter<V> {
 
@@ -41,7 +42,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> i
     }
 
     @Override
-    public <T extends eu.theappshop.baseadapter.vm.VM> int getCountItemType(Class<T> clazz) {
+    public <T extends VM> int getCountItemType(Class<T> clazz) {
         int count = 0;
         for (V v : vms) {
             if (clazz.isAssignableFrom(v.getClass())) {
@@ -153,7 +154,5 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver> i
         }
     }
 
-    public int getVMPosition(V v) {
-        return vms.indexOf(v);
-    }
+
 }
