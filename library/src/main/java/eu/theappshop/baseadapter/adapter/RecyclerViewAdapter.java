@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> implements AdapterDataObserver {
 
-    private Adapter abstractAdapter;
+    private Adapter adapter;
 
-    RecyclerViewAdapter(BaseAdapter abstractAdapter) {
-        this.abstractAdapter = abstractAdapter;
+    RecyclerViewAdapter(Adapter adapter) {
+        this.adapter = adapter;
     }
 
     @NonNull
@@ -22,28 +22,28 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder> im
     @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(@NonNull RecyclerBindingHolder holder, int position) {
-        abstractAdapter.bindViewHolder(holder, position);
+        adapter.bindViewHolder(holder, position);
     }
 
     @Override
     public int getItemCount() {
-        return abstractAdapter.getItemCount();
+        return adapter.getItemCount();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return abstractAdapter.getItemViewType(position);
+        return adapter.getItemViewType(position);
     }
 
     @Override
     public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
-        abstractAdapter.registerObserver(this);
+        adapter.registerObserver(this);
     }
 
     @Override
     public void unregisterAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
-        abstractAdapter.unregisterObserver(this);
+        adapter.unregisterObserver(this);
     }
 }
