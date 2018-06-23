@@ -23,7 +23,9 @@ public final class BaseBindingAdapters {
       int spanCount,
       Integer orientation) {
 
-    recyclerView.setAdapter(adapter == null ? null : new RecyclerViewAdapter(adapter));
+    final RecyclerViewAdapter decorator = adapter == null ? null : new RecyclerViewAdapter(adapter);
+
+    recyclerView.setAdapter(decorator);
 
     if (orientation == null) {
       orientation = LinearLayout.VERTICAL;
@@ -60,6 +62,19 @@ public final class BaseBindingAdapters {
         throw new IllegalStateException("Unsupported Layout Manager");
     }
     recyclerView.setLayoutManager(lm);
+    recyclerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override public void onViewAttachedToWindow(View v) {
+        if (decorator != null) {
+          adapter.registerObserver(decorator);
+        }
+      }
+
+      @Override public void onViewDetachedFromWindow(View v) {
+        if (decorator != null) {
+          adapter.unregisterObserver(decorator);
+        }
+      }
+    });
   }
 
   @BindingAdapter("adapter")

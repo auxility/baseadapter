@@ -25,7 +25,6 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   ViewPagerAdapter(Adapter adapter) {
     this.adapter = adapter;
-    this.adapter.registerObserver(this);
     states = new ArrayList<>(adapter.getItemCount());
     for (int i = 0; i < adapter.getItemCount(); i++) {
       states.add(null);

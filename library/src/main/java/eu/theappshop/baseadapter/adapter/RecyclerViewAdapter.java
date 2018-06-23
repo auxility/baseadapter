@@ -41,18 +41,6 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
   }
 
   @Override
-  public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onAttachedToRecyclerView(recyclerView);
-    adapter.registerObserver(this);
-  }
-
-  @Override
-  public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
-    super.onDetachedFromRecyclerView(recyclerView);
-    adapter.unregisterObserver(this);
-  }
-
-  @Override
   public void refresh(List<VM> oldItems) {
     DiffUtil.DiffResult diffResult =
         DiffUtil.calculateDiff(new DiffVMCallback(oldItems, adapter.getItems()));

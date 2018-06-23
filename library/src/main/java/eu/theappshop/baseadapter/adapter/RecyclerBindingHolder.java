@@ -35,6 +35,7 @@ class RecyclerBindingHolder<V extends VM> extends RecyclerView.ViewHolder
   @Override
   public void bindViewModel(V VM) {
     binding.setVariable(BR.viewModel, VM);
+    binding.executePendingBindings();
   }
 
   @Override

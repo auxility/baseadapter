@@ -35,6 +35,7 @@ class PagerBindingHolder<V extends VM> implements BaseViewHolder<V> {
   public void bindViewModel(V VM) {
     this.vm = VM;
     binding.setVariable(BR.viewModel, VM);
+    binding.executePendingBindings();
   }
 
   @Override
