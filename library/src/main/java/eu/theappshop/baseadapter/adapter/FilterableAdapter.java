@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.misc.Filter;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,53 +52,76 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
     refresh();
   }
 
+  public void addFilter(Filter<V> filter) {
+    filters.add(filter);
+    refresh();
+  }
+
+  public void addFilters(Collection<Filter<V>> filters) {
+    this.filters.addAll(filters);
+    refresh();
+  }
+
+  public void clearFilters() {
+    filters.clear();
+    refresh();
+  }
+
+  public void removeFilter(int position) {
+    filters.remove(position);
+    refresh();
+  }
+
+  public List<Filter<V>> getFilters() {
+    return filters;
+  }
+
   @Override
   public void add(V item) {
+    super.add(item);
     allVms.add(item);
-    refresh();
   }
 
   @Override
   public void add(int position, V item) {
-    allVms.add(position, item);
-    refresh();
+    super.add(position, item);
+    V prevItem = getItem(position - 1);
+    int allVmsIndex = allVms.indexOf(prevItem) + 1;
+    allVms.add(allVmsIndex, item);
   }
 
   @Override
   public void addAll(List<? extends V> list) {
+    super.addAll(list);
     allVms.addAll(list);
-    refresh();
   }
 
   @Override
   public void addAll(List<? extends V> list, int position) {
-    allVms.addAll(position, list);
-    refresh();
+    super.addAll(list, position);
+    V prevItem = getItem(position - 1);
+    int allVmsIndex = allVms.indexOf(prevItem) + 1;
+    allVms.addAll(allVmsIndex, list);
   }
 
   @Override
   public void remove(V v) {
-    int index = allVms.indexOf(v);
-    if (index != -1) {
-      allVms.remove(index);
-      refresh();
-    }
+    super.remove(v);
+    allVms.remove(v);
   }
 
   @Override
   public V remove(int index) {
-    if (index != -1) {
-      V v = allVms.remove(index);
-      refresh();
-      return v;
-    }
-    return null;
+    V vm = super.remove(index);
+    allVms.remove(vm);
+    return vm;
   }
 
   @Override
-  public void removeRange(int start, int end) {
-    allVms.subList(start, end).clear();
-    refresh();
+  public List<V> removeRange(int start, int end) {
+    List<V> removedVms = super.removeRange(start, end);
+    allVms.removeAll(removedVms);
+    return removedVms;
   }
 
   public int getUnfilteredItemCount() {
@@ -108,7 +132,7 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
     return allVms;
   }
 
-  public V getUnfilteredtItem(int position) {
+  public V getUnfilteredItem(int position) {
     return allVms.get(position);
   }
 
@@ -127,7 +151,7 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
 
   public int findFirstIndexOfUnfiltered(Class<? extends V> cls) {
     for (int i = 0; i < getUnfilteredItemCount(); i++) {
-      if (getUnfilteredtItem(i).getClass() == cls) {
+      if (getUnfilteredItem(i).getClass() == cls) {
         return i;
       }
     }
@@ -136,7 +160,7 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
 
   public int findLastIndexOfUnfiltered(Class<? extends V> cls) {
     for (int i = getUnfilteredItemCount() - 1; i >= 0; i--) {
-      if (getUnfilteredtItem(i).getClass() == cls) {
+      if (getUnfilteredItem(i).getClass() == cls) {
         return i;
       }
     }

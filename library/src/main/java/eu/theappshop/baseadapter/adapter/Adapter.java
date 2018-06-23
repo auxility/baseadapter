@@ -45,7 +45,7 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
   V remove(int index);
 
-  void removeRange(int start, int end);
+  List<V> removeRange(int start, int end);
 
   void registerObserver(AdapterDataObserver observer);
 

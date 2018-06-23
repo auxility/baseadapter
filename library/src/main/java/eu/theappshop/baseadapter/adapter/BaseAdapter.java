@@ -162,11 +162,13 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   }
 
   @Override
-  public void removeRange(int start, int end) {
-    vms.subList(start, end).clear();
+  public List<V> removeRange(int start, int end) {
+    List<V> removedVms = vms.subList(start, end);
+    vms.removeAll(removedVms);
     for (AdapterDataObserver observer : mObservers) {
       observer.notifyItemRangeRemoved(start, end - start);
     }
+    return removedVms;
   }
 
   @Override
