@@ -142,7 +142,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
       TitledVM tvm = (TitledVM) vm;
       return tvm.getTitle();
     } else {
-      throw new IllegalStateException("Only TitledVM is allowed to setup TabLayout with Viewpager");
+      return "Untitled";
     }
   }
 
