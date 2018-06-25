@@ -78,30 +78,30 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
 
   @Override
   public void add(V item) {
-    super.add(item);
     allVms.add(item);
+    refresh();
   }
 
   @Override
   public void add(int position, V item) {
-    super.add(position, item);
     V prevItem = getItem(position - 1);
     int allVmsIndex = allVms.indexOf(prevItem) + 1;
     allVms.add(allVmsIndex, item);
+    refresh();
   }
 
   @Override
   public void addAll(List<? extends V> list) {
-    super.addAll(list);
     allVms.addAll(list);
+    refresh();
   }
 
   @Override
   public void addAll(List<? extends V> list, int position) {
-    super.addAll(list, position);
     V prevItem = getItem(position - 1);
     int allVmsIndex = allVms.indexOf(prevItem) + 1;
     allVms.addAll(allVmsIndex, list);
+    refresh();
   }
 
   @Override
