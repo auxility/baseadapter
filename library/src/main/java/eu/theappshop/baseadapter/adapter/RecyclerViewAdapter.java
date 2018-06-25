@@ -4,13 +4,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import eu.theappshop.baseadapter.misc.DiffVMCallback;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
 
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
-    implements AdapterDataObserver {
+    implements AdapterDataObserver, RecyclerView.OnAttachStateChangeListener {
 
   private Adapter<VM> adapter;
 
@@ -45,5 +46,17 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
     DiffUtil.DiffResult diffResult =
         DiffUtil.calculateDiff(new DiffVMCallback(oldItems, adapter.getItems()));
     diffResult.dispatchUpdatesTo(this);
+  }
+
+  @Override public void onViewAttachedToWindow(View v) {
+    if (adapter != null) {
+      adapter.registerObserver(this);
+    }
+  }
+
+  @Override public void onViewDetachedFromWindow(View v) {
+    if (adapter != null) {
+      adapter.unregisterObserver(this);
+    }
   }
 }

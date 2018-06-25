@@ -62,30 +62,20 @@ public final class BaseBindingAdapters {
         throw new IllegalStateException("Unsupported Layout Manager");
     }
     recyclerView.setLayoutManager(lm);
-    recyclerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-      @Override public void onViewAttachedToWindow(View v) {
-        if (decorator != null) {
-          adapter.registerObserver(decorator);
-        }
-      }
-
-      @Override public void onViewDetachedFromWindow(View v) {
-        if (decorator != null) {
-          adapter.unregisterObserver(decorator);
-        }
-      }
-    });
+    //if we has been already attached no observer will be registered
+    if (recyclerView.isAttachedToWindow() && decorator != null) {
+      adapter.registerObserver(decorator);
+    }
   }
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final ViewPager viewPager, final Adapter adapter) {
     final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
     viewPager.setAdapter(decorator);
-
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
-        adapter.registerObserver(decorator);
+
       }
 
       @Override
