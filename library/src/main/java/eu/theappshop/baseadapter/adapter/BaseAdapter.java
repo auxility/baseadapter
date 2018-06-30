@@ -2,10 +2,12 @@ package eu.theappshop.baseadapter.adapter;
 
 import android.database.Observable;
 import android.support.annotation.NonNull;
-import eu.theappshop.baseadapter.vm.VM;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import eu.theappshop.baseadapter.vm.VM;
 
 public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
     implements Adapter<V> {
@@ -164,11 +166,12 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   @Override
   public List<V> removeRange(int start, int end) {
     List<V> removedVms = vms.subList(start, end);
-    vms.removeAll(removedVms);
+    List<V> returnValues = new ArrayList<>(removedVms);
+    removedVms.clear();
     for (AdapterDataObserver observer : mObservers) {
       observer.notifyItemRangeRemoved(start, end - start);
     }
-    return removedVms;
+    return returnValues;
   }
 
   @Override
