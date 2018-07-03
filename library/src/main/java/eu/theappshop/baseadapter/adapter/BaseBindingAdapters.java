@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
@@ -83,5 +85,18 @@ public final class BaseBindingAdapters {
         adapter.unregisterObserver(decorator);
       }
     });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final AdapterView listView, final Adapter adapter) {
+    final ListAdapter decorator = new ListAdapter(adapter);
+    listView.setAdapter(decorator);
+  }
+
+  @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
+  public static void _bindAdapter(final Spinner spinner, final Adapter adapter,
+      boolean hintEnabled) {
+    final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
+    spinner.setAdapter(decorator);
   }
 }

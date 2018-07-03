@@ -1,6 +1,7 @@
 package eu.theappshop.baseadapter.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +14,10 @@ import java.util.List;
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
     implements AdapterDataObserver, RecyclerView.OnAttachStateChangeListener {
 
+  @Nullable
   private Adapter<VM> adapter;
 
-  RecyclerViewAdapter(Adapter adapter) {
+  RecyclerViewAdapter(@Nullable Adapter adapter) {
     this.adapter = adapter;
   }
 
@@ -28,24 +30,28 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
   @SuppressWarnings("unchecked")
   @Override
   public void onBindViewHolder(@NonNull RecyclerBindingHolder holder, int position) {
+    assert adapter != null;
     adapter.bindViewHolder(holder, position);
   }
 
   @Override
   public int getItemCount() {
-    return adapter.getItemCount();
+    return adapter == null ? 0 : adapter.getItemCount();
   }
 
   @Override
   public int getItemViewType(int position) {
+    assert adapter != null;
     return adapter.getItemViewType(position);
   }
 
   @Override
   public void refresh(List<VM> oldItems) {
-    DiffUtil.DiffResult diffResult =
-        DiffUtil.calculateDiff(new DiffVMCallback(oldItems, adapter.getItems()));
-    diffResult.dispatchUpdatesTo(this);
+    if (adapter != null) {
+      DiffUtil.DiffResult diffResult =
+          DiffUtil.calculateDiff(new DiffVMCallback(oldItems, adapter.getItems()));
+      diffResult.dispatchUpdatesTo(this);
+    }
   }
 
   @Override public void onViewAttachedToWindow(View v) {

@@ -20,21 +20,26 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   private static final String STATE_TAG = "VIEW_STATE_";
   private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
+  @Nullable
   private Adapter<VM> adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(Adapter adapter) {
+  ViewPagerAdapter(@Nullable Adapter adapter) {
     this.adapter = adapter;
-    adapter.registerObserver(this);
-    states = new ArrayList<>(adapter.getItemCount());
-    for (int i = 0; i < adapter.getItemCount(); i++) {
-      states.add(null);
+    if (adapter != null) {
+      adapter.registerObserver(this);
+      states = new ArrayList<>(adapter.getItemCount());
+      for (int i = 0; i < adapter.getItemCount(); i++) {
+        states.add(null);
+      }
+    } else {
+      states = new ArrayList<>();
     }
   }
 
   @Override
   public int getCount() {
-    return adapter.getItemCount();
+    return adapter == null ? 0 : adapter.getItemCount();
   }
 
   @Override
@@ -51,6 +56,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @NonNull
   @Override
   public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    assert adapter != null;
     eu.theappshop.baseadapter.vm.VM VM = adapter.getItem(position);
     PagerBindingHolder vmPagerBindingHolder =
         PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(),
@@ -90,6 +96,9 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @Override
   public Parcelable saveState() {
     Bundle bundle = new Bundle();
+    if (adapter == null) {
+      return bundle;
+    }
     if (states == null) {
       states = new ArrayList<>();
     }
@@ -127,6 +136,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   public int getItemPosition(@NonNull Object object) {
     if (object instanceof PagerBindingHolder) {
       PagerBindingHolder pagerBindingHolder = (PagerBindingHolder) object;
+      assert adapter != null;
       int position = adapter.indexOf(pagerBindingHolder.getVM());
       return position == -1 ? POSITION_NONE : position;
     } else {
@@ -137,6 +147,9 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @Nullable
   @Override
   public CharSequence getPageTitle(int position) {
+    if (adapter == null) {
+      return null;
+    }
     VM vm = adapter.getItem(position);
     if (vm instanceof TitledVM) {
       TitledVM tvm = (TitledVM) vm;
@@ -148,9 +161,11 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   @Override
   public void notifyDataSetChanged() {
-    states = new ArrayList<>();
-    while (states.size() < adapter.getItemCount()) {
-      states.add(null);
+    if (adapter != null) {
+      states = new ArrayList<>();
+      while (states.size() < adapter.getItemCount()) {
+        states.add(null);
+      }
     }
     super.notifyDataSetChanged();
   }
