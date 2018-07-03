@@ -4,6 +4,5 @@ import java.util.List;
 
 public interface Filter<T> {
 
-    List<T> filter(List<T> list);
-
+  List<T> filter(List<T> list);
 }

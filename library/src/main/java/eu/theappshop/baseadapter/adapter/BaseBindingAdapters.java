@@ -17,13 +17,15 @@ public final class BaseBindingAdapters {
   @BindingAdapter(value = {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView, final BaseAdapter adapter,
+  public static void _bindAdapter(final RecyclerView recyclerView, final Adapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,
       Integer orientation) {
 
-    recyclerView.setAdapter(adapter == null ? null : new RecyclerViewAdapter(adapter));
+    final RecyclerViewAdapter decorator = adapter == null ? null : new RecyclerViewAdapter(adapter);
+
+    recyclerView.setAdapter(decorator);
 
     if (orientation == null) {
       orientation = LinearLayout.VERTICAL;
@@ -60,17 +62,20 @@ public final class BaseBindingAdapters {
         throw new IllegalStateException("Unsupported Layout Manager");
     }
     recyclerView.setLayoutManager(lm);
+    //if we has been already attached no observer will be registered
+    if (recyclerView.isAttachedToWindow() && decorator != null) {
+      adapter.registerObserver(decorator);
+    }
   }
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final ViewPager viewPager, final Adapter adapter) {
     final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
     viewPager.setAdapter(decorator);
-
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
-        adapter.registerObserver(decorator);
+
       }
 
       @Override

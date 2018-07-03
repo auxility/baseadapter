@@ -1,50 +1,57 @@
 package eu.theappshop.baseadapter.adapter;
 
+import eu.theappshop.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import eu.theappshop.baseadapter.vm.VM;
-
 public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
-    int getItemCount();
+  int getItemCount();
 
-    void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
+  void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
 
-    int getItemViewType(int position);
+  int getItemViewType(int position);
 
-    boolean isEmpty();
+  boolean isEmpty();
 
-    <T extends VM> int getCountItemType(Class<T> clazz);
+  <T extends VM> int getCountItemType(Class<T> clazz);
 
-    void clear();
+  void clear();
 
-    void add(V item);
+  void add(V item);
 
-    void add(int position, V item);
+  void add(int position, V item);
 
-    void addAll(List<? extends V> list);
+  void addAll(List<? extends V> list);
 
-    void addAll(List<? extends V> list, int position);
+  void addAll(List<? extends V> list, int position);
 
-    List<V> getItems();
+  List<V> getItems();
 
-    V getItem(int index);
+  V getItem(int index);
 
-    int indexOf(V o);
+  int indexOf(V o);
 
-    Iterator<V> iterator();
+  int lastIndexOf(V o);
 
-    int findFirstIndexOf(Class<? extends V> cls);
+  Iterator<V> iterator();
 
-    void remove(V v);
+  int findFirstIndexOf(Class<? extends V> cls);
 
-    V remove(int index);
+  int findLastIndexOf(Class<? extends V> cls);
 
-    void removeRange(int start, int end);
+  void remove(V v);
 
-    void registerObserver(AdapterDataObserver observer);
+  V remove(int index);
 
-    void unregisterObserver(AdapterDataObserver observer);
+  List<V> removeRange(int start, int end);
+
+  void registerObserver(AdapterDataObserver observer);
+
+  void unregisterObserver(AdapterDataObserver observer);
+
+  void refresh();
+
+  void setVMs(List<V> vms);
 }
