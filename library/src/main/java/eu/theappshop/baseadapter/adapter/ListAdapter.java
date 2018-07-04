@@ -52,7 +52,6 @@ public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
     ListBindingHolder<VM> bindingHolder;
-    assert adapter != null;
     VM vm = (VM) getItem(position);
     if (convertView == null) {
       bindingHolder =

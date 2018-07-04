@@ -41,4 +41,8 @@ public class ListBindingHolder<V extends VM> implements BaseViewHolder<V> {
   @Override public ViewDataBinding getBinding() {
     return binding;
   }
+
+  public V getVm() {
+    return vm;
+  }
 }
