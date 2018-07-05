@@ -9,11 +9,12 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import eu.theappshop.baseadapter.vm.TitledVM;
-import eu.theappshop.baseadapter.vm.VM;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.theappshop.baseadapter.vm.TitledVM;
+import eu.theappshop.baseadapter.vm.VM;
 
 class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
@@ -167,9 +168,10 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   @Override
   public void notifyItemRangeInserted(int positionStart, int itemCount) {
-    while (positionStart < positionStart + itemCount) {
+    int i = positionStart;
+    while (i < positionStart + itemCount) {
       states.add(positionStart, null);
-      positionStart++;
+      i++;
     }
     super.notifyDataSetChanged();
   }

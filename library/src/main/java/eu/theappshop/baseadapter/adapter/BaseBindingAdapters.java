@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.LinearLayout;
+
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
@@ -80,7 +81,9 @@ public final class BaseBindingAdapters {
 
       @Override
       public void onViewDetachedFromWindow(View v) {
-        adapter.unregisterObserver(decorator);
+        if (adapter != null) {
+          adapter.unregisterObserver(decorator);
+        }
       }
     });
   }
