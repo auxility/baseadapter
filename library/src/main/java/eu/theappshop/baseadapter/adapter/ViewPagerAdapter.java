@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import eu.theappshop.baseadapter.vm.TitledVM;
 import eu.theappshop.baseadapter.vm.VM;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +21,24 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   private static final String STATE_TAG = "VIEW_STATE_";
   private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
+  @Nullable
   private Adapter<VM> adapter;
   private List<SparseArray<Parcelable>> states;
 
   ViewPagerAdapter(Adapter adapter) {
     this.adapter = adapter;
-    adapter.registerObserver(this);
-    states = new ArrayList<>(adapter.getItemCount());
-    for (int i = 0; i < adapter.getItemCount(); i++) {
+    if (adapter != null) {
+      adapter.registerObserver(this);
+    }
+    states = new ArrayList<>(adapter == null ? 0 :adapter.getItemCount());
+    for (int i = 0; i < (adapter == null ? 0 : adapter.getItemCount()); i++) {
       states.add(null);
     }
   }
 
   @Override
   public int getCount() {
-    return adapter.getItemCount();
+    return adapter == null ? 0 : adapter.getItemCount();
   }
 
   @Override
@@ -93,7 +97,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     if (states == null) {
       states = new ArrayList<>();
     }
-    while (states.size() < adapter.getItemCount()) {
+    while (states.size() < (adapter == null ? 0 :adapter.getItemCount())) {
       states.add(null);
     }
     bundle.putInt(STATES_COUNT_TAG, states.size());
@@ -149,7 +153,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @Override
   public void notifyDataSetChanged() {
     states = new ArrayList<>();
-    while (states.size() < adapter.getItemCount()) {
+    while (states.size() < (adapter == null ? 0 : adapter.getItemCount())) {
       states.add(null);
     }
     super.notifyDataSetChanged();
