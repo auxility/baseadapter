@@ -1,27 +1,25 @@
 package eu.theappshop.baseadapter.adapter;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import eu.theappshop.baseadapter.vm.VM;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
 
-  @Nullable
+  @NonNull
   private Adapter adapter;
   private List<Integer> viewTypes;
 
-  public ListAdapter(@Nullable Adapter adapter) {
-    //TODO register/unregister subscriber
+  public ListAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
     invalidateViewType();
-    if (adapter != null) {
-      adapter.registerObserver(this);
-    }
+    adapter.registerObserver(this);
   }
 
   @Override public int getViewTypeCount() {
@@ -39,11 +37,11 @@ public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
   }
 
   @Override public int getCount() {
-    return adapter == null ? 0 : adapter.getItemCount();
+    return adapter.getItemCount();
   }
 
   @Override public Object getItem(int position) {
-    return adapter == null ? null : adapter.getItem(position);
+    return adapter.getItem(position);
   }
 
   @Override public long getItemId(int position) {

@@ -1,6 +1,8 @@
 package eu.theappshop.baseadapter.adapter;
 
 import android.databinding.BindingAdapter;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +21,7 @@ public final class BaseBindingAdapters {
   @BindingAdapter(value = {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView, final Adapter adapter,
+  public static void _bindAdapter(final RecyclerView recyclerView, @Nullable final Adapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,
@@ -65,13 +67,18 @@ public final class BaseBindingAdapters {
     }
     recyclerView.setLayoutManager(lm);
     //if we has been already attached no observer will be registered
-    if (recyclerView.isAttachedToWindow() && decorator != null) {
-      adapter.registerObserver(decorator);
-    }
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final ViewPager viewPager, final Adapter adapter) {
+  public static void _bindAdapter(final ViewPager viewPager, @Nullable final Adapter adapter) {
+      PagerAdapter prevAdapter = viewPager.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          viewPager.setAdapter(null);
+          return;
+      }
     final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
     viewPager.setAdapter(decorator);
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
@@ -82,23 +89,59 @@ public final class BaseBindingAdapters {
 
       @Override
       public void onViewDetachedFromWindow(View v) {
-        if (adapter != null) {
-          adapter.unregisterObserver(decorator);
-        }
+        adapter.unregisterObserver(decorator);
       }
     });
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final AdapterView listView, final Adapter adapter) {
+  public static void _bindAdapter(final AdapterView adapterView, @Nullable final Adapter adapter) {
+      android.widget.Adapter prevAdapter = adapterView.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          adapterView.setAdapter(null);
+          return;
+      }
     final ListAdapter decorator = new ListAdapter(adapter);
-    listView.setAdapter(decorator);
+    adapterView.setAdapter(decorator);
+    adapterView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+        @Override
+        public void onViewAttachedToWindow(View v) {
+
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(View v) {
+            adapter.unregisterObserver(decorator);
+        }
+    });
   }
 
   @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
-  public static void _bindAdapter(final Spinner spinner, final Adapter adapter,
+  public static void _bindAdapter(final Spinner spinner, @Nullable final Adapter adapter,
       boolean hintEnabled) {
-    final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
-    spinner.setAdapter(decorator);
+      android.widget.Adapter prevAdapter = spinner.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          spinner.setAdapter(null);
+          return;
+      }
+      final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
+      spinner.setAdapter(decorator);
+      spinner.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+          @Override
+          public void onViewAttachedToWindow(View v) {
+
+          }
+
+          @Override
+          public void onViewDetachedFromWindow(View v) {
+              adapter.unregisterObserver(decorator);
+          }
+      });
   }
 }
