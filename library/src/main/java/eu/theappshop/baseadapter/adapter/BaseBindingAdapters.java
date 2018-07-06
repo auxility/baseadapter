@@ -82,7 +82,9 @@ public final class BaseBindingAdapters {
 
       @Override
       public void onViewDetachedFromWindow(View v) {
-        adapter.unregisterObserver(decorator);
+        if (adapter != null) {
+          adapter.unregisterObserver(decorator);
+        }
       }
     });
   }
