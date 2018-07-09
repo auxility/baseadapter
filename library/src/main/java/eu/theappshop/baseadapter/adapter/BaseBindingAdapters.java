@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
@@ -143,5 +144,31 @@ public final class BaseBindingAdapters {
               adapter.unregisterObserver(decorator);
           }
       });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
+      @Nullable final FilterableAdapter adapter) {
+    android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
+    if (adapter != null && adapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      autoCompleteTextView.setAdapter(null);
+      return;
+    }
+    final FilterableListAdapter decorator = new FilterableListAdapter(adapter);
+    autoCompleteTextView.setAdapter(decorator);
+    autoCompleteTextView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+
+      }
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
+    });
   }
 }

@@ -6,14 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import eu.theappshop.baseadapter.vm.VM;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
 
   @NonNull
-  private Adapter adapter;
+  protected Adapter adapter;
   private List<Integer> viewTypes;
 
   public ListAdapter(@NonNull Adapter adapter) {
