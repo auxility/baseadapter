@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import eu.theappshop.baseadapter.vm.TitledVM;
 import eu.theappshop.baseadapter.vm.VM;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +21,16 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   private static final String STATE_TAG = "VIEW_STATE_";
   private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
+  @NonNull
   private Adapter<VM> adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(Adapter adapter) {
+  ViewPagerAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
     adapter.registerObserver(this);
     states = new ArrayList<>(adapter.getItemCount());
     for (int i = 0; i < adapter.getItemCount(); i++) {
-      states.add(null);
+        states.add(null);
     }
   }
 
@@ -51,7 +53,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @NonNull
   @Override
   public Object instantiateItem(@NonNull ViewGroup container, int position) {
-    eu.theappshop.baseadapter.vm.VM VM = adapter.getItem(position);
+    VM VM = adapter.getItem(position);
     PagerBindingHolder vmPagerBindingHolder =
         PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(),
             container);
@@ -93,7 +95,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
     if (states == null) {
       states = new ArrayList<>();
     }
-    while (states.size() < adapter.getItemCount()) {
+    while (states.size() < (adapter.getItemCount())) {
       states.add(null);
     }
     bundle.putInt(STATES_COUNT_TAG, states.size());
@@ -148,10 +150,10 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   @Override
   public void notifyDataSetChanged() {
-    states = new ArrayList<>();
-    while (states.size() < adapter.getItemCount()) {
-      states.add(null);
-    }
+      states = new ArrayList<>();
+      while (states.size() < adapter.getItemCount()) {
+          states.add(null);
+      }
     super.notifyDataSetChanged();
   }
 
@@ -163,9 +165,10 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   @Override
   public void notifyItemRangeInserted(int positionStart, int itemCount) {
-    while (positionStart < positionStart + itemCount) {
+    int i = positionStart;
+    while (i < positionStart + itemCount) {
       states.add(positionStart, null);
-      positionStart++;
+      i++;
     }
     super.notifyDataSetChanged();
   }

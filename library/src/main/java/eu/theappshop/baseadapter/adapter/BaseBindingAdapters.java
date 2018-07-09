@@ -1,13 +1,18 @@
 package eu.theappshop.baseadapter.adapter;
 
 import android.databinding.BindingAdapter;
+import android.support.annotation.Nullable;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
@@ -17,7 +22,7 @@ public final class BaseBindingAdapters {
   @BindingAdapter(value = {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView, final Adapter adapter,
+  public static void _bindAdapter(final RecyclerView recyclerView, @Nullable final Adapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,
@@ -63,16 +68,98 @@ public final class BaseBindingAdapters {
     }
     recyclerView.setLayoutManager(lm);
     //if we has been already attached no observer will be registered
-    if (recyclerView.isAttachedToWindow() && decorator != null) {
-      adapter.registerObserver(decorator);
-    }
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final ViewPager viewPager, final Adapter adapter) {
+  public static void _bindAdapter(final ViewPager viewPager, @Nullable final Adapter adapter) {
+      PagerAdapter prevAdapter = viewPager.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          viewPager.setAdapter(null);
+          return;
+      }
     final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
     viewPager.setAdapter(decorator);
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+
+      }
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
+    });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final AdapterView adapterView, @Nullable final Adapter adapter) {
+      android.widget.Adapter prevAdapter = adapterView.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          adapterView.setAdapter(null);
+          return;
+      }
+    final ListAdapter decorator = new ListAdapter(adapter);
+    adapterView.setAdapter(decorator);
+    adapterView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+        @Override
+        public void onViewAttachedToWindow(View v) {
+
+        }
+
+        @Override
+        public void onViewDetachedFromWindow(View v) {
+            adapter.unregisterObserver(decorator);
+        }
+    });
+  }
+
+  @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
+  public static void _bindAdapter(final Spinner spinner, @Nullable final Adapter adapter,
+      boolean hintEnabled) {
+      android.widget.Adapter prevAdapter = spinner.getAdapter();
+      if (adapter != null && adapter instanceof  AdapterDataObserver) {
+          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+      }
+      if (adapter == null) {
+          spinner.setAdapter(null);
+          return;
+      }
+      final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
+      spinner.setAdapter(decorator);
+      spinner.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+          @Override
+          public void onViewAttachedToWindow(View v) {
+
+          }
+
+          @Override
+          public void onViewDetachedFromWindow(View v) {
+              adapter.unregisterObserver(decorator);
+          }
+      });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
+      @Nullable final FilterableAdapter adapter) {
+    android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
+    if (adapter != null && adapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      autoCompleteTextView.setAdapter(null);
+      return;
+    }
+    final FilterableListAdapter decorator = new FilterableListAdapter(adapter);
+    autoCompleteTextView.setAdapter(decorator);
+    autoCompleteTextView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
 
