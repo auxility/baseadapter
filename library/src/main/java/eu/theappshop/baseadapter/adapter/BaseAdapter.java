@@ -65,7 +65,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   public void add(V item) {
     vms.add(item);
     for (AdapterDataObserver observer : mObservers) {
-      observer.notifyItemInserted(vms.size());
+      observer.notifyItemInserted(vms.size() - 1);
     }
   }
 
