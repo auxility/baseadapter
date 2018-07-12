@@ -148,7 +148,7 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
-      @Nullable final FilterableAdapter adapter) {
+      @Nullable final BaseAdapter adapter) {
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
     if (adapter != null && adapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
