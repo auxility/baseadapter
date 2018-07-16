@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import eu.theappshop.baseadapter.vm.TitledVM;
 import eu.theappshop.baseadapter.vm.VM;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   ViewPagerAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
-    adapter.registerObserver(this);
     states = new ArrayList<>(adapter.getItemCount());
     for (int i = 0; i < adapter.getItemCount(); i++) {
         states.add(null);
