@@ -7,9 +7,12 @@ import java.util.List;
 
 public abstract class ObservableAdapter<V extends VM> implements Adapter<V> {
 
-  final List<AdapterDataObserver> observers = new ArrayList<>();
+  transient List<AdapterDataObserver> observers = new ArrayList<>();
 
   @Override public void registerObserver(@NonNull AdapterDataObserver observer) {
+    if (observers == null) {
+      observers = new ArrayList<>();
+    }
     if (!observers.contains(observer)) {
       observers.add(observer);
     }
