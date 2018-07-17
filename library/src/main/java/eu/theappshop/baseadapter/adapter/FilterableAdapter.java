@@ -33,7 +33,7 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
   public void refresh() {
     List<VM> oldVMs = (List<VM>) getItems();
     setVMs(filter());
-    for (AdapterDataObserver observer : observers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.refresh(oldVMs);
     }
   }
