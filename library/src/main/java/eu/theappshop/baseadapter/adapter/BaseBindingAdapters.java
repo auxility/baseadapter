@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
@@ -75,9 +76,7 @@ public final class BaseBindingAdapters {
     //if adapter instance was changed while viewpager was attached to screen
     // we have to unsubscribe the previous adapter
     PagerAdapter prevAdapter = viewPager.getAdapter();
-    if (adapter != null
-        && adapter instanceof AdapterDataObserver
-        && prevAdapter != null
+      if (adapter instanceof AdapterDataObserver
         && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
     }
@@ -110,10 +109,8 @@ public final class BaseBindingAdapters {
     //if adapter instance was changed while adapterView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = adapterView.getAdapter();
-    if (adapter != null
-        && adapter instanceof AdapterDataObserver
-        && prevAdapter != null
-        && prevAdapter instanceof AdapterDataObserver) {
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
     }
     if (adapter == null) {
@@ -146,10 +143,8 @@ public final class BaseBindingAdapters {
     //if adapter instance was changed while spinner was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = spinner.getAdapter();
-    if (adapter != null
-        && adapter instanceof AdapterDataObserver
-        && prevAdapter != null
-        && prevAdapter instanceof AdapterDataObserver) {
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
     }
     if (adapter == null) {
@@ -182,10 +177,8 @@ public final class BaseBindingAdapters {
     //if adapter instance was changed while autoCompleteTextView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
-    if (adapter != null
-        && adapter instanceof AdapterDataObserver
-        && prevAdapter != null
-        && prevAdapter instanceof AdapterDataObserver) {
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
     }
     if (adapter == null) {
