@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
@@ -72,20 +73,28 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final ViewPager viewPager, @Nullable final Adapter adapter) {
-      PagerAdapter prevAdapter = viewPager.getAdapter();
-      if (adapter != null && adapter instanceof  AdapterDataObserver) {
-          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
-      }
-      if (adapter == null) {
-          viewPager.setAdapter(null);
-          return;
-      }
+    //if adapter instance was changed while viewpager was attached to screen
+    // we have to unsubscribe the previous adapter
+    PagerAdapter prevAdapter = viewPager.getAdapter();
+      if (adapter instanceof AdapterDataObserver
+        && prevAdapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      viewPager.setAdapter(null);
+      return;
+    }
     final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
     viewPager.setAdapter(decorator);
+    //if adapter instance was changed while viewpager was attached to screen
+    //we have register observer since view is already attached to window
+    if (viewPager.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
-
+        adapter.registerObserver(decorator);
       }
 
       @Override
@@ -97,60 +106,79 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AdapterView adapterView, @Nullable final Adapter adapter) {
-      android.widget.Adapter prevAdapter = adapterView.getAdapter();
-      if (adapter != null && adapter instanceof  AdapterDataObserver) {
-          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
-      }
-      if (adapter == null) {
-          adapterView.setAdapter(null);
-          return;
-      }
+    //if adapter instance was changed while adapterView was attached to screen
+    // we have to unsubscribe the previous adapter
+    android.widget.Adapter prevAdapter = adapterView.getAdapter();
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      adapterView.setAdapter(null);
+      return;
+    }
     final ListAdapter decorator = new ListAdapter(adapter);
     adapterView.setAdapter(decorator);
+    //if adapter instance was changed while adapterView was attached to screen
+    //we have register observer since view is already attached to window
+    if (adapterView.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
     adapterView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-        @Override
-        public void onViewAttachedToWindow(View v) {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+        adapter.registerObserver(decorator);
+      }
 
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v) {
-            adapter.unregisterObserver(decorator);
-        }
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
     });
   }
 
   @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
   public static void _bindAdapter(final Spinner spinner, @Nullable final Adapter adapter,
       boolean hintEnabled) {
-      android.widget.Adapter prevAdapter = spinner.getAdapter();
-      if (adapter != null && adapter instanceof  AdapterDataObserver) {
-          adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    //if adapter instance was changed while spinner was attached to screen
+    // we have to unsubscribe the previous adapter
+    android.widget.Adapter prevAdapter = spinner.getAdapter();
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      spinner.setAdapter(null);
+      return;
+    }
+    final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
+    spinner.setAdapter(decorator);
+    //if adapter instance was changed while spinner was attached to screen
+    //we have register observer since view is already attached to window
+    if (spinner.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
+    spinner.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+        adapter.registerObserver(decorator);
       }
-      if (adapter == null) {
-          spinner.setAdapter(null);
-          return;
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
       }
-      final SpinnerAdapter decorator = new SpinnerAdapter(adapter, hintEnabled);
-      spinner.setAdapter(decorator);
-      spinner.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-          @Override
-          public void onViewAttachedToWindow(View v) {
-
-          }
-
-          @Override
-          public void onViewDetachedFromWindow(View v) {
-              adapter.unregisterObserver(decorator);
-          }
-      });
+    });
   }
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
       @Nullable final BaseAdapter adapter) {
+    //if adapter instance was changed while autoCompleteTextView was attached to screen
+    // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
-    if (adapter != null && adapter instanceof AdapterDataObserver) {
+      if (adapter instanceof AdapterDataObserver
+              && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
     }
     if (adapter == null) {
@@ -159,10 +187,15 @@ public final class BaseBindingAdapters {
     }
     final FilterableListAdapter decorator = new FilterableListAdapter(adapter);
     autoCompleteTextView.setAdapter(decorator);
+    //if adapter instance was changed while autoCompleteTextView was attached to screen
+    //we have register observer since view is already attached to window
+    if (autoCompleteTextView.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
     autoCompleteTextView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
-
+        adapter.registerObserver(decorator);
       }
 
       @Override

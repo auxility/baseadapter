@@ -1,5 +1,6 @@
 package eu.theappshop.baseadapter.adapter;
 
+import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Iterator;
@@ -47,9 +48,9 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
   List<V> removeRange(int start, int end);
 
-  void registerObserver(AdapterDataObserver observer);
+  void registerObserver(@NonNull AdapterDataObserver observer);
 
-  void unregisterObserver(AdapterDataObserver observer);
+  void unregisterObserver(@NonNull AdapterDataObserver observer);
 
   void refresh();
 

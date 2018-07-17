@@ -1,6 +1,5 @@
 package eu.theappshop.baseadapter.adapter;
 
-import android.database.Observable;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -9,8 +8,7 @@ import java.util.List;
 
 import eu.theappshop.baseadapter.vm.VM;
 
-public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
-    implements Adapter<V> {
+public class BaseAdapter<V extends VM> extends ObservableAdapter implements Adapter<V> {
 
   private List<V> vms;
 
@@ -56,7 +54,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   @Override
   public void clear() {
     vms.clear();
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyDataSetChanged();
     }
   }
@@ -64,7 +62,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   @Override
   public void add(V item) {
     vms.add(item);
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemInserted(vms.size() - 1);
     }
   }
@@ -72,7 +70,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   @Override
   public void add(int position, V item) {
     vms.add(position, item);
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemInserted(position);
     }
   }
@@ -81,7 +79,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   public void addAll(List<? extends V> list) {
     int previousLength = getItemCount();
     vms.addAll(list);
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemRangeInserted(previousLength, list.size());
     }
   }
@@ -89,7 +87,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   @Override
   public void addAll(List<? extends V> list, int position) {
     vms.addAll(position, list);
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemRangeInserted(position, list.size());
     }
   }
@@ -145,7 +143,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
     int index = vms.indexOf(v);
     if (index != -1) {
       vms.remove(index);
-      for (AdapterDataObserver observer : mObservers) {
+      for (AdapterDataObserver observer : getObservers()) {
         observer.notifyItemRemoved(index);
       }
     }
@@ -155,7 +153,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
   public V remove(int index) {
     if (index != -1) {
       V v = vms.remove(index);
-      for (AdapterDataObserver observer : mObservers) {
+      for (AdapterDataObserver observer : getObservers()) {
         observer.notifyItemRemoved(index);
       }
       return v;
@@ -168,7 +166,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
     List<V> removedVms = vms.subList(start, end);
     List<V> returnValues = new ArrayList<>(removedVms);
     removedVms.clear();
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemRangeRemoved(start, end - start);
     }
     return returnValues;
@@ -176,7 +174,7 @@ public class BaseAdapter<V extends VM> extends Observable<AdapterDataObserver>
 
   @Override
   public void refresh() {
-    for (AdapterDataObserver observer : mObservers) {
+    for (AdapterDataObserver observer : getObservers()) {
       observer.notifyDataSetChanged();
     }
   }

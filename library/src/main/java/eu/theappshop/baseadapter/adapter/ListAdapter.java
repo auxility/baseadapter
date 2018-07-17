@@ -18,7 +18,6 @@ public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
   public ListAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
     invalidateViewType();
-    adapter.registerObserver(this);
   }
 
   @Override public int getViewTypeCount() {
