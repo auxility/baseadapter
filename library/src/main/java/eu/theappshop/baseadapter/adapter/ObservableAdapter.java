@@ -7,11 +7,10 @@ import java.util.List;
 
 public abstract class ObservableAdapter {
 
-  private final String LOCK = "Some object that can be serialized";
   private transient List<AdapterDataObserver> observers = new ArrayList<>();
 
   public void registerObserver(@NonNull AdapterDataObserver observer) {
-    synchronized (LOCK) {
+    synchronized (this) {
       if (observers == null) {
         observers = new ArrayList<>();
       }
@@ -22,7 +21,7 @@ public abstract class ObservableAdapter {
   }
 
   public void unregisterObserver(@NonNull AdapterDataObserver observer) {
-    synchronized (LOCK) {
+    synchronized (this) {
       if (observers != null) {
         observers.remove(observer);
       }
