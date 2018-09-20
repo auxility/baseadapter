@@ -2,6 +2,7 @@ package eu.theappshop.baseadapter.adapter;
 
 import android.databinding.BindingAdapter;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -90,6 +91,36 @@ public final class BaseBindingAdapters {
       adapter.registerObserver(decorator);
     }
     viewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+        adapter.registerObserver(decorator);
+      }
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
+    });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final TabLayout tabLayout, @Nullable final Adapter adapter) {
+    Object prevAdapter = tabLayout.getTag();
+    if (adapter instanceof AdapterDataObserver && prevAdapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      //Although this method is deprecated it does exactly what we need (populating new data when pager adapter changes)
+      tabLayout.setTabsFromPagerAdapter(null);
+      return;
+    }
+    final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
+    //Attention you must update tabLayout on viewpager scroll by yourself
+    tabLayout.setTabsFromPagerAdapter(decorator);
+    if (tabLayout.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
+    tabLayout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
         adapter.registerObserver(decorator);
