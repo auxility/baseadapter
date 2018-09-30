@@ -2,15 +2,25 @@ package eu.theappshop.baseadapter.adapter;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import eu.theappshop.baseadapter.vm.VM;
 
-public class BaseAdapter<V extends VM> extends ObservableAdapter implements Adapter<V> {
+public class BaseAdapter<V extends VM> extends ObservableAdapter implements Adapter<V>, EndlessAdapter<V> {
 
   private List<V> vms;
+  private LoadMoreListener loadMoreListener;
+  private boolean isLoading;
+  private boolean hasLoadedAll;
+  private int threshold = 5;
+
+  public BaseAdapter(List<V> vms, LoadMoreListener loadMoreListener) {
+    this.vms = vms;
+    this.loadMoreListener = loadMoreListener;
+  }
 
   public BaseAdapter(List<V> vms) {
     this.vms = vms;
@@ -182,5 +192,41 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter implements Adap
   @Override
   public void setVMs(List<V> vms) {
     this.vms = vms;
+  }
+
+  @Override public void loadMore() {
+    isLoading = true;
+    if (loadMoreListener != null) {
+      loadMoreListener.onLoadMore();
+    }
+  }
+
+  @Override public void addLoadedItems(List<V> vms) {
+    isLoading = false;
+    addAll(vms);
+  }
+
+  @Override public boolean isLoading() {
+    return isLoading;
+  }
+
+  @Override public boolean hasLoadedAll() {
+    return hasLoadedAll;
+  }
+
+  public void setLoadedAll(boolean isLoadedAll){
+    this.hasLoadedAll = isLoadedAll;
+  }
+
+  @Override public int getThreshold() {
+    return threshold;
+  }
+
+  public void setThreshold(int threshold) {
+    this.threshold = threshold;
+  }
+
+  public interface LoadMoreListener extends Serializable {
+    void onLoadMore();
   }
 }

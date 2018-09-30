@@ -10,7 +10,7 @@ import eu.theappshop.baseadapter.vm.VM;
 
 import java.util.List;
 
-class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
     implements AdapterDataObserver {
 
   @NonNull
@@ -59,5 +59,9 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
   public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
     super.onDetachedFromRecyclerView(recyclerView);
     adapter.unregisterObserver(this);
+  }
+
+  @NonNull public Adapter getAdapter() {
+    return adapter;
   }
 }
