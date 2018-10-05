@@ -14,7 +14,7 @@ import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
 import java.util.List;
 
-class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
+class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterDataObserver<V> {
 
   private static final String STATES_COUNT_TAG = "STATES_COUNT";
   private static final String STATE_TAG = "VIEW_STATE_";
@@ -24,7 +24,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   private Adapter<VM> adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(@NonNull Adapter adapter) {
+  ViewPagerAdapter(@NonNull Adapter<VM> adapter) {
     this.adapter = adapter;
     states = new ArrayList<>(adapter.getItemCount());
     for (int i = 0; i < adapter.getItemCount(); i++) {
@@ -186,7 +186,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   }
 
   @Override
-  public void refresh(List<VM> oldItems) {
+  public void notifyDataSetChanged(List<V> oldItems, List<V> newVms) {
     notifyDataSetChanged();
   }
 }

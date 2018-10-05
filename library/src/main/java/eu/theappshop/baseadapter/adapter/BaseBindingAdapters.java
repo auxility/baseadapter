@@ -23,7 +23,8 @@ public final class BaseBindingAdapters {
   @BindingAdapter(value = {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView, @Nullable final Adapter adapter,
+  public static void _bindAdapter(final RecyclerView recyclerView,
+      @Nullable final Adapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,
@@ -201,7 +202,7 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
-      @Nullable final BaseAdapter adapter) {
+      @Nullable final Adapter adapter) {
     //if adapter instance was changed while autoCompleteTextView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();

@@ -9,13 +9,13 @@ import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
+public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDataObserver<V> {
 
   @NonNull
-  protected Adapter adapter;
+  protected Adapter<V> adapter;
   private List<Integer> viewTypes;
 
-  public ListAdapter(@NonNull Adapter adapter) {
+  public ListAdapter(@NonNull Adapter<V> adapter) {
     this.adapter = adapter;
     invalidateViewType();
   }
@@ -81,7 +81,7 @@ public class ListAdapter extends BaseAdapter implements AdapterDataObserver {
     notifyDataSetChanged();
   }
 
-  @Override public void refresh(List<VM> oldItems) {
+  @Override public void notifyDataSetChanged(List<V> oldItems, List<V> newVms) {
     notifyDataSetChanged();
   }
 

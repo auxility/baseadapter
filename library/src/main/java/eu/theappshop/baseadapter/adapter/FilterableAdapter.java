@@ -1,6 +1,7 @@
 package eu.theappshop.baseadapter.adapter;
 
 import android.support.annotation.NonNull;
+import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.misc.Filter;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
@@ -23,27 +24,40 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
     this(allVms, new LinkedList<Filter<V>>());
   }
 
-  public FilterableAdapter(List<V> allVms, List<Filter<V>> filters) {
-    this.allVms = allVms;
+  public FilterableAdapter(List<V> vms, List<Filter<V>> filters) {
     this.filters = filters;
-    refresh();
+    onNext(vms);
   }
 
   @Override
-  public void refresh() {
-    List<VM> oldVMs = (List<VM>) getItems();
-    setVMs(filter());
-    for (AdapterDataObserver observer : getObservers()) {
-      observer.refresh(oldVMs);
+  public void onNext(final List<V> unfiltered) {
+    boolean wasEmpty = vms == null || isEmpty();
+    this.allVms = new ArrayList<>(unfiltered); // cache original vms for future #refresh calls
+    List<V> oldVms = this.vms;
+    this.vms = filter(unfiltered); // filtered
+    for (AdapterDataObserver<V> observer : getObservers()) {
+      observer.notifyDataSetChanged(oldVms, this.vms);
+    }
+    if (registry != null && wasEmpty != isEmpty()) {
+      notifyPropertyChanged(BR.empty);
     }
   }
 
-  private List<V> filter() {
-    List<V> newVMs = allVms;
+  private List<V> filter(List<V> vms) {
+    if (filters.isEmpty()) {
+      return new ArrayList<>(vms);
+    }
+
+    List<V> newVMs = vms;
     for (Filter<V> filter : filters) {
       newVMs = filter.filter(newVMs);
     }
     return newVMs;
+  }
+
+  @Override
+  public void refresh() {
+    onNext(allVms);
   }
 
   @Override

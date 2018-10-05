@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="java.lang.Boolean" />
+        <variable
+            name="empty"
+            type="java.lang.Boolean" />
     </data>
 
     <android.support.v4.widget.Space

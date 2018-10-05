@@ -1,12 +1,14 @@
 package eu.theappshop.baseadapter.adapter;
 
+import android.databinding.Bindable;
+import android.databinding.Observable;
 import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
+public interface Adapter<V extends VM> extends Serializable, Iterable<V>, Observable {
 
   int getItemCount();
 
@@ -14,6 +16,7 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
   int getItemViewType(int position);
 
+  @Bindable
   boolean isEmpty();
 
   <T extends VM> int getCountItemType(Class<T> clazz);
@@ -48,11 +51,15 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V> {
 
   List<V> removeRange(int start, int end);
 
-  void registerObserver(@NonNull AdapterDataObserver observer);
+  void registerObserver(@NonNull AdapterDataObserver<V> observer);
 
-  void unregisterObserver(@NonNull AdapterDataObserver observer);
+  void unregisterObserver(@NonNull AdapterDataObserver<V> observer);
 
   void refresh();
 
-  void setVMs(List<V> vms);
+  /**
+   * Sets a new List of VMs to this adapter. Intended to be called inside a reactive pipeline.
+   * @param newVms vms
+   */
+  void onNext(final List<V> newVms);
 }

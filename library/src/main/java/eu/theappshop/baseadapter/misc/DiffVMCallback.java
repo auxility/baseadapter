@@ -5,12 +5,12 @@ import eu.theappshop.baseadapter.vm.DiffVM;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
 
-public class DiffVMCallback extends DiffUtil.Callback {
+public class DiffVMCallback<V extends VM> extends DiffUtil.Callback {
 
-  private List<? extends VM> oldList;
-  private List<? extends VM> newList;
+  private List<V> oldList;
+  private List<V> newList;
 
-  public DiffVMCallback(List<VM> oldList, List<VM> newList) {
+  public DiffVMCallback(List<V> oldList, List<V> newList) {
     this.oldList = oldList;
     this.newList = newList;
   }

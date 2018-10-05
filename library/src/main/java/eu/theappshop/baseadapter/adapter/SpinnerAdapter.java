@@ -10,14 +10,14 @@ import eu.theappshop.baseadapter.vm.SpinnerVM;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
 
-public class SpinnerAdapter extends BaseAdapter implements AdapterDataObserver {
+public class SpinnerAdapter<V extends VM> extends BaseAdapter implements AdapterDataObserver<V> {
 
   private boolean isHintEnabled;
   @Nullable
-  private Adapter adapter;
+  private Adapter<V> adapter;
 
   public SpinnerAdapter(
-      @Nullable Adapter adapter, boolean isHintEnabled) {
+      @Nullable Adapter<V> adapter, boolean isHintEnabled) {
     this.adapter = adapter;
     this.isHintEnabled = isHintEnabled;
   }
@@ -89,7 +89,7 @@ public class SpinnerAdapter extends BaseAdapter implements AdapterDataObserver {
     notifyDataSetChanged();
   }
 
-  @Override public void refresh(List<VM> oldItems) {
+  @Override public void notifyDataSetChanged(List<V> oldItems, List<V> newVms) {
     notifyDataSetChanged();
   }
 }
