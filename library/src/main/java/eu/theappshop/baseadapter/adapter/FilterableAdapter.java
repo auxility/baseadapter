@@ -38,7 +38,7 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
     for (AdapterDataObserver<V> observer : getObservers()) {
       observer.notifyDataSetChanged(oldVms, this.vms);
     }
-    if (registry != null && wasEmpty != isEmpty()) {
+    if (wasEmpty != isEmpty()) {
       notifyPropertyChanged(BR.empty);
     }
   }

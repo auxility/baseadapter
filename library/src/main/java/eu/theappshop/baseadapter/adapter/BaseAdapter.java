@@ -42,7 +42,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
     for (AdapterDataObserver<V> observer : getObservers()) {
       observer.notifyDataSetChanged(oldVms, this.vms);
     }
-    if (registry != null && wasEmpty != isEmpty()) {
+    if (wasEmpty != isEmpty()) {
       notifyPropertyChanged(BR.empty);
     }
   }
@@ -66,7 +66,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
     for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemInserted(vms.size() - 1);
     }
-    if (wasEmpty && registry != null) {
+    if (wasEmpty) {
       notifyPropertyChanged(BR.empty);
     }
   }
@@ -78,7 +78,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
     for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemInserted(position);
     }
-    if (wasEmpty && registry != null) {
+    if (wasEmpty) {
       notifyPropertyChanged(BR.empty);
     }
   }
@@ -90,7 +90,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
     for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemRangeInserted(previousLength, list.size());
     }
-    if (previousLength == 0 && registry != null) {
+    if (previousLength == 0) {
       notifyPropertyChanged(BR.empty);
     }
   }
@@ -102,7 +102,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
     for (AdapterDataObserver observer : getObservers()) {
       observer.notifyItemRangeInserted(position, list.size());
     }
-    if (wasEmpty && registry != null) {
+    if (wasEmpty) {
       notifyPropertyChanged(BR.empty);
     }
   }
