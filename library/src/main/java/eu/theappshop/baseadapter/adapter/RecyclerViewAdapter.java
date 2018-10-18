@@ -45,7 +45,7 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
   public void notifyDataSetChanged(List<V> oldItems, List<V> newVms) {
     // TODO: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
     DiffUtil.DiffResult diffResult =
-            DiffUtil.calculateDiff(new DiffVMCallback<>(oldItems, adapter.getItems()));
+            DiffUtil.calculateDiff(new DiffVMCallback<>(oldItems, newVms));
     diffResult.dispatchUpdatesTo(this);
   }
 

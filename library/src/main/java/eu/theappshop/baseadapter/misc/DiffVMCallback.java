@@ -29,16 +29,21 @@ public class DiffVMCallback<V extends VM> extends DiffUtil.Callback {
   public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
     VM oldItem = oldList.get(oldItemPosition);
     VM newItem = newList.get(newItemPosition);
-    return oldItem instanceof DiffVM && newItem instanceof DiffVM && ((DiffVM) newItem).isEqualItem(
-        oldItem);
+    if (newItem instanceof DiffVM) {
+      return ((DiffVM) newItem).isEqualItem(oldItem);
+    } else {
+      return oldItem.equals(newItem);
+    }
   }
 
   @Override
   public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
     VM oldItem = oldList.get(oldItemPosition);
     VM newItem = newList.get(newItemPosition);
-    return oldItem instanceof DiffVM
-        && newItem instanceof DiffVM
-        && ((DiffVM) newItem).isEqualContent(oldItem);
+    if (newItem instanceof DiffVM) {
+      return ((DiffVM) newItem).isEqualContent(oldItem);
+    } else {
+      return oldItem.equals(newItem);
+    }
   }
 }
