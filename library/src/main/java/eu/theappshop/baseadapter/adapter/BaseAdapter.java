@@ -238,15 +238,14 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
   }
 
   @Override public void loadMore() {
-    isLoading = true;
-    if (loadMoreListener != null) {
+    if (loadMoreListener != null && !isLoading && !hasLoadedAll) {
       loadMoreListener.onLoadMore();
     }
   }
 
-  @Override public void addLoadedItems(List<V> vms) {
-    isLoading = false;
-    addAll(vms);
+  @Override
+  public void setLoading(boolean loading) {
+    isLoading = loading;
   }
 
   @Override
