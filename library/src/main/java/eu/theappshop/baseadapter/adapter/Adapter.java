@@ -19,6 +19,10 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V>, Observ
   @Bindable
   boolean isEmpty();
 
+  /**
+   * @deprecated Use kotlin iterator extensions instead
+   */
+  @Deprecated
   <T extends VM> int getCountItemType(Class<T> clazz);
 
   void clear();
@@ -26,6 +30,8 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V>, Observ
   void add(V item);
 
   void add(int position, V item);
+
+  V set(int position, V item);
 
   void addAll(List<? extends V> list);
 
@@ -41,8 +47,16 @@ public interface Adapter<V extends VM> extends Serializable, Iterable<V>, Observ
 
   Iterator<V> iterator();
 
+  /**
+   * @deprecated Use kotlin iterator extensions instead
+   */
+  @Deprecated
   int findFirstIndexOf(Class<? extends V> cls);
 
+  /**
+   * @deprecated Use kotlin iterator extensions instead
+   */
+  @Deprecated
   int findLastIndexOf(Class<? extends V> cls);
 
   void remove(V v);

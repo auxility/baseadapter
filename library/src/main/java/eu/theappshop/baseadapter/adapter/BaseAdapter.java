@@ -84,6 +84,15 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
   }
 
   @Override
+  public V set(int position, V item) {
+    V v = vms.set(position, item);
+    for (AdapterDataObserver observer : getObservers()) {
+      observer.notifyItemChanged(position);
+    }
+    return v;
+  }
+
+  @Override
   public void addAll(List<? extends V> list) {
     int previousLength = getItemCount();
     vms.addAll(list);
@@ -214,7 +223,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
   @NonNull
   @Override
   public Iterator<V> iterator() {
-    return vms.iterator();
+    return vms.iterator(); // TODO: Override iterator with notifications!
   }
 
   @Override

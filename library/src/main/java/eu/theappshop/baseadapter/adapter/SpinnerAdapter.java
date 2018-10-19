@@ -92,4 +92,8 @@ public class SpinnerAdapter<V extends VM> extends BaseAdapter implements Adapter
   @Override public void notifyDataSetChanged(List<V> oldItems, List<V> newVms) {
     notifyDataSetChanged();
   }
+
+  @Override public void notifyItemChanged(int position) {
+    notifyDataSetChanged();
+  }
 }

@@ -119,6 +119,13 @@ public class FilterableAdapter<V extends VM> extends BaseAdapter<V> {
   }
 
   @Override
+  public V set(int position, V newItem) {
+    V oldItem = super.set(position, newItem);
+    allVms.set(indexOf(oldItem), newItem);
+    return oldItem;
+  }
+
+  @Override
   public void remove(V v) {
     super.remove(v);
     allVms.remove(v);

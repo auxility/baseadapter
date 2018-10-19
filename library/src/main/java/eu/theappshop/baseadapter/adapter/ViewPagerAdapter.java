@@ -148,10 +148,10 @@ class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterData
 
   @Override
   public void notifyDataSetChanged() {
-      states = new ArrayList<>();
-      while (states.size() < adapter.getItemCount()) {
-          states.add(null);
-      }
+    states = new ArrayList<>();
+    while (states.size() < adapter.getItemCount()) {
+      states.add(null);
+    }
     super.notifyDataSetChanged();
   }
 
@@ -182,6 +182,12 @@ class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterData
     for (int i = 0; i < itemCount; i++) {
       states.remove(positionStart);
     }
+    super.notifyDataSetChanged();
+  }
+
+  @Override
+  public void notifyItemChanged(int position) {
+    states.set(position, null);
     super.notifyDataSetChanged();
   }
 

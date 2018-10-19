@@ -16,4 +16,6 @@ interface AdapterDataObserver<V extends VM> {
   void notifyItemRangeRemoved(int positionStart, int itemCount);
 
   void notifyDataSetChanged(List<V> oldItems, List<V> newVms);
+
+  void notifyItemChanged(int position);
 }

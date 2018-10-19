@@ -85,6 +85,10 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
     notifyDataSetChanged();
   }
 
+  @Override public void notifyItemChanged(int position) {
+    notifyDataSetChanged();
+  }
+
   private void invalidateViewType() {
     viewTypes = new ArrayList<>();
     if (getCount() == 0) {
