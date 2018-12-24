@@ -13,17 +13,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
-import eu.theappshop.baseadapter.vm.GridLayoutVM;
-import eu.theappshop.baseadapter.vm.LinearLayoutVM;
 import eu.theappshop.baseadapter.vm.SpannedVM;
 import eu.theappshop.baseadapter.vm.VM;
+import eu.theappshop.baseadapter.vm.ViewGroupVM;
 
 public final class BaseBindingAdapters {
 
@@ -242,38 +241,19 @@ public final class BaseBindingAdapters {
 
   //TODO add adapter decorator
   @BindingAdapter("adapter")
-  public static void _bindAdapter(GridLayout gridLayout, Adapter adapter) {
-    gridLayout.removeAllViews();
-    LayoutInflater inflater = LayoutInflater.from(gridLayout.getContext());
+  public static void _bindAdapter(ViewGroup view, Adapter adapter) {
+    view.removeAllViews();
+    LayoutInflater inflater = LayoutInflater.from(view.getContext());
     for (Object o : adapter.getItems()) {
-      if (o instanceof GridLayoutVM) {
-        GridLayoutVM vm = (GridLayoutVM) o;
+      if (o instanceof ViewGroupVM) {
+        ViewGroupVM vm = (ViewGroupVM) o;
         ViewDataBinding binding = DataBindingUtil.inflate(inflater, vm.getLayoutId(), null, false);
         binding.setVariable(BR.viewModel, vm);
         binding.executePendingBindings();
-        gridLayout.addView(binding.getRoot(), vm.getLayoutParams());
+        view.addView(binding.getRoot(), vm.getLayoutParams());
       } else {
         throw new IllegalStateException(
-            "VMs inside gridlayout should implement GridLayoutVM");
-      }
-    }
-  }
-
-  //TODO add adapter decorator
-  @BindingAdapter("adapter")
-  public static void _bindAdapter(LinearLayout gridLayout, Adapter adapter) {
-    gridLayout.removeAllViews();
-    LayoutInflater inflater = LayoutInflater.from(gridLayout.getContext());
-    for (Object o : adapter.getItems()) {
-      if (o instanceof LinearLayoutVM) {
-        LinearLayoutVM vm = (LinearLayoutVM) o;
-        ViewDataBinding binding = DataBindingUtil.inflate(inflater, vm.getLayoutId(), null, false);
-        binding.setVariable(BR.viewModel, vm);
-        binding.executePendingBindings();
-        gridLayout.addView(binding.getRoot(), vm.getLayoutParams());
-      } else {
-        throw new IllegalStateException(
-            "VMs inside gridlayout should implement LinearLayoutVM");
+            "VMs inside gridlayout should implement ViewGroupVM");
       }
     }
   }
