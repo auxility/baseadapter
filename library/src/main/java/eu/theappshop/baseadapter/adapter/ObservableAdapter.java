@@ -28,7 +28,7 @@ public abstract class ObservableAdapter<V extends VM> {
     }
   }
 
-  public List<AdapterDataObserver<V>> getObservers() {
+  List<AdapterDataObserver<V>> getObservers() {
     return observers;
   }
 }

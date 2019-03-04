@@ -24,6 +24,7 @@ public class BaseAdapter<V extends VM> extends ObservableAdapter<V>
   public BaseAdapter(List<V> vms, LoadMoreListener loadMoreListener) {
     this.loadMoreListener = loadMoreListener;
     onNext(vms);
+    vms.removeIf()
   }
 
   public BaseAdapter(List<V> vms) {
