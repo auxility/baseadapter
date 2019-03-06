@@ -66,4 +66,6 @@ public interface Adapter<V extends VM>
   @NonNull ListIterator<V> listIterator(int index);
 
   void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
+
+  void refresh();
 }

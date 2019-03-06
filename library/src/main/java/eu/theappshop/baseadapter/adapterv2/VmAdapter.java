@@ -15,9 +15,13 @@ import java.util.ListIterator;
 
 public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V> {
 
-  private final ObservableAdapterImpl<V> observableAdapterDelegate = new ObservableAdapterImpl<>();
+  @NonNull private final ObservableAdapterImpl<V> observableAdapterDelegate =
+      new ObservableAdapterImpl<>();
+
   @NonNull private List<V> vms;
+
   private int size;
+
   private boolean isEmpty;
 
   public VmAdapter(@NonNull List<V> vms) {
@@ -220,31 +224,31 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     this.observableAdapterDelegate.unregisterObserver(observer);
   }
 
-  private void notifyDataSetChanged() {
+  @Override public void notifyDataSetChanged() {
     this.observableAdapterDelegate.notifyDataSetChanged();
   }
 
-  private void notifyItemInserted(int position) {
+  @Override public void notifyItemInserted(int position) {
     this.observableAdapterDelegate.notifyItemInserted(position);
   }
 
-  private void notifyItemRangeInserted(int positionStart, int itemCount) {
+  @Override public void notifyItemRangeInserted(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeInserted(positionStart, itemCount);
   }
 
-  private void notifyItemRemoved(int position) {
+  @Override public void notifyItemRemoved(int position) {
     this.observableAdapterDelegate.notifyItemRemoved(position);
   }
 
-  private void notifyItemRangeRemoved(int positionStart, int itemCount) {
+  @Override public void notifyItemRangeRemoved(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeRemoved(positionStart, itemCount);
   }
 
-  private void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
     this.observableAdapterDelegate.notifyDataSetChanged(oldItems, newVms);
   }
 
-  private void notifyItemChanged(int position) {
+  @Override public void notifyItemChanged(int position) {
     this.observableAdapterDelegate.notifyItemChanged(position);
   }
 
@@ -264,6 +268,10 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   @Override
   public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
     viewHolder.bindViewModel(vms.get(position));
+  }
+
+  @Override public void refresh() {
+    //Do Nothing
   }
 
   //TODO test

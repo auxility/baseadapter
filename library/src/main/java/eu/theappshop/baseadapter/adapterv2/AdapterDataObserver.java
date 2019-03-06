@@ -6,17 +6,17 @@ import java.util.List;
 
 interface AdapterDataObserver<V extends VM> {
 
-  void notifyDataSetChanged();
+  void onNotifyDataSetChanged();
 
-  void notifyItemInserted(int position);
+  void onNotifyItemInserted(int position);
 
-  void notifyItemRangeInserted(int positionStart, int itemCount);
+  void onNotifyItemRangeInserted(int positionStart, int itemCount);
 
-  void notifyItemRemoved(int position);
+  void onNotifyItemRemoved(int position);
 
-  void notifyItemRangeRemoved(int positionStart, int itemCount);
+  void onNotifyItemRangeRemoved(int positionStart, int itemCount);
 
-  void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms);
+  void onNotifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms);
 
-  void notifyItemChanged(int position);
+  void onNotifyItemChanged(int position);
 }
