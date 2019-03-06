@@ -3,6 +3,7 @@ package eu.theappshop.baseadapter.adapterv2;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.support.annotation.NonNull;
+import eu.theappshop.baseadapter.adapter.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,7 +14,7 @@ import java.util.ListIterator;
 public interface Adapter<V extends VM>
     extends Serializable, Observable, ObservableAdapter<V>, Iterable<V> {
 
-  @Bindable int size();
+  @Bindable int getSize();
 
   @Bindable boolean isEmpty();
 
@@ -25,9 +26,17 @@ public interface Adapter<V extends VM>
 
   @NonNull V remove(int index);
 
-  boolean remove(@NonNull VM vm);
+  boolean remove(@NonNull V vm);
+
+  boolean removeIf(@NonNull Predicate<V> predicate);
+
+  boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil);
+
+  List<V> removeRange(int beginIndex, int endIndex);
 
   void clear();
+
+  void clear(boolean withDiffUtil);
 
   void add(@NonNull V vm);
 
@@ -44,6 +53,10 @@ public interface Adapter<V extends VM>
 
   @NonNull V set(int index, @NonNull V element);
 
+  void set(@NonNull Collection<? extends V> c);
+
+  void set(@NonNull Collection<? extends V> c, boolean withDiffUtil);
+
   int indexOf(@NonNull V vm);
 
   int lastIndexOf(@NonNull V vm);
@@ -52,5 +65,5 @@ public interface Adapter<V extends VM>
 
   @NonNull ListIterator<V> listIterator(int index);
 
-  @NonNull List<V> subList(int fromIndex, int toIndex);
+  void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
 }
