@@ -1,7 +1,9 @@
 package eu.theappshop.baseadapter.vm;
 
+import android.support.annotation.NonNull;
+
 public interface TitledVM extends VM {
 
-  String getTitle();
+  @NonNull String getTitle();
 
 }
