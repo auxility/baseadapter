@@ -1,7 +1,6 @@
 package eu.theappshop.baseadapter.adapterv2;
 
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.adapter.BaseViewHolder;
@@ -18,7 +17,7 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   @NonNull private final ObservableAdapterImpl<V> observableAdapterDelegate =
       new ObservableAdapterImpl<>();
 
-  @NonNull private List<V> vms;
+  @NonNull protected List<V> vms;
 
   private int size;
 
@@ -33,11 +32,11 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     this(new ArrayList<V>());
   }
 
-  @Bindable @Override public int getSize() {
+  @Override public int getSize() {
     return this.size;
   }
 
-  @Bindable @Override public boolean isEmpty() {
+  @Override public boolean isEmpty() {
     return isEmpty;
   }
 
@@ -224,31 +223,31 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     this.observableAdapterDelegate.unregisterObserver(observer);
   }
 
-  @Override public void notifyDataSetChanged() {
+  protected void notifyDataSetChanged() {
     this.observableAdapterDelegate.notifyDataSetChanged();
   }
 
-  @Override public void notifyItemInserted(int position) {
+  protected void notifyItemInserted(int position) {
     this.observableAdapterDelegate.notifyItemInserted(position);
   }
 
-  @Override public void notifyItemRangeInserted(int positionStart, int itemCount) {
+  protected void notifyItemRangeInserted(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeInserted(positionStart, itemCount);
   }
 
-  @Override public void notifyItemRemoved(int position) {
+  protected void notifyItemRemoved(int position) {
     this.observableAdapterDelegate.notifyItemRemoved(position);
   }
 
-  @Override public void notifyItemRangeRemoved(int positionStart, int itemCount) {
+  protected void notifyItemRangeRemoved(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeRemoved(positionStart, itemCount);
   }
 
-  @Override public void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  protected void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
     this.observableAdapterDelegate.notifyDataSetChanged(oldItems, newVms);
   }
 
-  @Override public void notifyItemChanged(int position) {
+  protected void notifyItemChanged(int position) {
     this.observableAdapterDelegate.notifyItemChanged(position);
   }
 
