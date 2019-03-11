@@ -1,6 +1,7 @@
 package eu.theappshop.baseadapter.adapterv2;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.adapter.BaseViewHolder;
@@ -17,7 +18,7 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   @NonNull private final ObservableAdapterImpl<V> observableAdapterDelegate =
       new ObservableAdapterImpl<>();
 
-  @NonNull protected List<V> vms;
+  @NonNull private List<V> vms;
 
   private int size;
 
@@ -32,11 +33,11 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     this(new ArrayList<V>());
   }
 
-  @Override public int getSize() {
+  @Bindable @Override public int getSize() {
     return this.size;
   }
 
-  @Override public boolean isEmpty() {
+  @Bindable @Override public boolean isEmpty() {
     return isEmpty;
   }
 
@@ -49,7 +50,7 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @NonNull @Override public Iterator<V> iterator() {
-    return new AdapterIterator(this.vms.iterator());
+    return new AdapterIterator<>(this.vms.iterator(), new AdapterIteratorListenerImpl());
   }
 
   @NonNull @Override public V remove(int index) {
@@ -134,11 +135,12 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @NonNull @Override public ListIterator<V> listIterator() {
-    return new AdapterListIterator(vms.listIterator());
+    return new AdapterListIterator<>(vms.listIterator(), new AdapterListIteratorListenerImpl());
   }
 
   @NonNull @Override public ListIterator<V> listIterator(int index) {
-    return new AdapterListIterator(vms.listIterator(), index);
+    return new AdapterListIterator<>(vms.listIterator(index), new AdapterListIteratorListenerImpl(),
+        index);
   }
 
   @Override public boolean removeIf(@NonNull Predicate<V> predicate) {
@@ -223,31 +225,31 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     this.observableAdapterDelegate.unregisterObserver(observer);
   }
 
-  protected void notifyDataSetChanged() {
+  private void notifyDataSetChanged() {
     this.observableAdapterDelegate.notifyDataSetChanged();
   }
 
-  protected void notifyItemInserted(int position) {
+  private void notifyItemInserted(int position) {
     this.observableAdapterDelegate.notifyItemInserted(position);
   }
 
-  protected void notifyItemRangeInserted(int positionStart, int itemCount) {
+  private void notifyItemRangeInserted(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeInserted(positionStart, itemCount);
   }
 
-  protected void notifyItemRemoved(int position) {
+  private void notifyItemRemoved(int position) {
     this.observableAdapterDelegate.notifyItemRemoved(position);
   }
 
-  protected void notifyItemRangeRemoved(int positionStart, int itemCount) {
+  private void notifyItemRangeRemoved(int positionStart, int itemCount) {
     this.observableAdapterDelegate.notifyItemRangeRemoved(positionStart, itemCount);
   }
 
-  protected void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  private void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
     this.observableAdapterDelegate.notifyDataSetChanged(oldItems, newVms);
   }
 
-  protected void notifyItemChanged(int position) {
+  private void notifyItemChanged(int position) {
     this.observableAdapterDelegate.notifyItemChanged(position);
   }
 
@@ -270,92 +272,31 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @Override public void refresh() {
-    //Do Nothing
+    notifyDataSetChanged();
   }
 
-  //TODO test
-  class AdapterIterator implements Iterator<V> {
+  private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener {
 
-    private final Iterator<V> iterator;
-    private int position = 0;
-
-    private AdapterIterator(@NonNull Iterator<V> iterator) {
-      this.iterator = iterator;
-    }
-
-    @Override public boolean hasNext() {
-      return this.iterator.hasNext();
-    }
-
-    @Override public V next() {
-      this.position++;
-      return iterator.next();
-    }
-
-    @Override public void remove() {
-      this.iterator.remove();
-      updateSize();
-      notifyItemRemoved(this.position);
+    @Override public void onItemRemoved(int position) {
+      VmAdapter.this.updateSize();
+      VmAdapter.this.notifyItemRemoved(position);
     }
   }
 
-  //TODO test
-  class AdapterListIterator implements ListIterator<V> {
-
-    private final ListIterator<V> iterator;
-    private int position = 0;
-
-    AdapterListIterator(@NonNull ListIterator<V> iterator) {
-      this(iterator, 0);
+  private class AdapterListIteratorListenerImpl implements
+      AdapterListIterator.AdapterListIteratorListener {
+    @Override public void onItemAdded(int position) {
+      VmAdapter.this.updateSize();
+      VmAdapter.this.notifyItemInserted(position);
     }
 
-    AdapterListIterator(@NonNull ListIterator<V> iterator, int index) {
-      this.iterator = iterator;
-      this.position = index;
+    @Override public void onItemChanged(int position) {
+      VmAdapter.this.notifyItemChanged(position);
     }
 
-    @Override public boolean hasNext() {
-      return this.iterator.hasNext();
-    }
-
-    @Override public V next() {
-      this.position++;
-      return this.iterator.next();
-    }
-
-    @Override public boolean hasPrevious() {
-      return this.iterator.hasPrevious();
-    }
-
-    @Override public V previous() {
-      this.position--;
-      return this.iterator.previous();
-    }
-
-    @Override public int nextIndex() {
-      return this.iterator.nextIndex();
-    }
-
-    @Override public int previousIndex() {
-      return this.iterator.previousIndex();
-    }
-
-    @Override public void remove() {
-      this.iterator.remove();
-      updateSize();
-      notifyItemRemoved(this.position);
-    }
-
-    @Override public void set(V v) {
-      this.iterator.set(v);
-      notifyItemChanged(this.position);
-    }
-
-    @Override public void add(V v) {
-      this.position++;
-      this.iterator.add(v);
-      updateSize();
-      notifyItemInserted(this.position);
+    @Override public void onItemRemoved(int position) {
+      VmAdapter.this.updateSize();
+      VmAdapter.this.notifyItemRemoved(position);
     }
   }
 }
