@@ -8,11 +8,11 @@ public class AdapterListIterator<V extends VM> extends AdapterIterator<V>
     implements ListIterator<V> {
 
   @NonNull private final ListIterator<V> listIterator;
-  @NonNull private final AdapterListIteratorListener listListener;
+  @NonNull private final AdapterListIteratorListener<V> listListener;
 
   public AdapterListIterator(@NonNull ListIterator<V> iterator,
       @NonNull
-          AdapterListIteratorListener listener) {
+          AdapterListIteratorListener<V> listener) {
     super(iterator, listener);
     this.listIterator = iterator;
     this.listListener = listener;
@@ -20,7 +20,7 @@ public class AdapterListIterator<V extends VM> extends AdapterIterator<V>
 
   public AdapterListIterator(@NonNull ListIterator<V> iterator,
       @NonNull
-          AdapterListIteratorListener listener, int index) {
+          AdapterListIteratorListener<V> listener, int index) {
     this(iterator, listener);
     this.position = index;
   }
@@ -30,9 +30,9 @@ public class AdapterListIterator<V extends VM> extends AdapterIterator<V>
   }
 
   @Override public V previous() {
-    V vm = this.listIterator.previous();
+    currentItem = this.listIterator.previous();
     this.position--;
-    return vm;
+    return currentItem;
   }
 
   @Override public int nextIndex() {
@@ -45,18 +45,18 @@ public class AdapterListIterator<V extends VM> extends AdapterIterator<V>
 
   @Override public void set(V v) {
     this.listIterator.set(v);
-    listListener.onItemChanged(this.position);
+    listListener.onItemChanged(this.position, v, currentItem);
   }
 
   @Override public void add(V v) {
     this.listIterator.add(v);
-    listListener.onItemAdded(this.position);
+    listListener.onItemAdded(this.position, currentItem);
   }
 
-  public interface AdapterListIteratorListener extends AdapterIteratorListener {
+  public interface AdapterListIteratorListener<V extends VM> extends AdapterIteratorListener<V> {
 
-    void onItemAdded(int position);
+    void onItemAdded(int position, V item);
 
-    void onItemChanged(int position);
+    void onItemChanged(int position, V item, V oldItem);
   }
 }

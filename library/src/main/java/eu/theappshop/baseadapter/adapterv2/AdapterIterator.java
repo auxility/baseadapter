@@ -1,6 +1,7 @@
 package eu.theappshop.baseadapter.adapterv2;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.Iterator;
 
@@ -8,11 +9,12 @@ import java.util.Iterator;
 public class AdapterIterator<V extends VM> implements Iterator<V> {
 
   @NonNull private final Iterator<V> iterator;
-  @NonNull private final AdapterIteratorListener listener;
+  @NonNull private final AdapterIteratorListener<V> listener;
+  protected V currentItem;
   protected int position = 0;
 
   public AdapterIterator(@NonNull Iterator<V> iterator,
-      @NonNull AdapterIteratorListener listener) {
+      @NonNull AdapterIteratorListener<V> listener) {
     this.iterator = iterator;
     this.listener = listener;
   }
@@ -22,17 +24,17 @@ public class AdapterIterator<V extends VM> implements Iterator<V> {
   }
 
   @Override public V next() {
-    V vm = this.iterator.next();
+    currentItem = this.iterator.next();
     this.position++;
-    return vm;
+    return currentItem;
   }
 
   @Override public void remove() {
     this.iterator.remove();
-    listener.onItemRemoved(position);
+    listener.onItemRemoved(position, currentItem);
   }
 
-  public interface AdapterIteratorListener {
-    void onItemRemoved(int position);
+  public interface AdapterIteratorListener<V extends VM> {
+    void onItemRemoved(int position, V item);
   }
 }

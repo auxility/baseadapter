@@ -71,23 +71,18 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @Override public void clear() {
-    clearVms();
-    notifyDataSetChanged();
+    clear(false);
   }
 
   @Override public void clear(boolean withDiffUtil) {
-    if (withDiffUtil) {
-      List<V> oldVms = vms();
-      clearVms();
-      notifyDataSetChanged(oldVms, vms);
-    } else {
-      clear();
-    }
-  }
-
-  private void clearVms() {
+    List<V> oldVms = vms();
     this.vms.clear();
     updateSize();
+    if (withDiffUtil) {
+      notifyDataSetChanged(oldVms, vms);
+    } else {
+      notifyDataSetChanged();
+    }
   }
 
   @Override public void add(@NonNull V vm) {
@@ -144,48 +139,28 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @Override public boolean removeIf(@NonNull Predicate<V> predicate) {
+    return removeIf(predicate, false);
+  }
+
+  @Override public boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil) {
     Iterator<V> iterator = vms.iterator();
-    boolean isChanged = false;
+    List<V> oldvms = new ArrayList<>(vms);
     while (iterator.hasNext()) {
       V vm = iterator.next();
       if (predicate.apply(vm)) {
         iterator.remove();
-        isChanged = true;
       }
     }
-    if (isChanged) {
-      updateSize();
+    if (oldvms.size() == vms.size()) {
+      return false;
+    }
+    updateSize();
+    if (withDiffUtil) {
+      notifyDataSetChanged(oldvms, vms);
+    } else {
       notifyDataSetChanged();
     }
-    return isChanged;
-  }
-
-  @Override public boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil) {
-    if (withDiffUtil) {
-      Iterator<V> iterator = vms.iterator();
-      List<V> oldvms = new ArrayList<>(vms);
-      List<Integer> removedIndexes = new ArrayList<>();
-      int i = 0;
-      while (iterator.hasNext()) {
-        V vm = iterator.next();
-        if (predicate.apply(vm)) {
-          iterator.remove();
-          removedIndexes.add(i);
-        }
-        i++;
-      }
-      if (removedIndexes.size() == 1) {
-        notifyItemRemoved(removedIndexes.get(0));
-      } else if (removedIndexes.size() > 1) {
-        notifyDataSetChanged(oldvms, vms);
-      }
-      if (removedIndexes.size() > 0) {
-        updateSize();
-      }
-      return removedIndexes.size() > 0;
-    } else {
-      return removeIf(predicate);
-    }
+    return true;
   }
 
   @Override public List<V> removeRange(int beginIndex, int endIndex) {
@@ -198,23 +173,18 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
   }
 
   @Override public void set(@NonNull Collection<? extends V> c) {
-    setVms(c);
-    notifyDataSetChanged();
+    set(c, false);
   }
 
   @Override public void set(@NonNull Collection<? extends V> c, boolean withDiffUtil) {
-    if (withDiffUtil) {
-      List<V> oldVms = vms();
-      setVms(c);
-      notifyDataSetChanged(oldVms, vms);
-    } else {
-      set(c);
-    }
-  }
-
-  private void setVms(@NonNull Collection<? extends V> c) {
+    List<V> oldVms = vms();
     vms = new ArrayList<>(c);
     updateSize();
+    if (withDiffUtil) {
+      notifyDataSetChanged(oldVms, vms);
+    } else {
+      notifyDataSetChanged();
+    }
   }
 
   @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
@@ -275,28 +245,24 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     notifyDataSetChanged();
   }
 
-  private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener {
+  private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
 
-    @Override public void onItemRemoved(int position) {
+    @Override public void onItemRemoved(int position, V item) {
       VmAdapter.this.updateSize();
       VmAdapter.this.notifyItemRemoved(position);
     }
   }
 
-  private class AdapterListIteratorListenerImpl implements
-      AdapterListIterator.AdapterListIteratorListener {
-    @Override public void onItemAdded(int position) {
+  private class AdapterListIteratorListenerImpl extends AdapterIteratorListenerImpl implements
+      AdapterListIterator.AdapterListIteratorListener<V> {
+
+    @Override public void onItemAdded(int position, V item) {
       VmAdapter.this.updateSize();
       VmAdapter.this.notifyItemInserted(position);
     }
 
-    @Override public void onItemChanged(int position) {
+    @Override public void onItemChanged(int position, V item, V oldItem) {
       VmAdapter.this.notifyItemChanged(position);
-    }
-
-    @Override public void onItemRemoved(int position) {
-      VmAdapter.this.updateSize();
-      VmAdapter.this.notifyItemRemoved(position);
     }
   }
 }
