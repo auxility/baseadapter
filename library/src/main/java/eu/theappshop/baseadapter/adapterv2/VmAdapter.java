@@ -2,6 +2,7 @@ package eu.theappshop.baseadapter.adapterv2;
 
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.adapter.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
@@ -188,6 +189,21 @@ public class VmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Ada
         notifyPropertyChanged(BR.empty);
       }
     }
+  }
+
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof VmAdapter)) {
+      return false;
+    }
+    VmAdapter other = (VmAdapter) obj;
+    return this.vms.equals(other.vms);
+  }
+
+  @Override public int hashCode() {
+    return this.vms.hashCode();
   }
 
   @Override public void refresh() {
