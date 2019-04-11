@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
+public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Adapter<V> {
 
   @NonNull private Predicate<V> filter;
   @NonNull private final Adapter<V> adapter;
@@ -70,14 +70,6 @@ public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
     return this.adapter.isEmpty();
   }
 
-  @Override public boolean contains(@NonNull V vm) {
-    return this.vms.contains(vm);
-  }
-
-  @Override public boolean containsAll(@NonNull Collection<? extends V> c) {
-    return this.vms.containsAll(c);
-  }
-
   @NonNull @Override public Iterator<V> iterator() {
     return new AdapterIterator<>(this.vms.iterator(), new AdapterIteratorListenerImpl());
   }
@@ -88,20 +80,6 @@ public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
       this.adapter.remove(vm);
     }
     return vm;
-  }
-
-  @Override public boolean remove(@NonNull V vm) {
-    int index = this.vms.indexOf(vm);
-    if (index < 0) {
-      return false;
-    } else {
-      remove(index);
-      return true;
-    }
-  }
-
-  @Override public boolean removeIf(@NonNull Predicate<V> predicate) {
-    return removeIf(predicate, false);
   }
 
   @Override public boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil) {
@@ -145,18 +123,10 @@ public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
     return itemsToReturn;
   }
 
-  @Override public void clear() {
-    clear(false);
-  }
-
   //TODO remove and use remove range
   @Override public void clear(boolean withDiffUtil) {
     this.vms.clear();
     this.adapter.clear(withDiffUtil);
-  }
-
-  @Override public void add(@NonNull V vm) {
-    add(this.vms.size(), vm);
   }
 
   @Override public void add(int index, @NonNull V element) {
@@ -168,10 +138,6 @@ public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
         refresh();
       }
     }
-  }
-
-  @Override public boolean addAll(@NonNull Collection<? extends V> c) {
-    return addAll(this.vms.size(), c);
   }
 
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
@@ -202,23 +168,11 @@ public class FilterableVmAdapter<V extends VM> implements Adapter<V> {
     return prevVm;
   }
 
-  @Override public void set(@NonNull Collection<? extends V> c) {
-    set(c, false);
-  }
-
   @Override public void set(@NonNull Collection<? extends V> c, boolean withDiffUtil) {
     List<V> newVms = new ArrayList<>(c);
     List<V> filteredVms = ListUtils.filter(newVms, filter);
     this.vms = newVms;
     this.adapter.set(filteredVms, withDiffUtil);
-  }
-
-  @Override public int indexOf(@NonNull V vm) {
-    return vms.indexOf(vm);
-  }
-
-  @Override public int lastIndexOf(@NonNull V vm) {
-    return vms.lastIndexOf(vm);
   }
 
   @NonNull @Override public ListIterator<V> listIterator() {

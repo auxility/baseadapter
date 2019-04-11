@@ -1,6 +1,5 @@
 package eu.theappshop.baseadapter.adapterv2;
 
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.BR;
@@ -13,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V> {
+public class VmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Adapter<V> {
 
   @NonNull private final ObservableAdapterImpl<V> observableAdapterDelegate =
       new ObservableAdapterImpl<>();
@@ -41,16 +40,13 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     return isEmpty;
   }
 
-  @Override public boolean contains(@NonNull V vm) {
-    return this.vms.contains(vm);
-  }
-
-  @Override public boolean containsAll(@NonNull Collection<? extends V> c) {
-    return this.vms.containsAll(c);
-  }
-
   @NonNull @Override public Iterator<V> iterator() {
     return new AdapterIterator<>(this.vms.iterator(), new AdapterIteratorListenerImpl());
+  }
+
+  @NonNull @Override public ListIterator<V> listIterator(int index) {
+    return new AdapterListIterator<>(vms.listIterator(index), new AdapterListIteratorListenerImpl(),
+        index);
   }
 
   @NonNull @Override public V remove(int index) {
@@ -58,20 +54,6 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     updateSize();
     notifyItemRemoved(index);
     return e;
-  }
-
-  @Override public boolean remove(@NonNull V vm) {
-    int index = indexOf(vm);
-    if (index < 0) {
-      return false;
-    } else {
-      remove(index);
-      return true;
-    }
-  }
-
-  @Override public void clear() {
-    clear(false);
   }
 
   @Override public void clear(boolean withDiffUtil) {
@@ -85,18 +67,10 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     }
   }
 
-  @Override public void add(@NonNull V vm) {
-    add(vms.size(), vm);
-  }
-
   @Override public void add(int index, @NonNull V element) {
     vms.add(index, element);
     updateSize();
     notifyItemInserted(index);
-  }
-
-  @Override public boolean addAll(@NonNull Collection<? extends V> c) {
-    return addAll(vms.size(), c);
   }
 
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
@@ -119,27 +93,6 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     V returnValue = vms.set(index, element);
     notifyItemChanged(index);
     return returnValue;
-  }
-
-  @Override public int indexOf(@NonNull V vm) {
-    return vms.indexOf(vm);
-  }
-
-  @Override public int lastIndexOf(@NonNull V vm) {
-    return vms.lastIndexOf(vm);
-  }
-
-  @NonNull @Override public ListIterator<V> listIterator() {
-    return new AdapterListIterator<>(vms.listIterator(), new AdapterListIteratorListenerImpl());
-  }
-
-  @NonNull @Override public ListIterator<V> listIterator(int index) {
-    return new AdapterListIterator<>(vms.listIterator(index), new AdapterListIteratorListenerImpl(),
-        index);
-  }
-
-  @Override public boolean removeIf(@NonNull Predicate<V> predicate) {
-    return removeIf(predicate, false);
   }
 
   @Override public boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil) {
@@ -172,10 +125,6 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     return itemsToReturn;
   }
 
-  @Override public void set(@NonNull Collection<? extends V> c) {
-    set(c, false);
-  }
-
   @Override public void set(@NonNull Collection<? extends V> c, boolean withDiffUtil) {
     List<V> oldVms = vms();
     vms = new ArrayList<>(c);
@@ -185,6 +134,11 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
     } else {
       notifyDataSetChanged();
     }
+  }
+
+  @Override
+  public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
+    viewHolder.bindViewModel(vms.get(position));
   }
 
   @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
@@ -234,11 +188,6 @@ public class VmAdapter<V extends VM> extends BaseObservable implements Adapter<V
         notifyPropertyChanged(BR.empty);
       }
     }
-  }
-
-  @Override
-  public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
-    viewHolder.bindViewModel(vms.get(position));
   }
 
   @Override public void refresh() {

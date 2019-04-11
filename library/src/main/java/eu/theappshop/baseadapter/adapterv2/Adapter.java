@@ -7,7 +7,6 @@ import eu.theappshop.baseadapter.adapter.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -18,11 +17,25 @@ public interface Adapter<V extends VM>
 
   @Bindable boolean isEmpty();
 
+  @NonNull ListIterator<V> listIterator();
+
+  @NonNull ListIterator<V> listIterator(int index);
+
   boolean contains(@NonNull V vm);
 
   boolean containsAll(@NonNull Collection<? extends V> c);
 
-  @NonNull Iterator<V> iterator();
+  int indexOf(@NonNull V vm);
+
+  int lastIndexOf(@NonNull V vm);
+
+  void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
+
+  void refresh();
+
+  @NonNull V get(int index);
+
+  @NonNull List<V> vms();
 
   @NonNull V remove(int index);
 
@@ -46,26 +59,9 @@ public interface Adapter<V extends VM>
 
   boolean addAll(int index, @NonNull Collection<? extends V> c);
 
-  @NonNull V get(int index);
-
-  //copy list to avoid modification in original
-  @NonNull List<V> vms();
-
   @NonNull V set(int index, @NonNull V element);
 
   void set(@NonNull Collection<? extends V> c);
 
   void set(@NonNull Collection<? extends V> c, boolean withDiffUtil);
-
-  int indexOf(@NonNull V vm);
-
-  int lastIndexOf(@NonNull V vm);
-
-  @NonNull ListIterator<V> listIterator();
-
-  @NonNull ListIterator<V> listIterator(int index);
-
-  void bindViewHolder(BaseViewHolder<V> viewHolder, int position);
-
-  void refresh();
 }
