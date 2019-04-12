@@ -1,4 +1,4 @@
-package eu.theappshop.baseadapter;
+package eu.theappshop.baseadapter.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

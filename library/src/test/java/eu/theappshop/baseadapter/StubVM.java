@@ -1,9 +1,11 @@
 package eu.theappshop.baseadapter;
 
 import android.support.annotation.Nullable;
+import eu.theappshop.baseadapter.utils.ListUtils;
 import eu.theappshop.baseadapter.vm.VM;
+import java.util.Comparator;
 
-public class StubVM implements VM {
+public class StubVM implements VM, Comparable<StubVM> {
 
   final int value;
 
@@ -28,5 +30,23 @@ public class StubVM implements VM {
 
   @Override public int hashCode() {
     return value;
+  }
+
+  @Override public int compareTo(StubVM o) {
+    return this.value - o.value;
+  }
+
+  public static class IntMapper implements ListUtils.Mapper<Integer, StubVM> {
+
+    @Override public StubVM map(Integer integer) {
+      return new StubVM(integer);
+    }
+  }
+
+  public static class StubVmComparator implements Comparator<StubVM> {
+
+    @Override public int compare(StubVM o1, StubVM o2) {
+      return o1.value - o2.value;
+    }
   }
 }
