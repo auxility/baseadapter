@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
 
-interface AdapterDataObserver<V extends VM> {
+public interface AdapterDataObserver<V extends VM> {
 
   void onNotifyDataSetChanged();
 
