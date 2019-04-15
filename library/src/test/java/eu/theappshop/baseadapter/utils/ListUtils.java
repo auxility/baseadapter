@@ -1,6 +1,7 @@
 package eu.theappshop.baseadapter.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class ListUtils {
@@ -10,6 +11,10 @@ public abstract class ListUtils {
       list.add(mapper.map(i));
     }
     return list;
+  }
+
+  public static <T> List<T> listOf(T... items) {
+    return new ArrayList<>(Arrays.asList(items));
   }
 
   public interface Mapper<T, V> {

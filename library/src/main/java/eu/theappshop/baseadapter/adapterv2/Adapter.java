@@ -37,6 +37,9 @@ public interface Adapter<V extends VM>
 
   @NonNull List<V> vms();
 
+  //CRUD
+
+  //remove methods
   @NonNull V remove(int index);
 
   boolean remove(@NonNull V vm);
@@ -51,6 +54,8 @@ public interface Adapter<V extends VM>
 
   void clear(boolean withDiffUtil);
 
+  //add methods
+
   void add(@NonNull V vm);
 
   void add(int index, @NonNull V element);
@@ -58,6 +63,8 @@ public interface Adapter<V extends VM>
   boolean addAll(@NonNull Collection<? extends V> c);
 
   boolean addAll(int index, @NonNull Collection<? extends V> c);
+
+  //set methods
 
   @NonNull V set(int index, @NonNull V element);
 

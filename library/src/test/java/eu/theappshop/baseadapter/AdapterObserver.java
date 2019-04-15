@@ -18,37 +18,45 @@ public class AdapterObserver<V extends VM> implements AdapterDataObserver<V> {
   }
 
   @Override public void onNotifyDataSetChanged() {
-
+    updateDataFromAdapter();
   }
 
   @Override public void onNotifyItemInserted(int position) {
-
+    this.vms.add(position, this.adapter.get(position));
   }
 
-  @Override public void onNotifyItemRangeInserted(int positionStart, int itemCount) {
-
+  @Override public void onNotifyItemRangeInserted(int positionStart, int positionEnd) {
+    this.vms.addAll(positionStart, getRange(positionStart, positionEnd));
   }
 
   @Override public void onNotifyItemRemoved(int position) {
-
+    this.vms.remove(position);
   }
 
   @Override public void onNotifyItemRangeRemoved(int positionStart, int itemCount) {
-
+    this.vms.subList(positionStart, itemCount).clear();
   }
 
   @Override public void onNotifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
-
+    updateDataFromAdapter();
   }
 
   @Override public void onNotifyItemChanged(int position) {
-
+    this.vms.set(position, this.adapter.get(position));
   }
 
   private void updateDataFromAdapter() {
-    vms = new ArrayList<>();
-    for (int i = 0; i < adapter.getSize(); i++) {
-      vms.add(adapter.get(i));
+    this.vms = new ArrayList<>();
+    for (int i = 0; i < this.adapter.getSize(); i++) {
+      this.vms.add(this.adapter.get(i));
     }
+  }
+
+  private List<V> getRange(int positionStart, int positionEnd) {
+    List<V> vmsToReturn = new ArrayList<>();
+    for (int i = positionStart; i < positionEnd; i++) {
+      vmsToReturn.add(this.adapter.get(i));
+    }
+    return vmsToReturn;
   }
 }

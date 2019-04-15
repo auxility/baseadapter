@@ -8,7 +8,7 @@ public class TestUtils {
       block.run();
       fail("Throwable " + expectedException.getSimpleName() + " is not thrown");
     } catch (Throwable ex) {
-      if (!ex.getClass().equals(expectedException)) {
+      if (!expectedException.isAssignableFrom(ex.getClass())) {
         throw ex;
       }
     }

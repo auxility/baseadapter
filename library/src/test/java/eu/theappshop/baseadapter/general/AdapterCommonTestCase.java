@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static eu.theappshop.baseadapter.utils.ListUtils.listOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +43,7 @@ public abstract class AdapterCommonTestCase {
     vm4 = new StubVM(4);
     vm5 = new StubVM(5);
     vm6 = new StubVM(6);
-    adapter = provideAdapter(new ArrayList<>(Arrays.asList(vm1, vm2, vm3, vm4, vm5)));
+    adapter = provideAdapter(listOf(vm1, vm2, vm3, vm4, vm5));
   }
 
   @Test
