@@ -151,31 +151,31 @@ public class VmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Ada
   }
 
   private void notifyDataSetChanged() {
-    this.observableAdapterDelegate.notifyDataSetChanged();
+    this.observableAdapterDelegate.onNotifyDataSetChanged();
   }
 
   private void notifyItemInserted(int position) {
-    this.observableAdapterDelegate.notifyItemInserted(position);
+    this.observableAdapterDelegate.onNotifyItemInserted(position);
   }
 
   private void notifyItemRangeInserted(int positionStart, int itemCount) {
-    this.observableAdapterDelegate.notifyItemRangeInserted(positionStart, itemCount);
+    this.observableAdapterDelegate.onNotifyItemRangeInserted(positionStart, itemCount);
   }
 
   private void notifyItemRemoved(int position) {
-    this.observableAdapterDelegate.notifyItemRemoved(position);
+    this.observableAdapterDelegate.onNotifyItemRemoved(position);
   }
 
   private void notifyItemRangeRemoved(int positionStart, int itemCount) {
-    this.observableAdapterDelegate.notifyItemRangeRemoved(positionStart, itemCount);
+    this.observableAdapterDelegate.onNotifyItemRangeRemoved(positionStart, itemCount);
   }
 
   private void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
-    this.observableAdapterDelegate.notifyDataSetChanged(oldItems, newVms);
+    this.observableAdapterDelegate.onNotifyDataSetChanged(oldItems, newVms);
   }
 
   private void notifyItemChanged(int position) {
-    this.observableAdapterDelegate.notifyItemChanged(position);
+    this.observableAdapterDelegate.onNotifyItemChanged(position);
   }
 
   //TODO test
