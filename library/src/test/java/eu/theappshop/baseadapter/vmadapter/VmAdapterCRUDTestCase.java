@@ -1,16 +1,24 @@
 package eu.theappshop.baseadapter.vmadapter;
 
+import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.AdapterObserver;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.StubVM;
+import eu.theappshop.baseadapter.adapterv2.Predicate;
 import eu.theappshop.baseadapter.adapterv2.VmAdapter;
+import eu.theappshop.baseadapter.utils.ListUtils;
 import eu.theappshop.baseadapter.utils.TestUtils;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
 import static eu.theappshop.baseadapter.utils.ListUtils.listOf;
 import static eu.theappshop.baseadapter.utils.TestUtils.assertThrows;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -70,6 +78,7 @@ public class VmAdapterCRUDTestCase {
     assertEquals(listOf(vm2, vm3, vm4, vm5, vm6), observer.vms);
     //Test correct notify method was called
     verify(observer, times(1)).onNotifyItemRemoved(0);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
   }
 
   @Test
@@ -85,32 +94,136 @@ public class VmAdapterCRUDTestCase {
   }
 
   @Test
-  public void testRemoveByVm() {
+  public void testRemoveByVmContent() {
+    int indexOfVm = adapter.indexOf(vm1);
+    assertTrue(adapter.remove(vm1));
+    assertFalse(adapter.remove(vm10));
+    assertEquals(listOf(vm2, vm3, vm4, vm5, vm6), observer.vms);
+    verify(observer, times(1)).onNotifyItemRemoved(indexOfVm);
+    verify(observer, times(1)).onNotifyItemRemoved(anyInt());
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+  }
 
+  @Test
+  public void testRemoveByVmSizeAndEmpty() {
+    List<StubVM> vmsToRemove = new ArrayList<>(adapter.vms());
+    int size = vmsToRemove.size();
+    for (StubVM vm : vmsToRemove) {
+      adapter.remove(vm);
+    }
+    verify(adapter, times(size)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
   }
 
   @Test
   public void testRemovePredicate() {
-
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return object.value % 2 == 0;
+      }
+    });
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+    assertEquals(ListUtils.listOf(vm1, vm3, vm5), observer.vms);
   }
 
   @Test
-  public void testRemovePredicateDiffUtil() {
+  public void testRemovePredicateSizeAndEmpty() {
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return false;
+      }
+    });
+    verify(adapter, times(0)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+    assertEquals(ListUtils.listOf(vm1, vm2, vm3, vm4, vm5, vm6), observer.vms);
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return true;
+      }
+    });
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    assertTrue(observer.vms.isEmpty());
+  }
 
+  @Test
+  public void testRemovePredicateDiff() {
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return object.value % 2 == 0;
+      }
+    }, true);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+    assertEquals(ListUtils.listOf(vm1, vm3, vm5), observer.vms);
+  }
+
+  @Test
+  public void testRemovePredicateSizeAndEmptyDiff() {
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return false;
+      }
+    });
+    verify(adapter, times(0)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+    assertEquals(ListUtils.listOf(vm1, vm2, vm3, vm4, vm5, vm6), observer.vms);
+    adapter.removeIf(new Predicate<StubVM>() {
+      @Override public Boolean apply(@NonNull StubVM object) {
+        return true;
+      }
+    }, true);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    assertTrue(observer.vms.isEmpty());
   }
 
   @Test
   public void testRemoveRange() {
+    assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.removeRange(-1, 2);
+      }
+    });
+    assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.removeRange(2, adapter.getSize() + 1);
+      }
+    });
+    assertThrows(IllegalArgumentException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.removeRange(2, 0);
+      }
+    });
+    adapter.removeRange(0, 2);
+    assertEquals(ListUtils.listOf(vm3, vm4, vm5, vm6), observer.vms);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
+    verify(observer, times(1)).onNotifyItemRangeRemoved(0, 2);
+  }
 
+  @Test
+  public void testRemoveRangeAll() {
+    adapter.removeRange(0, adapter.getSize());
+    assertTrue(observer.vms.isEmpty());
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
   }
 
   @Test
   public void testClear() {
-
+    adapter.clear();
+    assertTrue(observer.vms.isEmpty());
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
   }
 
   @Test
-  public void testClearDiffUtil() {
-
+  public void testClearDiff() {
+    adapter.clear(true);
+    assertTrue(observer.vms.isEmpty());
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
   }
 }

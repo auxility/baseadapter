@@ -6,7 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     VmAdapterSerializationTestCase.class,
-    VmAdapterCommonTestCase.class
+    VmAdapterCommonTestCase.class,
+    VmAdapterCRUDTestCase.class
 })
 public class VmAdapterUnitTest {
 

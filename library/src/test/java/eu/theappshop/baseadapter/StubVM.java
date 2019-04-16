@@ -7,7 +7,7 @@ import java.util.Comparator;
 
 public class StubVM implements VM, Comparable<StubVM> {
 
-  final int value;
+  public final int value;
 
   public StubVM(int value) {
     this.value = value;
