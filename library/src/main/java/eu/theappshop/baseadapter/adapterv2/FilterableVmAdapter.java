@@ -2,6 +2,7 @@ package eu.theappshop.baseadapter.adapterv2;
 
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import eu.theappshop.baseadapter.adapter.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
@@ -13,12 +14,12 @@ import java.util.ListIterator;
 
 public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Adapter<V> {
 
-  @NonNull private Predicate<V> filter;
+  @NonNull private SerializablePredicate<V> filter;
   @NonNull private final Adapter<V> adapter;
   @NonNull private List<V> vms;
 
   public FilterableVmAdapter(
-      @NonNull Predicate<V> filter,
+      @NonNull SerializablePredicate<V> filter,
       @NonNull Adapter<V> adapter,
       @NonNull List<V> vms) {
     this.vms = vms;
@@ -28,36 +29,35 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   }
 
   public FilterableVmAdapter(
-      @NonNull Predicate<V> filter,
+      @NonNull SerializablePredicate<V> filter,
       @NonNull List<V> vms) {
     this(filter, new VmAdapter<V>(), vms);
-    refresh();
   }
 
   public FilterableVmAdapter(
-      @NonNull Predicate<V> filter,
+      @NonNull SerializablePredicate<V> filter,
       @NonNull Adapter<V> adapter) {
     this(filter, adapter, new ArrayList<V>());
   }
 
   public FilterableVmAdapter(
-      @NonNull Predicate<V> filter) {
+      @NonNull SerializablePredicate<V> filter) {
     this(filter, new VmAdapter<V>());
   }
 
   public FilterableVmAdapter() {
-    this(new Predicate<V>() {
+    this(new SerializablePredicate<V>() {
       @Override public Boolean apply(@NonNull V object) {
         return true;
       }
     });
   }
 
-  @NonNull public Predicate<V> getFilter() {
+  @NonNull public SerializablePredicate<V> getFilter() {
     return filter;
   }
 
-  public void setFilter(@NonNull Predicate<V> filter) {
+  public void setFilter(@NonNull SerializablePredicate<V> filter) {
     this.filter = filter;
     refresh();
   }
@@ -153,7 +153,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   }
 
   @NonNull @Override public V get(int index) {
-    return this.vms.get(index);
+    return this.adapter.get(index);
   }
 
   @NonNull @Override public List<V> vms() {
@@ -215,6 +215,22 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
         adapter.remove(item);
       }
     }
+  }
+
+  @Override public boolean equals(@Nullable Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof FilterableVmAdapter)) {
+      return false;
+    }
+    FilterableVmAdapter other = (FilterableVmAdapter) obj;
+    return this.vms.equals(other.vms) && this.adapter.equals(
+        other.adapter);
+  }
+
+  @Override public int hashCode() {
+    return this.vms.hashCode() * 1000 + this.adapter.hashCode();
   }
 
   private class AdapterListIteratorListenerImpl extends AdapterIteratorListenerImpl implements

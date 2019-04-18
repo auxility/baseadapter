@@ -23,7 +23,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class VmAdapterCRUDTestCase {
+public class VmAdapterTestCase {
 
   private VmAdapter<StubVM> adapter;
   private AdapterObserver<StubVM> observer;
@@ -225,5 +225,26 @@ public class VmAdapterCRUDTestCase {
     assertTrue(observer.vms.isEmpty());
     verify(adapter, times(1)).notifyPropertyChanged(BR.size);
     verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+  }
+
+  @Test
+  public void testGet() {
+    assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.get(-1);
+      }
+    });
+    assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.get(adapter.getSize());
+      }
+    });
+    StubVM vm = adapter.get(0);
+    assertEquals(vm, vm1);
+  }
+
+  @Test
+  public void testGetSize() {
+    assertEquals(6, adapter.getSize());
   }
 }
