@@ -114,7 +114,7 @@ public class FilterableAdapterTestCase {
     //Test vms to be displayed after removal
     assertEquals(listOf(vm1, vm3, vm5), observer.vms);
     //Test correct notify method was called
-    verify(observer, times(0)).onNotifyItemRemoved(anyInt());
+    verify(observer, times(0)).notifyItemRemoved(anyInt());
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
     StubVM removedVmFiltered = adapter.remove(adapter.indexOf(vm3));
     //Test correct VM removed
@@ -122,7 +122,7 @@ public class FilterableAdapterTestCase {
     //Test vms to be displayed after removal
     assertEquals(listOf(vm1, vm5), observer.vms);
     //Test correct notify method was called
-    verify(observer, times(1)).onNotifyItemRemoved(1);
+    verify(observer, times(1)).notifyItemRemoved(1);
     //verify(adapter.adapter, times(0)).notifyPropertyChanged(BR.empty);
   }
 

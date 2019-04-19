@@ -1,7 +1,7 @@
 package eu.theappshop.baseadapter.general;
 
 import eu.theappshop.baseadapter.StubVM;
-import eu.theappshop.baseadapter.adapterv2.Adapter;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
 import eu.theappshop.baseadapter.utils.ListUtils;
 import eu.theappshop.baseadapter.utils.SerializationUtils;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class AdapterSerializationTestCase {
 
-  private Adapter<StubVM> adapter;
+  private AbstractVmAdapter<StubVM> adapter;
 
   @Before
   public void setUp() {
@@ -38,10 +38,10 @@ public abstract class AdapterSerializationTestCase {
     byte[] serialized = SerializationUtils.serialize(adapter);
     Object deserialized = SerializationUtils.deserialize(serialized);
 
-    assertTrue(deserialized instanceof Adapter<?>);
-    assertTrue(((Adapter<?>) deserialized).vms().get(0) instanceof StubVM);
+    assertTrue(deserialized instanceof AbstractVmAdapter<?>);
+    assertTrue(((AbstractVmAdapter<?>) deserialized).vms().get(0) instanceof StubVM);
     assertEquals(adapter, deserialized);
   }
 
-  protected abstract Adapter<StubVM> getAdapter(List<StubVM> vms);
+  protected abstract AbstractVmAdapter<StubVM> getAdapter(List<StubVM> vms);
 }

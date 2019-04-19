@@ -1,34 +1,37 @@
 package eu.theappshop.baseadapter.adapterv2;
 
 import android.databinding.BaseObservable;
+import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import eu.theappshop.baseadapter.adapter.BaseViewHolder;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.Collection;
 import java.util.ListIterator;
 
-public abstract class AbstractVmAdapter<V extends VM> extends BaseObservable implements Adapter<V> {
+public abstract class AbstractVmAdapter<V extends VM> extends BaseObservable
+    implements VmAdapter<V> {
 
-  @Override public int indexOf(@NonNull V vm) {
+  public int indexOf(@NonNull V vm) {
     return vms().indexOf(vm);
   }
 
-  @Override public int lastIndexOf(@NonNull V vm) {
+  public int lastIndexOf(@NonNull V vm) {
     return vms().lastIndexOf(vm);
   }
 
-  @Override public boolean contains(@NonNull V vm) {
+  public boolean contains(@NonNull V vm) {
     return vms().contains(vm);
   }
 
-  @Override public boolean containsAll(@NonNull Collection<? extends V> c) {
+  public boolean containsAll(@NonNull Collection<? extends V> c) {
     return vms().containsAll(c);
   }
 
-  @NonNull @Override public ListIterator<V> listIterator() {
+  @NonNull public ListIterator<V> listIterator() {
     return listIterator(0);
   }
 
-  @Override public boolean remove(@NonNull V vm) {
+  public boolean remove(@NonNull V vm) {
     int index = indexOf(vm);
     if (index < 0) {
       return false;
@@ -38,23 +41,35 @@ public abstract class AbstractVmAdapter<V extends VM> extends BaseObservable imp
     }
   }
 
-  @Override public void clear() {
+  public void clear() {
     clear(false);
   }
 
-  @Override public void add(@NonNull V vm) {
+  public void add(@NonNull V vm) {
     add(vms().size(), vm);
   }
 
-  @Override public boolean addAll(@NonNull Collection<? extends V> c) {
+  public boolean addAll(@NonNull Collection<? extends V> c) {
     return addAll(vms().size(), c);
   }
 
-  @Override public boolean removeIf(@NonNull Predicate<V> predicate) {
+  public boolean removeIf(@NonNull Predicate<V> predicate) {
     return removeIf(predicate, false);
   }
 
-  @Override public void set(@NonNull Collection<? extends V> c) {
+  public void set(@NonNull Collection<? extends V> c) {
     set(c, false);
+  }
+
+  public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
+    viewHolder.bindViewModel(get(position));
+  }
+
+  public @Bindable boolean isEmpty() {
+    return getSize() == 0;
+  }
+
+  public void refresh() {
+
   }
 }

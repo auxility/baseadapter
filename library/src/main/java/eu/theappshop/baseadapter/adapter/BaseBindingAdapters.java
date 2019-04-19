@@ -19,6 +19,8 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import eu.theappshop.baseadapter.BR;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
+import eu.theappshop.baseadapter.adapterv2.AdapterDataObserver;
 import eu.theappshop.baseadapter.misc.LayoutManagerType;
 import eu.theappshop.baseadapter.vm.GridLayoutVM;
 import eu.theappshop.baseadapter.vm.LinearLayoutVM;
@@ -31,7 +33,7 @@ public final class BaseBindingAdapters {
       "adapter", "layoutManager", "reverse", "spanCount", "orientation"
   }, requireAll = false)
   public static void _bindAdapter(final RecyclerView recyclerView,
-      @Nullable final Adapter adapter,
+      @Nullable final AbstractVmAdapter adapter,
       LayoutManagerType layoutManagerType,
       boolean reverse,
       int spanCount,
@@ -62,7 +64,7 @@ public final class BaseBindingAdapters {
         glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
           @Override
           public int getSpanSize(int position) {
-            VM vm = adapter.getItem(position);
+            VM vm = adapter.get(position);
             if (!(vm instanceof SpannedVM)) {
               throw new IllegalStateException(
                   "VMs inside variable span grid should implement SpannedVM");
@@ -80,7 +82,8 @@ public final class BaseBindingAdapters {
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final ViewPager viewPager, @Nullable final Adapter adapter) {
+  public static void _bindAdapter(final ViewPager viewPager,
+      @Nullable final AbstractVmAdapter adapter) {
     //if adapter instance was changed while viewpager was attached to screen
     // we have to unsubscribe the previous adapter
     PagerAdapter prevAdapter = viewPager.getAdapter();
@@ -112,7 +115,8 @@ public final class BaseBindingAdapters {
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final TabLayout tabLayout, @Nullable final Adapter adapter) {
+  public static void _bindAdapter(final TabLayout tabLayout,
+      @Nullable final AbstractVmAdapter adapter) {
     Object prevAdapter = tabLayout.getTag();
     if (adapter instanceof AdapterDataObserver && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
@@ -142,7 +146,8 @@ public final class BaseBindingAdapters {
   }
 
   @BindingAdapter("adapter")
-  public static void _bindAdapter(final AdapterView adapterView, @Nullable final Adapter adapter) {
+  public static void _bindAdapter(final AdapterView adapterView,
+      @Nullable final AbstractVmAdapter adapter) {
     //if adapter instance was changed while adapterView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = adapterView.getAdapter();
@@ -175,7 +180,7 @@ public final class BaseBindingAdapters {
   }
 
   @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
-  public static void _bindAdapter(final Spinner spinner, @Nullable final Adapter adapter,
+  public static void _bindAdapter(final Spinner spinner, @Nullable final AbstractVmAdapter adapter,
       boolean hintEnabled) {
     //if adapter instance was changed while spinner was attached to screen
     // we have to unsubscribe the previous adapter
@@ -209,7 +214,7 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
-      @Nullable final Adapter adapter) {
+      @Nullable final AbstractVmAdapter adapter) {
     //if adapter instance was changed while autoCompleteTextView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
@@ -242,10 +247,10 @@ public final class BaseBindingAdapters {
 
   //TODO add adapter decorator
   @BindingAdapter("adapter")
-  public static void _bindAdapter(GridLayout gridLayout, Adapter adapter) {
+  public static void _bindAdapter(GridLayout gridLayout, AbstractVmAdapter adapter) {
     gridLayout.removeAllViews();
     LayoutInflater inflater = LayoutInflater.from(gridLayout.getContext());
-    for (Object o : adapter.getItems()) {
+    for (Object o : adapter.vms()) {
       if (o instanceof GridLayoutVM) {
         GridLayoutVM vm = (GridLayoutVM) o;
         ViewDataBinding binding = DataBindingUtil.inflate(inflater, vm.getLayoutId(), null, false);
@@ -261,10 +266,10 @@ public final class BaseBindingAdapters {
 
   //TODO add adapter decorator
   @BindingAdapter("adapter")
-  public static void _bindAdapter(LinearLayout gridLayout, Adapter adapter) {
+  public static void _bindAdapter(LinearLayout gridLayout, AbstractVmAdapter adapter) {
     gridLayout.removeAllViews();
     LayoutInflater inflater = LayoutInflater.from(gridLayout.getContext());
-    for (Object o : adapter.getItems()) {
+    for (Object o : adapter.vms()) {
       if (o instanceof LinearLayoutVM) {
         LinearLayoutVM vm = (LinearLayoutVM) o;
         ViewDataBinding binding = DataBindingUtil.inflate(inflater, vm.getLayoutId(), null, false);

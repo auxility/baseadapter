@@ -5,6 +5,8 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
+import eu.theappshop.baseadapter.adapterv2.AdapterDataObserver;
 import eu.theappshop.baseadapter.misc.DiffVMCallback;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
@@ -13,9 +15,9 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
     implements AdapterDataObserver<V> {
 
   @NonNull
-  private Adapter<V> adapter;
+  private AbstractVmAdapter<V> adapter;
 
-  RecyclerViewAdapter(@NonNull Adapter<V> adapter) {
+  RecyclerViewAdapter(@NonNull AbstractVmAdapter<V> adapter) {
     this.adapter = adapter;
   }
 
@@ -33,12 +35,12 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
 
   @Override
   public int getItemCount() {
-    return adapter.getItemCount();
+    return adapter.getSize();
   }
 
   @Override
   public int getItemViewType(int position) {
-    return adapter.getItemViewType(position);
+    return adapter.get(position).getLayoutId();
   }
 
   @Override
@@ -61,7 +63,31 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
     adapter.unregisterObserver(this);
   }
 
-  @NonNull public Adapter getAdapter() {
+  @NonNull public AbstractVmAdapter getAdapter() {
     return adapter;
+  }
+
+  @Override public void notifyItemInserted(int position) {
+    notifyItemInserted(position);
+  }
+
+  @Override public void notifyItemRangeInserted(int positionStart, int itemCount) {
+    notifyItemRangeInserted(positionStart, itemCount);
+  }
+
+  @Override public void notifyItemRemoved(int position) {
+    notifyItemRemoved(position);
+  }
+
+  @Override public void notifyItemRangeRemoved(int positionStart, int itemCount) {
+    notifyItemRangeRemoved(positionStart, itemCount);
+  }
+
+  @Override public void notifyItemChanged(int position) {
+    notifyItemChanged(position);
+  }
+
+  @Override public void notifyDataSetChanged() {
+    notifyDataSetChanged();
   }
 }

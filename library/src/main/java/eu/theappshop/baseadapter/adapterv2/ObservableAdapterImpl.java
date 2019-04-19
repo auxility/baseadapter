@@ -29,58 +29,58 @@ public class ObservableAdapterImpl<V extends VM>
     }
   }
 
-  @Override public void onNotifyDataSetChanged() {
+  @Override public void notifyDataSetChanged() {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyDataSetChanged();
+        observer.notifyDataSetChanged();
       }
     }
   }
 
-  @Override public void onNotifyItemInserted(int position) {
+  @Override public void notifyItemInserted(int position) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyItemInserted(position);
+        observer.notifyItemInserted(position);
       }
     }
   }
 
-  @Override public void onNotifyItemRangeInserted(int positionStart, int itemCount) {
+  @Override public void notifyItemRangeInserted(int positionStart, int itemCount) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyItemRangeInserted(positionStart, itemCount);
+        observer.notifyItemRangeInserted(positionStart, itemCount);
       }
     }
   }
 
-  @Override public void onNotifyItemRemoved(int position) {
+  @Override public void notifyItemRemoved(int position) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyItemRemoved(position);
+        observer.notifyItemRemoved(position);
       }
     }
   }
 
-  @Override public void onNotifyItemRangeRemoved(int positionStart, int itemCount) {
+  @Override public void notifyItemRangeRemoved(int positionStart, int itemCount) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyItemRangeRemoved(positionStart, itemCount);
+        observer.notifyItemRangeRemoved(positionStart, itemCount);
       }
     }
   }
 
-  @Override public void onNotifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyDataSetChanged(oldItems, newVms);
+        observer.notifyDataSetChanged(oldItems, newVms);
       }
     }
   }
 
-  @Override public void onNotifyItemChanged(int position) {
+  @Override public void notifyItemChanged(int position) {
     if (observers != null) {
       for (AdapterDataObserver<V> observer : observers) {
-        observer.onNotifyItemChanged(position);
+        observer.notifyItemChanged(position);
       }
     }
   }

@@ -12,37 +12,35 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> implements Adapter<V> {
+public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapterDecorator<V> {
 
   @NonNull private SerializablePredicate<V> filter;
-  @NonNull private final Adapter<V> adapter;
   @NonNull private List<V> vms;
 
   public FilterableVmAdapter(
-      @NonNull SerializablePredicate<V> filter,
-      @NonNull Adapter<V> adapter,
-      @NonNull List<V> vms) {
+      @NonNull AbstractVmAdapter<V> adapter,
+      @NonNull List<V> vms,
+      @NonNull SerializablePredicate<V> filter) {
+    super(adapter);
     this.vms = vms;
     this.filter = filter;
-    this.adapter = adapter;
     refresh();
   }
 
   public FilterableVmAdapter(
-      @NonNull SerializablePredicate<V> filter,
-      @NonNull List<V> vms) {
-    this(filter, new VmAdapter<V>(), vms);
+      @NonNull List<V> vms,
+      @NonNull SerializablePredicate<V> filter) {
+    this(new BaseVmAdapter<V>(), vms, filter);
   }
 
   public FilterableVmAdapter(
-      @NonNull SerializablePredicate<V> filter,
-      @NonNull Adapter<V> adapter) {
-    this(filter, adapter, new ArrayList<V>());
+      @NonNull AbstractVmAdapter<V> adapter, @NonNull SerializablePredicate<V> filter) {
+    this(adapter, new ArrayList<V>(), filter);
   }
 
   public FilterableVmAdapter(
       @NonNull SerializablePredicate<V> filter) {
-    this(filter, new VmAdapter<V>());
+    this(new BaseVmAdapter<V>(), filter);
   }
 
   public FilterableVmAdapter() {
@@ -63,11 +61,11 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   }
 
   @Bindable @Override public int getSize() {
-    return this.adapter.getSize();
+    return getAdapter().getSize();
   }
 
   @Bindable @Override public boolean isEmpty() {
-    return this.adapter.isEmpty();
+    return getAdapter().isEmpty();
   }
 
   @NonNull @Override public Iterator<V> iterator() {
@@ -77,7 +75,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   @NonNull @Override public V remove(int index) {
     V vm = vms.remove(index);
     if (filter.apply(vm)) {
-      this.adapter.remove(vm);
+      getAdapter().remove(vm);
     }
     return vm;
   }
@@ -94,7 +92,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
     if (vms.size() == prevSize) {
       return false;
     }
-    this.adapter.set(ListUtils.filter(vms, filter), withDiffUtil);
+    getAdapter().set(ListUtils.filter(vms, filter), withDiffUtil);
     return true;
   }
 
@@ -115,9 +113,11 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
     });
     if (firstVm != null && lastVm != null) {
       if (firstVm == lastVm) {
-        this.adapter.remove(firstVm);
+        getAdapter().remove(firstVm);
       } else {
-        this.adapter.removeRange(adapter.indexOf(firstVm), adapter.indexOf(lastVm) + 1);
+        getAdapter()
+            .removeRange(getAdapter().indexOf(firstVm),
+                getAdapter().indexOf(lastVm) + 1);
       }
     }
     return itemsToReturn;
@@ -126,14 +126,14 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   //TODO remove and use remove range
   @Override public void clear(boolean withDiffUtil) {
     this.vms.clear();
-    this.adapter.clear(withDiffUtil);
+    getAdapter().clear(withDiffUtil);
   }
 
   @Override public void add(int index, @NonNull V element) {
     this.vms.add(index, element);
     if (filter.apply(element)) {
       if (index == this.vms.size() - 1) {
-        this.adapter.add(element);
+        getAdapter().add(element);
       } else {
         refresh();
       }
@@ -145,7 +145,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
     boolean returnValue = this.vms.addAll(index, newVms);
     if (index == this.vms.size()) {
       List<V> newFilteredVms = ListUtils.filter(newVms, filter);
-      this.adapter.addAll(newFilteredVms);
+      getAdapter().addAll(newFilteredVms);
     } else {
       refresh();
     }
@@ -153,7 +153,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   }
 
   @NonNull @Override public V get(int index) {
-    return this.adapter.get(index);
+    return getAdapter().get(index);
   }
 
   @NonNull @Override public List<V> vms() {
@@ -172,7 +172,7 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
     List<V> newVms = new ArrayList<>(c);
     List<V> filteredVms = ListUtils.filter(newVms, filter);
     this.vms = newVms;
-    this.adapter.set(filteredVms, withDiffUtil);
+    getAdapter().set(filteredVms, withDiffUtil);
   }
 
   @NonNull @Override public ListIterator<V> listIterator() {
@@ -185,36 +185,11 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
   }
 
   @Override public void bindViewHolder(BaseViewHolder<V> viewHolder, int position) {
-    this.adapter.bindViewHolder(viewHolder, position);
+    getAdapter().bindViewHolder(viewHolder, position);
   }
 
   @Override public void refresh() {
-    this.adapter.set(ListUtils.filter(this.vms, filter));
-  }
-
-  @Override public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-    this.adapter.addOnPropertyChangedCallback(callback);
-  }
-
-  @Override public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-    this.adapter.removeOnPropertyChangedCallback(callback);
-  }
-
-  @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
-    this.adapter.registerObserver(observer);
-  }
-
-  @Override public void unregisterObserver(@NonNull AdapterDataObserver<V> observer) {
-    this.adapter.unregisterObserver(observer);
-  }
-
-  private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
-
-    @Override public void onItemRemoved(int position, V item) {
-      if (filter.apply(item)) {
-        adapter.remove(item);
-      }
-    }
+    getAdapter().set(ListUtils.filter(this.vms, filter));
   }
 
   @Override public boolean equals(@Nullable Object obj) {
@@ -225,12 +200,21 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
       return false;
     }
     FilterableVmAdapter other = (FilterableVmAdapter) obj;
-    return this.vms.equals(other.vms) && this.adapter.equals(
-        other.adapter);
+    return this.vms.equals(other.vms) && getAdapter().equals(
+        other.getAdapter());
   }
 
   @Override public int hashCode() {
-    return this.vms.hashCode() * 1000 + this.adapter.hashCode();
+    return this.vms.hashCode() * 1000 + getAdapter().hashCode();
+  }
+
+  private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
+
+    @Override public void onItemRemoved(int position, V item) {
+      if (filter.apply(item)) {
+        getAdapter().remove(item);
+      }
+    }
   }
 
   private class AdapterListIteratorListenerImpl extends AdapterIteratorListenerImpl implements
@@ -246,11 +230,11 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapter<V> impl
       boolean itemFiltered = filter.apply(item);
       boolean prevFiltered = filter.apply(oldItem);
       if (itemFiltered && prevFiltered) {
-        adapter.set(adapter.indexOf(oldItem), item);
+        getAdapter().set(getAdapter().indexOf(oldItem), item);
       } else if (itemFiltered) {
         refresh();
       } else if (prevFiltered) {
-        adapter.remove(oldItem);
+        getAdapter().remove(oldItem);
       }
     }
   }

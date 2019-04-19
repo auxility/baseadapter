@@ -4,7 +4,7 @@ import android.databinding.ViewDataBinding;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.StubVM;
 import eu.theappshop.baseadapter.adapter.BaseViewHolder;
-import eu.theappshop.baseadapter.adapterv2.Adapter;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
 import eu.theappshop.baseadapter.utils.TestUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class AdapterCommonTestCase {
 
-  private Adapter<StubVM> adapter;
+  private AbstractVmAdapter<StubVM> adapter;
   private StubVM vm1;
   private StubVM vm2;
   private StubVM vm3;
@@ -205,5 +205,5 @@ public abstract class AdapterCommonTestCase {
     Mockito.verify(binding).setVariable(BR.viewModel, vm1);
   }
 
-  protected abstract Adapter<StubVM> provideAdapter(List<StubVM> vms);
+  protected abstract AbstractVmAdapter<StubVM> provideAdapter(List<StubVM> vms);
 }

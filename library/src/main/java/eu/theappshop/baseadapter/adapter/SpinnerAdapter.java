@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import eu.theappshop.baseadapter.R;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
+import eu.theappshop.baseadapter.adapterv2.AdapterDataObserver;
 import eu.theappshop.baseadapter.vm.SpinnerVM;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.List;
@@ -14,20 +16,20 @@ public class SpinnerAdapter<V extends VM> extends BaseAdapter implements Adapter
 
   private boolean isHintEnabled;
   @Nullable
-  private Adapter<V> adapter;
+  private AbstractVmAdapter<V> adapter;
 
   public SpinnerAdapter(
-      @Nullable Adapter<V> adapter, boolean isHintEnabled) {
+      @Nullable AbstractVmAdapter<V> adapter, boolean isHintEnabled) {
     this.adapter = adapter;
     this.isHintEnabled = isHintEnabled;
   }
 
   @Override public int getCount() {
-    return adapter == null ? 0 : adapter.getItemCount();
+    return adapter == null ? 0 : adapter.getSize();
   }
 
   @Override public Object getItem(int position) {
-    return adapter == null ? null : adapter.getItem(position);
+    return adapter == null ? null : adapter.get(position);
   }
 
   @Override public long getItemId(int position) {
@@ -71,6 +73,10 @@ public class SpinnerAdapter<V extends VM> extends BaseAdapter implements Adapter
     }
     bindingHolder.bindViewModel(vm);
     return bindingHolder.getBinding().getRoot();
+  }
+
+  @Override public void notifyDataSetChanged() {
+    notifyDataSetChanged();
   }
 
   @Override public void notifyItemInserted(int position) {

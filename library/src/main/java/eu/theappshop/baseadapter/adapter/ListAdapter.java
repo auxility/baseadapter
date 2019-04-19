@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
+import eu.theappshop.baseadapter.adapterv2.AdapterDataObserver;
 import eu.theappshop.baseadapter.vm.VM;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +14,10 @@ import java.util.List;
 public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDataObserver<V> {
 
   @NonNull
-  protected Adapter<V> adapter;
+  protected AbstractVmAdapter<V> adapter;
   private List<Integer> viewTypes;
 
-  public ListAdapter(@NonNull Adapter<V> adapter) {
+  public ListAdapter(@NonNull AbstractVmAdapter<V> adapter) {
     this.adapter = adapter;
     invalidateViewType();
   }
@@ -31,15 +33,15 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
     if (getCount() == 0) {
       return super.getItemViewType(position);
     }
-    return viewTypes.indexOf(adapter.getItem(position).getLayoutId());
+    return viewTypes.indexOf(adapter.get(position).getLayoutId());
   }
 
   @Override public int getCount() {
-    return adapter.getItemCount();
+    return adapter.getSize();
   }
 
   @Override public Object getItem(int position) {
-    return adapter.getItem(position);
+    return adapter.get(position);
   }
 
   @Override public long getItemId(int position) {
@@ -94,7 +96,7 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
     if (getCount() == 0) {
       return;
     }
-    for (Object object : adapter.getItems()) {
+    for (Object object : adapter.vms()) {
       VM vm = (VM) object;
       if (!viewTypes.contains(vm.getLayoutId())) {
         viewTypes.add(vm.getLayoutId());

@@ -3,13 +3,14 @@ package eu.theappshop.baseadapter.adapter;
 import android.support.annotation.NonNull;
 import android.widget.Filter;
 import android.widget.Filterable;
+import eu.theappshop.baseadapter.adapterv2.AbstractVmAdapter;
 
 public class FilterableListAdapter extends ListAdapter implements Filterable {
 
   private Filter filter = new EmptyFilter();
 
   public FilterableListAdapter(
-      @NonNull Adapter adapter) {
+      @NonNull AbstractVmAdapter adapter) {
     super(adapter);
   }
 
@@ -21,8 +22,8 @@ public class FilterableListAdapter extends ListAdapter implements Filterable {
 
     @Override protected FilterResults performFiltering(CharSequence constraint) {
       FilterResults filterResults = new FilterResults();
-      filterResults.values = adapter.getItems();
-      filterResults.count = adapter.getItemCount();
+      filterResults.values = adapter.vms();
+      filterResults.count = adapter.getSize();
       return filterResults;
     }
 

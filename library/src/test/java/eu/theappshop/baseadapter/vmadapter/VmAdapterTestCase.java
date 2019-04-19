@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import eu.theappshop.baseadapter.AdapterObserver;
 import eu.theappshop.baseadapter.BR;
 import eu.theappshop.baseadapter.StubVM;
+import eu.theappshop.baseadapter.adapterv2.BaseVmAdapter;
 import eu.theappshop.baseadapter.adapterv2.Predicate;
-import eu.theappshop.baseadapter.adapterv2.VmAdapter;
 import eu.theappshop.baseadapter.utils.ListUtils;
 import eu.theappshop.baseadapter.utils.TestUtils;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 
 public class VmAdapterTestCase {
 
-  private VmAdapter<StubVM> adapter;
+  private BaseVmAdapter<StubVM> adapter;
   private AdapterObserver<StubVM> observer;
   private StubVM vm1;
   private StubVM vm2;
@@ -50,7 +50,7 @@ public class VmAdapterTestCase {
     vm8 = new StubVM(8);
     vm9 = new StubVM(9);
     vm10 = new StubVM(10);
-    adapter = spy(new VmAdapter<>(listOf(vm1, vm2, vm3, vm4, vm5, vm6)));
+    adapter = spy(new BaseVmAdapter<>(listOf(vm1, vm2, vm3, vm4, vm5, vm6)));
     observer = spy(new AdapterObserver<>(adapter));
     adapter.registerObserver(observer);
   }
@@ -77,7 +77,7 @@ public class VmAdapterTestCase {
     //Test vms to be displayed after removal
     assertEquals(listOf(vm2, vm3, vm4, vm5, vm6), observer.vms);
     //Test correct notify method was called
-    verify(observer, times(1)).onNotifyItemRemoved(0);
+    verify(observer, times(1)).notifyItemRemoved(0);
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
   }
 
@@ -99,8 +99,8 @@ public class VmAdapterTestCase {
     assertTrue(adapter.remove(vm1));
     assertFalse(adapter.remove(vm10));
     assertEquals(listOf(vm2, vm3, vm4, vm5, vm6), observer.vms);
-    verify(observer, times(1)).onNotifyItemRemoved(indexOfVm);
-    verify(observer, times(1)).onNotifyItemRemoved(anyInt());
+    verify(observer, times(1)).notifyItemRemoved(indexOfVm);
+    verify(observer, times(1)).notifyItemRemoved(anyInt());
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
   }
 
@@ -200,7 +200,7 @@ public class VmAdapterTestCase {
     assertEquals(ListUtils.listOf(vm3, vm4, vm5, vm6), observer.vms);
     verify(adapter, times(1)).notifyPropertyChanged(BR.size);
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
-    verify(observer, times(1)).onNotifyItemRangeRemoved(0, 2);
+    verify(observer, times(1)).notifyItemRangeRemoved(0, 2);
   }
 
   @Test
