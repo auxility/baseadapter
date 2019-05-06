@@ -177,6 +177,7 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
     int newSize = vms.size();
     if (newSize != size) {
       if (size == 0 || newSize == 0) {
+        isEmpty = vms.isEmpty();
         notifyPropertyChanged(BR.empty);
       }
       size = newSize;

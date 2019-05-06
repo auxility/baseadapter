@@ -1,32 +1,20 @@
 package com.skiff2011.baseadapter;
 
-import android.databinding.Observable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import com.skiff2011.baseadapter.misc.SuperObservable;
 import com.skiff2011.baseadapter.vm.VM;
 
 abstract public class AbstractVmAdapterDecorator<V extends VM> extends AbstractVmAdapter<V> {
 
-  @NonNull private AbstractVmAdapter<V> decoratedAdapter;
-
-  //equals null if deserialization occurred and DependantCallback should be added again to superObservable
-  @Nullable transient private Boolean deserializationIndicator = false;
+  @NonNull private SuperObservable<AbstractVmAdapter<V>> decoratedAdapter;
 
   public AbstractVmAdapterDecorator(
       @NonNull AbstractVmAdapter<V> decoratedAdapter) {
-    this.decoratedAdapter = decoratedAdapter;
+    this.decoratedAdapter = new SuperObservable<>(decoratedAdapter, this);
   }
 
-  public AbstractVmAdapter<V> getAdapter() {
-    if (deserializationIndicator == null) {
-      deserializationIndicator = false;
-      chainDependantObservable();
-    }
-    return decoratedAdapter;
-  }
-
-  private void chainDependantObservable() {
-    decoratedAdapter.addOnPropertyChangedCallback(new DependantCallback());
+  protected AbstractVmAdapter<V> getAdapter() {
+    return decoratedAdapter.getValue();
   }
 
   @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
@@ -35,12 +23,5 @@ abstract public class AbstractVmAdapterDecorator<V extends VM> extends AbstractV
 
   @Override public void unregisterObserver(@NonNull AdapterDataObserver<V> observer) {
     getAdapter().unregisterObserver(observer);
-  }
-
-  private class DependantCallback extends Observable.OnPropertyChangedCallback {
-
-    @Override public void onPropertyChanged(Observable sender, int propertyId) {
-      AbstractVmAdapterDecorator.this.notifyPropertyChanged(propertyId);
-    }
   }
 }
