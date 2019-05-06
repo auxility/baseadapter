@@ -3,12 +3,11 @@
   <data>
     <variable
         name="viewModel"
-        type="eu.theappshop.baseadapter.vm.VM"
+        type="com.skiff2011.baseadapter.vm.VM"
         />
   </data>
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <View xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:orientation="vertical"
       />
 </layout>
