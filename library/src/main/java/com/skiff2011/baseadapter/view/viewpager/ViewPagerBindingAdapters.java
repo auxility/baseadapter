@@ -1,79 +1,20 @@
-package com.skiff2011.baseadapter.view;
+package com.skiff2011.baseadapter.view.viewpager;
 
 import android.databinding.BindingAdapter;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.LinearLayout;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
-import com.skiff2011.baseadapter.misc.LayoutManagerType;
-import com.skiff2011.baseadapter.vm.SpannedVM;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.ItemAdapter;
 
-public final class BaseBindingAdapters {
-
-  @BindingAdapter(value = {
-      "adapter", "layoutManager", "reverse", "spanCount", "orientation"
-  }, requireAll = false)
-  public static void _bindAdapter(final RecyclerView recyclerView,
-      @Nullable final AbstractVmAdapter adapter,
-      LayoutManagerType layoutManagerType,
-      boolean reverse,
-      int spanCount,
-      Integer orientation) {
-
-    final RecyclerViewAdapter decorator = adapter == null ? null : new RecyclerViewAdapter(adapter);
-
-    recyclerView.setAdapter(decorator);
-
-    if (orientation == null) {
-      orientation = LinearLayout.VERTICAL;
-    }
-
-    RecyclerView.LayoutManager lm;
-    switch (layoutManagerType == null ? LayoutManagerType.LINEAR : layoutManagerType) {
-      case LINEAR:
-        lm = new LinearLayoutManager(recyclerView.getContext(), orientation, reverse);
-        break;
-      case GRID:
-        lm = new GridLayoutManager(recyclerView.getContext(), spanCount, orientation, reverse);
-        break;
-      case STAGGERED_GRID:
-        lm = new StaggeredGridLayoutManager(spanCount, orientation);
-        break;
-      case VARIABLE_GRID:
-        GridLayoutManager glm =
-            new GridLayoutManager(recyclerView.getContext(), SpannedVM.MAX_SPAN_SIZE);
-        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-          @Override
-          public int getSpanSize(int position) {
-            VM vm = adapter.get(position);
-            if (!(vm instanceof SpannedVM)) {
-              throw new IllegalStateException(
-                  "VMs inside variable span grid should implement SpannedVM");
-            }
-            return ((SpannedVM) vm).getSpanSize();
-          }
-        });
-        lm = glm;
-        break;
-      default:
-        throw new IllegalStateException("Unsupported Layout Manager");
-    }
-    recyclerView.setLayoutManager(lm);
-    //if we has been already attached no observer will be registered
-  }
+public class ViewPagerBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final ViewPager viewPager,
-      @Nullable final AbstractVmAdapter adapter) {
+      @Nullable final ItemAdapter adapter) {
     //if adapter instance was changed while viewpager was attached to screen
     // we have to unsubscribe the previous adapter
     PagerAdapter prevAdapter = viewPager.getAdapter();
@@ -106,7 +47,7 @@ public final class BaseBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final TabLayout tabLayout,
-      @Nullable final AbstractVmAdapter adapter) {
+      @Nullable final AbstractItemAdapter adapter) {
     Object prevAdapter = tabLayout.getTag();
     if (adapter instanceof AdapterDataObserver && prevAdapter instanceof AdapterDataObserver) {
       adapter.unregisterObserver((AdapterDataObserver) prevAdapter);

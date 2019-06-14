@@ -1,4 +1,4 @@
-package com.skiff2011.baseadapter.view;
+package com.skiff2011.baseadapter.view.viewpager;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,24 +9,24 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
-import com.skiff2011.baseadapter.vm.TitledVM;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.ItemAdapter;
+import com.skiff2011.baseadapter.item.Item;
+import com.skiff2011.baseadapter.item.TitledItem;
 import java.util.ArrayList;
 import java.util.List;
 
-class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterDataObserver<V> {
+class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   private static final String STATES_COUNT_TAG = "STATES_COUNT";
   private static final String STATE_TAG = "VIEW_STATE_";
   private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
   @NonNull
-  private AbstractVmAdapter<VM> adapter;
+  private ItemAdapter adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(@NonNull AbstractVmAdapter<VM> adapter) {
+  ViewPagerAdapter(@NonNull ItemAdapter adapter) {
     this.adapter = adapter;
     states = new ArrayList<>(adapter.getSize());
     for (int i = 0; i < adapter.getSize(); i++) {
@@ -53,9 +53,9 @@ class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterData
   @NonNull
   @Override
   public Object instantiateItem(@NonNull ViewGroup container, int position) {
-    VM VM = adapter.get(position);
+    Item Item = adapter.get(position);
     PagerBindingHolder vmPagerBindingHolder =
-        PagerBindingHolder.create(LayoutInflater.from(container.getContext()), VM.getLayoutId(),
+        PagerBindingHolder.create(LayoutInflater.from(container.getContext()), Item.getLayoutId(),
             container);
     adapter.bindViewHolder(vmPagerBindingHolder, position);
     if ((states != null) && (states.size() > position)) {
@@ -139,9 +139,9 @@ class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterData
   @Nullable
   @Override
   public CharSequence getPageTitle(int position) {
-    VM vm = adapter.get(position);
-    if (vm instanceof TitledVM) {
-      TitledVM tvm = (TitledVM) vm;
+    Item item = adapter.get(position);
+    if (item instanceof TitledItem) {
+      TitledItem tvm = (TitledItem) item;
       return tvm.getTitle();
     } else {
       return "Untitled";
@@ -194,7 +194,8 @@ class ViewPagerAdapter<V extends VM> extends PagerAdapter implements AdapterData
   }
 
   @Override
-  public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     notifyOnDataSetChanged();
   }
 }

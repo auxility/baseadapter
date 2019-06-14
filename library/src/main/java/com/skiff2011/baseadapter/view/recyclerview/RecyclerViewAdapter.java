@@ -1,23 +1,23 @@
-package com.skiff2011.baseadapter.view;
+package com.skiff2011.baseadapter.view.recyclerview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
-import com.skiff2011.baseadapter.misc.DiffVMCallback;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.ItemAdapter;
+import com.skiff2011.baseadapter.item.Item;
+import com.skiff2011.baseadapter.misc.DiffItemCallback;
 import java.util.List;
 
-public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<RecyclerBindingHolder>
-    implements AdapterDataObserver<V> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHolder>
+    implements AdapterDataObserver {
 
   @NonNull
-  private AbstractVmAdapter<V> adapter;
+  private ItemAdapter adapter;
 
-  RecyclerViewAdapter(@NonNull AbstractVmAdapter<V> adapter) {
+  RecyclerViewAdapter(@NonNull ItemAdapter adapter) {
     this.adapter = adapter;
   }
 
@@ -55,7 +55,7 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
     adapter.unregisterObserver(this);
   }
 
-  @NonNull public AbstractVmAdapter getAdapter() {
+  @NonNull public ItemAdapter getAdapter() {
     return adapter;
   }
 
@@ -84,10 +84,11 @@ public class RecyclerViewAdapter<V extends VM> extends RecyclerView.Adapter<Recy
   }
 
   @Override
-  public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     // TODO: https://medium.com/@jonfhancock/get-threading-right-with-diffutil-423378e126d2
     DiffUtil.DiffResult diffResult =
-        DiffUtil.calculateDiff(new DiffVMCallback<>(oldItems, newVms));
+        DiffUtil.calculateDiff(new DiffItemCallback(oldItems, newVms));
     diffResult.dispatchUpdatesTo(this);
   }
 }

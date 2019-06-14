@@ -1,7 +1,7 @@
 package com.skiff2011.baseadapter.general;
 
-import com.skiff2011.baseadapter.AbstractVmAdapter;
-import com.skiff2011.baseadapter.StubVM;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
+import com.skiff2011.baseadapter.StubItem;
 import com.skiff2011.baseadapter.utils.ListUtils;
 import com.skiff2011.baseadapter.utils.SerializationUtils;
 import java.io.IOException;
@@ -14,11 +14,11 @@ import static org.junit.Assert.assertTrue;
 
 public abstract class AdapterSerializationTestCase {
 
-  private AbstractVmAdapter<StubVM> adapter;
+  private AbstractItemAdapter<StubItem> adapter;
 
   @Before
   public void setUp() {
-    adapter = getAdapter(ListUtils.generateList(10, new StubVM.IntMapper()));
+    adapter = getAdapter(ListUtils.generateList(10, new StubItem.IntMapper()));
   }
 
   @Test
@@ -38,10 +38,10 @@ public abstract class AdapterSerializationTestCase {
     byte[] serialized = SerializationUtils.serialize(adapter);
     Object deserialized = SerializationUtils.deserialize(serialized);
 
-    assertTrue(deserialized instanceof AbstractVmAdapter<?>);
-    assertTrue(((AbstractVmAdapter<?>) deserialized).vms().get(0) instanceof StubVM);
+    assertTrue(deserialized instanceof AbstractItemAdapter<?>);
+    assertTrue(((AbstractItemAdapter<?>) deserialized).vms().get(0) instanceof StubItem);
     assertEquals(adapter, deserialized);
   }
 
-  protected abstract AbstractVmAdapter<StubVM> getAdapter(List<StubVM> vms);
+  protected abstract AbstractItemAdapter<StubItem> getAdapter(List<StubItem> vms);
 }

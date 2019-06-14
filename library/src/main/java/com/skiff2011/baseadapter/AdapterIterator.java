@@ -1,11 +1,11 @@
 package com.skiff2011.baseadapter;
 
 import android.support.annotation.NonNull;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.Iterator;
 
 //TODO test
-public class AdapterIterator<V extends VM> implements Iterator<V> {
+public class AdapterIterator<V extends Item> implements Iterator<V> {
 
   @NonNull private final Iterator<V> iterator;
   @NonNull private final AdapterIteratorListener<V> listener;
@@ -33,7 +33,7 @@ public class AdapterIterator<V extends VM> implements Iterator<V> {
     listener.onItemRemoved(position, currentItem);
   }
 
-  public interface AdapterIteratorListener<V extends VM> {
+  public interface AdapterIteratorListener<V extends Item> {
     void onItemRemoved(int position, V item);
   }
 }

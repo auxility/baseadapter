@@ -5,19 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDataObserver<V> {
+public class ListAdapter<V extends Item> extends BaseAdapter implements AdapterDataObserver {
 
   @NonNull
-  protected AbstractVmAdapter<V> adapter;
+  protected AbstractItemAdapter<V> adapter;
   private List<Integer> viewTypes;
 
-  public ListAdapter(@NonNull AbstractVmAdapter<V> adapter) {
+  public ListAdapter(@NonNull AbstractItemAdapter<V> adapter) {
     this.adapter = adapter;
     invalidateViewType();
   }
@@ -49,16 +49,16 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
   }
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    ListBindingHolder<VM> bindingHolder;
-    VM vm = (VM) getItem(position);
+    ListBindingHolder<Item> bindingHolder;
+    Item item = (Item) getItem(position);
     if (convertView == null) {
       bindingHolder =
-          ListBindingHolder.create(LayoutInflater.from(parent.getContext()), vm.getLayoutId(),
+          ListBindingHolder.create(LayoutInflater.from(parent.getContext()), item.getLayoutId(),
               parent);
     } else {
-      bindingHolder = (ListBindingHolder<VM>) convertView.getTag();
+      bindingHolder = (ListBindingHolder<Item>) convertView.getTag();
     }
-    bindingHolder.bindViewModel(vm);
+    bindingHolder.bindViewModel(item);
     return bindingHolder.getBinding().getRoot();
   }
 
@@ -83,7 +83,8 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
     notifyOnDataSetChanged();
   }
 
-  @Override public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     notifyOnDataSetChanged();
   }
 
@@ -97,9 +98,9 @@ public class ListAdapter<V extends VM> extends BaseAdapter implements AdapterDat
       return;
     }
     for (Object object : adapter.vms()) {
-      VM vm = (VM) object;
-      if (!viewTypes.contains(vm.getLayoutId())) {
-        viewTypes.add(vm.getLayoutId());
+      Item item = (Item) object;
+      if (!viewTypes.contains(item.getLayoutId())) {
+        viewTypes.add(item.getLayoutId());
       }
     }
   }

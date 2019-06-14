@@ -1,29 +1,31 @@
-package com.skiff2011.baseadapter.view;
+package com.skiff2011.baseadapter.view.recyclerview;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.skiff2011.baseadapter.BR;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
+import com.skiff2011.baseadapter.view.BaseViewHolder;
 
-class PagerBindingHolder<V extends VM> implements BaseViewHolder<V> {
+class RecyclerBindingHolder<V extends Item> extends RecyclerView.ViewHolder
+    implements BaseViewHolder<V> {
 
-  private static final String TAG = PagerBindingHolder.class.getSimpleName();
-
+  private static final String TAG = RecyclerBindingHolder.class.getSimpleName();
   private ViewDataBinding binding;
-  private V vm;
 
-  private PagerBindingHolder(ViewDataBinding binding) {
+  private RecyclerBindingHolder(ViewDataBinding binding) {
+    super(binding.getRoot());
     this.binding = binding;
   }
 
-  public static <V extends VM> PagerBindingHolder<V> create(LayoutInflater layoutInflater,
+  public static <V extends Item> RecyclerBindingHolder<V> create(LayoutInflater layoutInflater,
       @LayoutRes int resId, ViewGroup p) {
     try {
-      return new PagerBindingHolder<>(DataBindingUtil.inflate(layoutInflater, resId, p, true));
+      return new RecyclerBindingHolder<>(DataBindingUtil.inflate(layoutInflater, resId, p, false));
     } catch (Throwable e) {
       String resName = layoutInflater.getContext().getResources().getResourceName(resId);
       Log.e(TAG, "Error inflating layout " + resName);
@@ -33,17 +35,12 @@ class PagerBindingHolder<V extends VM> implements BaseViewHolder<V> {
 
   @Override
   public void bindViewModel(V VM) {
-    this.vm = VM;
-    binding.setVariable(BR.viewModel, VM);
+    binding.setVariable(BR.item, VM);
     binding.executePendingBindings();
   }
 
   @Override
   public ViewDataBinding getBinding() {
     return binding;
-  }
-
-  public V getVM() {
-    return vm;
   }
 }

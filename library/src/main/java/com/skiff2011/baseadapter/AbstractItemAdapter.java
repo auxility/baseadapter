@@ -3,14 +3,14 @@ package com.skiff2011.baseadapter;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.vm.VM;
 import java.util.Collection;
 import java.util.ListIterator;
 
-public abstract class AbstractVmAdapter<V extends VM> extends BaseObservable
-    implements VmAdapter<V> {
+public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
+    implements ItemAdapter<V> {
 
   public int indexOf(@NonNull V vm) {
     return vms().indexOf(vm);

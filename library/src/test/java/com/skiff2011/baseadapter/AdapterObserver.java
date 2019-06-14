@@ -1,16 +1,16 @@
 package com.skiff2011.baseadapter;
 
 import android.support.annotation.NonNull;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterObserver<V extends VM> implements AdapterDataObserver<V> {
+public class AdapterObserver<V extends Item> implements AdapterDataObserver {
 
   public List<V> vms;
-  private AbstractVmAdapter<V> adapter;
+  private AbstractItemAdapter<V> adapter;
 
-  public AdapterObserver(AbstractVmAdapter<V> adapter) {
+  public AdapterObserver(AbstractItemAdapter<V> adapter) {
     this.adapter = adapter;
     updateDataFromAdapter();
   }
@@ -35,7 +35,8 @@ public class AdapterObserver<V extends VM> implements AdapterDataObserver<V> {
     this.vms.subList(positionStart, itemCount).clear();
   }
 
-  @Override public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     updateDataFromAdapter();
   }
 

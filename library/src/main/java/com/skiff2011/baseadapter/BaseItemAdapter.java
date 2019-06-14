@@ -3,8 +3,8 @@ package com.skiff2011.baseadapter;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.function.Predicate;
-import com.skiff2011.baseadapter.vm.VM;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,10 +12,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
+public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
 
-  @NonNull private final ObservableAdapterImpl<V> observableAdapterDelegate =
-      new ObservableAdapterImpl<>();
+  @NonNull private final ObservableAdapterImpl observableAdapterDelegate =
+      new ObservableAdapterImpl();
 
   @NonNull private List<V> vms;
 
@@ -23,12 +23,12 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
 
   private boolean isEmpty;
 
-  public BaseVmAdapter(@NonNull List<V> vms) {
+  public BaseItemAdapter(@NonNull List<V> vms) {
     this.vms = vms;
     updateSize();
   }
 
-  public BaseVmAdapter() {
+  public BaseItemAdapter() {
     this(new ArrayList<V>());
   }
 
@@ -61,7 +61,7 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
     this.vms.clear();
     updateSize();
     if (withDiffUtil) {
-      notifyDataSetChanged(oldVms, vms);
+      notifyDataSetChanged((List<Item>) oldVms, (List<Item>) vms);
     } else {
       notifyDataSetChanged();
     }
@@ -136,11 +136,11 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
     }
   }
 
-  @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
+  @Override public void registerObserver(@NonNull AdapterDataObserver observer) {
     this.observableAdapterDelegate.registerObserver(observer);
   }
 
-  @Override public void unregisterObserver(@NonNull AdapterDataObserver<V> observer) {
+  @Override public void unregisterObserver(@NonNull AdapterDataObserver observer) {
     this.observableAdapterDelegate.unregisterObserver(observer);
   }
 
@@ -164,7 +164,8 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
     this.observableAdapterDelegate.notifyOnItemRangeRemoved(positionStart, itemCount);
   }
 
-  private void notifyDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  private void notifyDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     this.observableAdapterDelegate.notifyOnDataSetChanged(oldItems, newVms);
   }
 
@@ -189,10 +190,10 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof BaseVmAdapter)) {
+    if (!(obj instanceof BaseItemAdapter)) {
       return false;
     }
-    BaseVmAdapter other = (BaseVmAdapter) obj;
+    BaseItemAdapter other = (BaseItemAdapter) obj;
     return this.vms.equals(other.vms);
   }
 
@@ -207,8 +208,8 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
   private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
 
     @Override public void onItemRemoved(int position, V item) {
-      BaseVmAdapter.this.updateSize();
-      BaseVmAdapter.this.notifyItemRemoved(position);
+      BaseItemAdapter.this.updateSize();
+      BaseItemAdapter.this.notifyItemRemoved(position);
     }
   }
 
@@ -216,12 +217,12 @@ public class BaseVmAdapter<V extends VM> extends AbstractVmAdapter<V> {
       AdapterListIterator.AdapterListIteratorListener<V> {
 
     @Override public void onItemAdded(int position, V item) {
-      BaseVmAdapter.this.updateSize();
-      BaseVmAdapter.this.notifyItemInserted(position);
+      BaseItemAdapter.this.updateSize();
+      BaseItemAdapter.this.notifyItemInserted(position);
     }
 
     @Override public void onItemChanged(int position, V item, V oldItem) {
-      BaseVmAdapter.this.notifyItemChanged(position);
+      BaseItemAdapter.this.notifyItemChanged(position);
     }
   }
 }

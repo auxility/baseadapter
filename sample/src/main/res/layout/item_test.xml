@@ -2,8 +2,8 @@
 <layout xmlns:tools="http://schemas.android.com/tools">
   <data>
     <variable
-        name="viewModel"
-        type="com.skiff2011.baseadapter.sample.TestVM"
+        name="item"
+        type="com.skiff2011.baseadapter.sample.TestItem"
         />
   </data>
 
@@ -12,7 +12,7 @@
       android:layout_height="wrap_content"
       android:gravity="center"
       android:padding="16dp"
-      android:text='@{viewModel.count + ""}'
+      android:text='@{item.count + ""}'
       android:textSize="22sp"
       tools:text="2"
       >

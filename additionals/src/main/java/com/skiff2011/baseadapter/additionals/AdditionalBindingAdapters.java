@@ -6,14 +6,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 
 abstract public class AdditionalBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AdapterView adapterView,
-      @Nullable final AbstractVmAdapter adapter) {
+      @Nullable final AbstractItemAdapter adapter) {
     //if adapter instance was changed while adapterView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = adapterView.getAdapter();
@@ -46,7 +46,8 @@ abstract public class AdditionalBindingAdapters {
   }
 
   @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
-  public static void _bindAdapter(final Spinner spinner, @Nullable final AbstractVmAdapter adapter,
+  public static void _bindAdapter(final Spinner spinner,
+      @Nullable final AbstractItemAdapter adapter,
       boolean hintEnabled) {
     //if adapter instance was changed while spinner was attached to screen
     // we have to unsubscribe the previous adapter
@@ -80,7 +81,7 @@ abstract public class AdditionalBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
-      @Nullable final AbstractVmAdapter adapter) {
+      @Nullable final AbstractItemAdapter adapter) {
     //if adapter instance was changed while autoCompleteTextView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();

@@ -3,8 +3,8 @@ package com.skiff2011.baseadapter.vmadapter;
 import android.support.annotation.NonNull;
 import com.skiff2011.baseadapter.AdapterObserver;
 import com.skiff2011.baseadapter.BR;
-import com.skiff2011.baseadapter.BaseVmAdapter;
-import com.skiff2011.baseadapter.StubVM;
+import com.skiff2011.baseadapter.BaseItemAdapter;
+import com.skiff2011.baseadapter.StubItem;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.utils.ListUtils;
 import com.skiff2011.baseadapter.utils.TestUtils;
@@ -23,34 +23,34 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class VmAdapterTestCase {
+public class ItemAdapterTestCase {
 
-  private BaseVmAdapter<StubVM> adapter;
-  private AdapterObserver<StubVM> observer;
-  private StubVM vm1;
-  private StubVM vm2;
-  private StubVM vm3;
-  private StubVM vm4;
-  private StubVM vm5;
-  private StubVM vm6;
-  private StubVM vm7;
-  private StubVM vm8;
-  private StubVM vm9;
-  private StubVM vm10;
+  private BaseItemAdapter<StubItem> adapter;
+  private AdapterObserver<StubItem> observer;
+  private StubItem vm1;
+  private StubItem vm2;
+  private StubItem vm3;
+  private StubItem vm4;
+  private StubItem vm5;
+  private StubItem vm6;
+  private StubItem vm7;
+  private StubItem vm8;
+  private StubItem vm9;
+  private StubItem vm10;
 
   @Before
   public void setUp() {
-    vm1 = new StubVM(1);
-    vm2 = new StubVM(2);
-    vm3 = new StubVM(3);
-    vm4 = new StubVM(4);
-    vm5 = new StubVM(5);
-    vm6 = new StubVM(6);
-    vm7 = new StubVM(7);
-    vm8 = new StubVM(8);
-    vm9 = new StubVM(9);
-    vm10 = new StubVM(10);
-    adapter = spy(new BaseVmAdapter<>(listOf(vm1, vm2, vm3, vm4, vm5, vm6)));
+    vm1 = new StubItem(1);
+    vm2 = new StubItem(2);
+    vm3 = new StubItem(3);
+    vm4 = new StubItem(4);
+    vm5 = new StubItem(5);
+    vm6 = new StubItem(6);
+    vm7 = new StubItem(7);
+    vm8 = new StubItem(8);
+    vm9 = new StubItem(9);
+    vm10 = new StubItem(10);
+    adapter = spy(new BaseItemAdapter<>(listOf(vm1, vm2, vm3, vm4, vm5, vm6)));
     observer = spy(new AdapterObserver<>(adapter));
     adapter.registerObserver(observer);
   }
@@ -71,8 +71,8 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemoveByIndexContent() {
-    StubVM removedVm = adapter.remove(0);
-    //Test correct VM removed
+    StubItem removedVm = adapter.remove(0);
+    //Test correct Item removed
     assertEquals(vm1, removedVm);
     //Test vms to be displayed after removal
     assertEquals(listOf(vm2, vm3, vm4, vm5, vm6), observer.vms);
@@ -106,9 +106,9 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemoveByVmSizeAndEmpty() {
-    List<StubVM> vmsToRemove = new ArrayList<>(adapter.vms());
+    List<StubItem> vmsToRemove = new ArrayList<>(adapter.vms());
     int size = vmsToRemove.size();
-    for (StubVM vm : vmsToRemove) {
+    for (StubItem vm : vmsToRemove) {
       adapter.remove(vm);
     }
     verify(adapter, times(size)).notifyPropertyChanged(BR.size);
@@ -117,8 +117,8 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemovePredicate() {
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return object.value % 2 == 0;
       }
     });
@@ -129,16 +129,16 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemovePredicateSizeAndEmpty() {
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return false;
       }
     });
     verify(adapter, times(0)).notifyPropertyChanged(BR.size);
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
     assertEquals(ListUtils.listOf(vm1, vm2, vm3, vm4, vm5, vm6), observer.vms);
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return true;
       }
     });
@@ -149,8 +149,8 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemovePredicateDiff() {
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return object.value % 2 == 0;
       }
     }, true);
@@ -161,16 +161,16 @@ public class VmAdapterTestCase {
 
   @Test
   public void testRemovePredicateSizeAndEmptyDiff() {
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return false;
       }
     });
     verify(adapter, times(0)).notifyPropertyChanged(BR.size);
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
     assertEquals(ListUtils.listOf(vm1, vm2, vm3, vm4, vm5, vm6), observer.vms);
-    adapter.removeIf(new Predicate<StubVM>() {
-      @Override public Boolean apply(@NonNull StubVM object) {
+    adapter.removeIf(new Predicate<StubItem>() {
+      @Override public Boolean apply(@NonNull StubItem object) {
         return true;
       }
     }, true);
@@ -239,7 +239,7 @@ public class VmAdapterTestCase {
         adapter.get(adapter.getSize());
       }
     });
-    StubVM vm = adapter.get(0);
+    StubItem vm = adapter.get(0);
     assertEquals(vm, vm1);
   }
 

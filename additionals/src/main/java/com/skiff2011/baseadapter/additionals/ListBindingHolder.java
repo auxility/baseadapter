@@ -7,10 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.skiff2011.baseadapter.BR;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.vm.VM;
 
-public class ListBindingHolder<V extends VM> implements BaseViewHolder<V> {
+public class ListBindingHolder<V extends Item> implements BaseViewHolder<V> {
 
   private static final String TAG = ListBindingHolder.class.getSimpleName();
 
@@ -22,7 +22,7 @@ public class ListBindingHolder<V extends VM> implements BaseViewHolder<V> {
     binding.getRoot().setTag(this);
   }
 
-  public static <V extends VM> ListBindingHolder<V> create(LayoutInflater layoutInflater,
+  public static <V extends Item> ListBindingHolder<V> create(LayoutInflater layoutInflater,
       @LayoutRes int resId, ViewGroup p) {
     try {
       return new ListBindingHolder<>(DataBindingUtil.inflate(layoutInflater, resId, p, false));
@@ -35,7 +35,7 @@ public class ListBindingHolder<V extends VM> implements BaseViewHolder<V> {
 
   @Override public void bindViewModel(V VM) {
     this.vm = VM;
-    binding.setVariable(BR.viewModel, VM);
+    binding.setVariable(BR.item, VM);
     binding.executePendingBindings();
   }
 

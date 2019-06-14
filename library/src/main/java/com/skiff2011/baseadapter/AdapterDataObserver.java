@@ -1,10 +1,10 @@
 package com.skiff2011.baseadapter;
 
 import android.support.annotation.NonNull;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.List;
 
-public interface AdapterDataObserver<V extends VM> {
+public interface AdapterDataObserver {
 
   void notifyOnDataSetChanged();
 
@@ -16,7 +16,8 @@ public interface AdapterDataObserver<V extends VM> {
 
   void notifyOnItemRangeRemoved(int positionStart, int itemCount);
 
-  void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms);
+  void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms);
 
   void notifyOnItemChanged(int position);
 }

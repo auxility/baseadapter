@@ -1,7 +1,7 @@
 package com.skiff2011.baseadapter.sample
 
-import com.skiff2011.baseadapter.vm.VM
+import com.skiff2011.baseadapter.item.Item
 
-class TestVM(val count: Int) : VM {
+class TestItem(val count: Int) : Item {
   override fun getLayoutId(): Int = R.layout.item_test
 }

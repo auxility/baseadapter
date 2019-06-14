@@ -3,16 +3,18 @@ package com.skiff2011.baseadapter;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.support.annotation.NonNull;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.vm.VM;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public interface VmAdapter<V extends VM>
-    extends Observable, Serializable, ObservableAdapter<V>, Iterable<V> {
+public interface ItemAdapter<V extends Item> extends Observable,
+    Serializable,
+    ObservableAdapter,
+    Iterable<V> {
 
   int indexOf(@NonNull V vm);
 

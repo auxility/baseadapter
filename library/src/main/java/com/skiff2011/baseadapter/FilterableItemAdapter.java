@@ -3,11 +3,11 @@ package com.skiff2011.baseadapter;
 import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.ListUtils;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.misc.function.SerializablePredicate;
 import com.skiff2011.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.vm.VM;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,13 +15,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapterDecorator<V> {
+public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDecorator<V> {
 
   @NonNull private SerializablePredicate<V> filter;
   @NonNull private List<V> vms;
 
-  public FilterableVmAdapter(
-      @NonNull AbstractVmAdapter<V> adapter,
+  public FilterableItemAdapter(
+      @NonNull AbstractItemAdapter<V> adapter,
       @NonNull List<V> vms,
       @NonNull SerializablePredicate<V> filter) {
     super(adapter);
@@ -30,23 +30,23 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapterDecorato
     refresh();
   }
 
-  public FilterableVmAdapter(
+  public FilterableItemAdapter(
       @NonNull List<V> vms,
       @NonNull SerializablePredicate<V> filter) {
-    this(new BaseVmAdapter<V>(), vms, filter);
+    this(new BaseItemAdapter<V>(), vms, filter);
   }
 
-  public FilterableVmAdapter(
-      @NonNull AbstractVmAdapter<V> adapter, @NonNull SerializablePredicate<V> filter) {
+  public FilterableItemAdapter(
+      @NonNull AbstractItemAdapter<V> adapter, @NonNull SerializablePredicate<V> filter) {
     this(adapter, new ArrayList<V>(), filter);
   }
 
-  public FilterableVmAdapter(
+  public FilterableItemAdapter(
       @NonNull SerializablePredicate<V> filter) {
-    this(new BaseVmAdapter<V>(), filter);
+    this(new BaseItemAdapter<V>(), filter);
   }
 
-  public FilterableVmAdapter() {
+  public FilterableItemAdapter() {
     this(new SerializablePredicate<V>() {
       @Override public Boolean apply(@NonNull V object) {
         return true;
@@ -199,10 +199,10 @@ public class FilterableVmAdapter<V extends VM> extends AbstractVmAdapterDecorato
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof FilterableVmAdapter)) {
+    if (!(obj instanceof FilterableItemAdapter)) {
       return false;
     }
-    FilterableVmAdapter other = (FilterableVmAdapter) obj;
+    FilterableItemAdapter other = (FilterableItemAdapter) obj;
     return this.vms.equals(other.vms) && getAdapter().equals(
         other.getAdapter());
   }

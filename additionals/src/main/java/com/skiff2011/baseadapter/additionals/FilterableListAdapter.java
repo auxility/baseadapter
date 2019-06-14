@@ -3,14 +3,14 @@ package com.skiff2011.baseadapter.additionals;
 import android.support.annotation.NonNull;
 import android.widget.Filter;
 import android.widget.Filterable;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
 
 public class FilterableListAdapter extends ListAdapter implements Filterable {
 
   private Filter filter = new EmptyFilter();
 
   public FilterableListAdapter(
-      @NonNull AbstractVmAdapter adapter) {
+      @NonNull AbstractItemAdapter adapter) {
     super(adapter);
   }
 

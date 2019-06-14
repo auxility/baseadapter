@@ -1,16 +1,15 @@
 package com.skiff2011.baseadapter;
 
 import android.support.annotation.NonNull;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObservableAdapterImpl<V extends VM>
-    implements ObservableAdapter<V>, AdapterDataObserver<V> {
+public class ObservableAdapterImpl implements ObservableAdapter, AdapterDataObserver {
 
-  private transient List<AdapterDataObserver<V>> observers = new ArrayList<>();
+  private transient List<AdapterDataObserver> observers = new ArrayList<>();
 
-  @Override public void registerObserver(@NonNull AdapterDataObserver<V> observer) {
+  @Override public void registerObserver(@NonNull AdapterDataObserver observer) {
     synchronized (this) {
       if (observers == null) {
         observers = new ArrayList<>();
@@ -21,7 +20,7 @@ public class ObservableAdapterImpl<V extends VM>
     }
   }
 
-  @Override public void unregisterObserver(@NonNull AdapterDataObserver<V> observer) {
+  @Override public void unregisterObserver(@NonNull AdapterDataObserver observer) {
     synchronized (this) {
       if (observers != null) {
         observers.remove(observer);
@@ -31,7 +30,7 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnDataSetChanged() {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnDataSetChanged();
       }
     }
@@ -39,7 +38,7 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnItemInserted(int position) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnItemInserted(position);
       }
     }
@@ -47,7 +46,7 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnItemRangeInserted(int positionStart, int itemCount) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnItemRangeInserted(positionStart, itemCount);
       }
     }
@@ -55,7 +54,7 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnItemRemoved(int position) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnItemRemoved(position);
       }
     }
@@ -63,15 +62,16 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnItemRangeRemoved(int positionStart, int itemCount) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnItemRangeRemoved(positionStart, itemCount);
       }
     }
   }
 
-  @Override public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnDataSetChanged(oldItems, newVms);
       }
     }
@@ -79,7 +79,7 @@ public class ObservableAdapterImpl<V extends VM>
 
   @Override public void notifyOnItemChanged(int position) {
     if (observers != null) {
-      for (AdapterDataObserver<V> observer : observers) {
+      for (AdapterDataObserver observer : observers) {
         observer.notifyOnItemChanged(position);
       }
     }

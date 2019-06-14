@@ -1,15 +1,15 @@
 package com.skiff2011.baseadapter;
 
 import android.support.annotation.Nullable;
+import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.utils.ListUtils;
-import com.skiff2011.baseadapter.vm.VM;
 import java.util.Comparator;
 
-public class StubVM implements VM, Comparable<StubVM> {
+public class StubItem implements Item, Comparable<StubItem> {
 
   public final int value;
 
-  public StubVM(int value) {
+  public StubItem(int value) {
     this.value = value;
   }
 
@@ -21,10 +21,10 @@ public class StubVM implements VM, Comparable<StubVM> {
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof StubVM)) {
+    if (!(obj instanceof StubItem)) {
       return false;
     }
-    StubVM other = (StubVM) obj;
+    StubItem other = (StubItem) obj;
     return this.value == other.value && this.getLayoutId() == other.getLayoutId();
   }
 
@@ -32,20 +32,20 @@ public class StubVM implements VM, Comparable<StubVM> {
     return value;
   }
 
-  @Override public int compareTo(StubVM o) {
+  @Override public int compareTo(StubItem o) {
     return this.value - o.value;
   }
 
-  public static class IntMapper implements ListUtils.Mapper<Integer, StubVM> {
+  public static class IntMapper implements ListUtils.Mapper<Integer, StubItem> {
 
-    @Override public StubVM map(Integer integer) {
-      return new StubVM(integer);
+    @Override public StubItem map(Integer integer) {
+      return new StubItem(integer);
     }
   }
 
-  public static class StubVmComparator implements Comparator<StubVM> {
+  public static class StubVmComparator implements Comparator<StubItem> {
 
-    @Override public int compare(StubVM o1, StubVM o2) {
+    @Override public int compare(StubItem o1, StubItem o2) {
       return o1.value - o2.value;
     }
   }

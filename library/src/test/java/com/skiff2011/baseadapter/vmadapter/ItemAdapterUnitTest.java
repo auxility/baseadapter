@@ -5,10 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    VmAdapterSerializationTestCase.class,
-    VmAdapterCommonTestCase.class,
-    VmAdapterTestCase.class
+    ItemAdapterSerializationTestCase.class,
+    ItemAdapterCommonTestCase.class,
+    ItemAdapterTestCase.class
 })
-public class VmAdapterUnitTest {
+public class ItemAdapterUnitTest {
 
 }

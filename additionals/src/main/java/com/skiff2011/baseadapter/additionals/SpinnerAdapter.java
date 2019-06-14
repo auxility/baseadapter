@@ -6,20 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import com.skiff2011.baseadapter.AbstractVmAdapter;
+import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 import com.skiff2011.baseadapter.R;
-import com.skiff2011.baseadapter.vm.VM;
+import com.skiff2011.baseadapter.item.Item;
 import java.util.List;
 
-public class SpinnerAdapter<V extends VM> extends BaseAdapter implements AdapterDataObserver<V> {
+public class SpinnerAdapter<V extends Item> extends BaseAdapter implements AdapterDataObserver {
 
   private boolean isHintEnabled;
   @Nullable
-  private AbstractVmAdapter<V> adapter;
+  private AbstractItemAdapter<V> adapter;
 
   public SpinnerAdapter(
-      @Nullable AbstractVmAdapter<V> adapter, boolean isHintEnabled) {
+      @Nullable AbstractItemAdapter<V> adapter, boolean isHintEnabled) {
     this.adapter = adapter;
     this.isHintEnabled = isHintEnabled;
   }
@@ -38,40 +38,41 @@ public class SpinnerAdapter<V extends VM> extends BaseAdapter implements Adapter
 
   //in case of spinner convertView is always null no need to add extra conditions
   @Override public View getView(int position, View convertView, ViewGroup parent) {
-    VM vm = (VM) getItem(position);
-    ListBindingHolder<VM> bindingHolder =
+    Item item = (Item) getItem(position);
+    ListBindingHolder<Item> bindingHolder =
         ListBindingHolder.create(LayoutInflater.from(parent.getContext()),
-            vm instanceof SpinnerVM ? ((SpinnerVM) vm).getSelectedLayoutID() : vm.getLayoutId(),
+            item instanceof SpinnerItem ? ((SpinnerItem) item).getSelectedLayoutID()
+                : item.getLayoutId(),
             parent);
-    bindingHolder.bindViewModel(vm);
+    bindingHolder.bindViewModel(item);
     return bindingHolder.getBinding().getRoot();
   }
 
   @Override public View getDropDownView(int position, View convertView, ViewGroup parent) {
-    VM vm = (VM) getItem(position);
-    ListBindingHolder<VM> bindingHolder;
+    Item item = (Item) getItem(position);
+    ListBindingHolder<Item> bindingHolder;
     //if convertView is null just create new ListBindingHolder
     if (convertView == null) {
       bindingHolder =
-          ListBindingHolder.create(LayoutInflater.from(parent.getContext()), vm.getLayoutId(),
+          ListBindingHolder.create(LayoutInflater.from(parent.getContext()), item.getLayoutId(),
               parent);
     } else {
-      // if it is hint vm inflate it
+      // if it is hint item inflate it
       if (isHintEnabled && position == 0) {
         bindingHolder = ListBindingHolder.create(LayoutInflater.from(parent.getContext()),
             R.layout.layout_empty,
             parent);
       } else {
         //check if views are the same if it is not inflate new one
-        bindingHolder = (ListBindingHolder<VM>) convertView.getTag();
-        if (bindingHolder.getVm().getLayoutId() != vm.getLayoutId()) {
+        bindingHolder = (ListBindingHolder<Item>) convertView.getTag();
+        if (bindingHolder.getVm().getLayoutId() != item.getLayoutId()) {
           bindingHolder =
-              ListBindingHolder.create(LayoutInflater.from(parent.getContext()), vm.getLayoutId(),
+              ListBindingHolder.create(LayoutInflater.from(parent.getContext()), item.getLayoutId(),
                   parent);
         }
       }
     }
-    bindingHolder.bindViewModel(vm);
+    bindingHolder.bindViewModel(item);
     return bindingHolder.getBinding().getRoot();
   }
 
@@ -95,7 +96,8 @@ public class SpinnerAdapter<V extends VM> extends BaseAdapter implements Adapter
     notifyOnDataSetChanged();
   }
 
-  @Override public void notifyOnDataSetChanged(@NonNull List<V> oldItems, @NonNull List<V> newVms) {
+  @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
+      @NonNull List<? extends Item> newVms) {
     notifyOnDataSetChanged();
   }
 

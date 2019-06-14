@@ -6,7 +6,7 @@
 *.apk
 *.ap_
 
-# Files for the ART/Dalvik VM
+# Files for the ART/Dalvik Item
 *.dex
 
 # Java class files
@@ -60,7 +60,7 @@ gen-external-apklibs
 
 # Built application files
 
-# Files for the ART/Dalvik VM
+# Files for the ART/Dalvik Item
 
 # Java class files
 
