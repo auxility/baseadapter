@@ -78,9 +78,13 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
       while (states.size() < position) {
         states.add(null);
       }
-      SparseArray<Parcelable> state = new SparseArray<>();
-      pagerBindingHolder.getBinding().getRoot().saveHierarchyState(state);
-      states.set(position, state);
+      /*we have to avoid state saving in case if item removed
+       * for example if current item is last item and it was removed from adapter*/
+      if (adapter.getSize() > position && adapter.get(position) == pagerBindingHolder.getVM()) {
+        SparseArray<Parcelable> state = new SparseArray<>();
+        pagerBindingHolder.getBinding().getRoot().saveHierarchyState(state);
+        states.set(position, state);
+      }
       container.removeView(pagerBindingHolder.getBinding().getRoot());
       activeHolders.remove(position);
     } else {
