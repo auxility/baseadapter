@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+  <data>
+    <variable
+        name="item"
+        type="com.skiff2011.baseadapter.sample.PagerSampleItem"
+        />
+  </data>
+
+  <RelativeLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/rootRL"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text='@{"index = " + item.index}'
+        android:textSize="20sp"
+        tools:text="index = 0"
+        />
+
+    <ScrollView
+        android:id="@+id/textSV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titleTV"
+        >
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:padding="16dp"
+          android:text="@string/lorem_ipsum"
+          />
+
+    </ScrollView>
+
+  </RelativeLayout>
+
+</layout>

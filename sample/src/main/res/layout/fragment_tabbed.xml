@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <data>
+    <variable
+        name="viewModel"
+        type="com.skiff2011.baseadapter.sample.TabbedViewModel"
+        />
+  </data>
+
+  <RelativeLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/tabbedRootRL"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <android.support.v7.widget.Toolbar
+          android:id="@+id/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:navigationIcon="@drawable/ic_arrow_back"
+          >
+
+      </android.support.v7.widget.Toolbar>
+
+      <android.support.design.widget.TabLayout
+          android:id="@+id/tabLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <com.skiff2011.baseadapter.sample.NonSwipeableViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/appbar"
+        adapter="@{viewModel.adapter}"
+        />
+
+  </RelativeLayout>
+
+</layout>

@@ -3,6 +3,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: "kotlin-kapt"
 
+ext {
+    version_navigation = "1.0.0"
+    version_constraint_layout = "1.1.3"
+    version_lifecycle = "1.1.1"
+}
+
 android {
     compileSdkVersion compileVersion
     defaultConfig {
@@ -34,6 +40,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
+    implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
+    implementation "com.android.support.constraint:constraint-layout:$version_constraint_layout"
+    implementation "android.arch.lifecycle:extensions:$version_lifecycle"
+
     implementation project(':library')
-    implementation project(':additionals')
 }

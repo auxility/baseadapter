@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+  <data>
+    <variable
+        name="item"
+        type="com.skiff2011.baseadapter.sample.RvSampleItem"
+        />
+  </data>
+
+  <TextView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:padding="24dp"
+      android:text='@{"index = " + item.index}'
+      android:textSize="20sp"
+      tools:text="index = 0"
+      >
+
+  </TextView>
+
+</layout>
