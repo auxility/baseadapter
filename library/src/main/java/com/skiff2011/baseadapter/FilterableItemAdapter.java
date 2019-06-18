@@ -135,7 +135,7 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
   @Override public void add(int index, @NonNull V element) {
     this.vms.add(index, element);
     if (filter.apply(element)) {
-      if (index == this.vms.size() - 1) {
+      if (index == this.vms.size()) {
         getAdapter().add(element);
       } else {
         refresh();
