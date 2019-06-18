@@ -1,11 +1,11 @@
 package com.skiff2011.baseadapter.additionals;
 
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import androidx.annotation.LayoutRes;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import com.skiff2011.baseadapter.BR;
 import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.view.BaseViewHolder;

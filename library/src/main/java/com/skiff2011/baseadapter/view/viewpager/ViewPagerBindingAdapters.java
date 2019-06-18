@@ -1,11 +1,11 @@
 package com.skiff2011.baseadapter.view.viewpager;
 
-import android.databinding.BindingAdapter;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
+import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 import com.skiff2011.baseadapter.ItemAdapter;

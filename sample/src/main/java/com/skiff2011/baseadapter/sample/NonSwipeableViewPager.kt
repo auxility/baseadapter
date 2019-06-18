@@ -2,16 +2,16 @@ package com.skiff2011.baseadapter.sample
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.view.ViewPager
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.DecelerateInterpolator
 import android.widget.Scroller
+import androidx.viewpager.widget.ViewPager
 
 class NonSwipeableViewPager @JvmOverloads constructor(
   context: Context,
   attrs: AttributeSet? = null
-) : ViewPager(context, attrs) {
+) : androidx.viewpager.widget.ViewPager(context, attrs) {
 
   init {
     setMyScroller()
@@ -32,7 +32,7 @@ class NonSwipeableViewPager @JvmOverloads constructor(
 
   private fun setMyScroller() {
     try {
-      val viewpager = ViewPager::class.java
+      val viewpager = androidx.viewpager.widget.ViewPager::class.java
       val scroller = viewpager.getDeclaredField("mScroller")
       scroller.isAccessible = true
       scroller.set(this, MyScroller(context))

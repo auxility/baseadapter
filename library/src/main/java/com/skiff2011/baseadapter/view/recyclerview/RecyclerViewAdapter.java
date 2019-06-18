@@ -1,10 +1,10 @@
 package com.skiff2011.baseadapter.view.recyclerview;
 
-import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 import com.skiff2011.baseadapter.ItemAdapter;
 import com.skiff2011.baseadapter.item.Item;

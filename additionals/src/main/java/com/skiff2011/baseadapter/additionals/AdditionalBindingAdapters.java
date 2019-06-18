@@ -1,11 +1,11 @@
 package com.skiff2011.baseadapter.additionals;
 
-import android.databinding.BindingAdapter;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
+import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 

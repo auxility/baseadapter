@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.SuperObservable;
 

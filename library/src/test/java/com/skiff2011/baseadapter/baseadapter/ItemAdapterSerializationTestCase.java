@@ -1,4 +1,4 @@
-package com.skiff2011.baseadapter.vmadapter;
+package com.skiff2011.baseadapter.baseadapter;
 
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.BaseItemAdapter;

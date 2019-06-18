@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter.sample
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 
 class BaseAdapterSampleFragment : TabbedFragment() {
 

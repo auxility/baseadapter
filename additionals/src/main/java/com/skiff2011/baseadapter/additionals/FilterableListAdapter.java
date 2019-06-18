@@ -1,8 +1,8 @@
 package com.skiff2011.baseadapter.additionals;
 
-import android.support.annotation.NonNull;
 import android.widget.Filter;
 import android.widget.Filterable;
+import androidx.annotation.NonNull;
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 
 public class FilterableListAdapter extends ListAdapter implements Filterable {

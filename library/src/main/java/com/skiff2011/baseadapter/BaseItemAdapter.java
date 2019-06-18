@@ -1,8 +1,8 @@
 package com.skiff2011.baseadapter;
 
-import android.databinding.Bindable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.Bindable;
 import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import java.util.ArrayList;

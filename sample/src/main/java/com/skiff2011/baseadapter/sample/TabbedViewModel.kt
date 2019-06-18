@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter.sample
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.skiff2011.baseadapter.ItemAdapter
 import com.skiff2011.baseadapter.item.TitledItem
 

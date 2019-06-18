@@ -2,13 +2,13 @@ package com.skiff2011.baseadapter.view.viewpager;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
 import com.skiff2011.baseadapter.AdapterDataObserver;
 import com.skiff2011.baseadapter.ItemAdapter;
 import com.skiff2011.baseadapter.item.Item;

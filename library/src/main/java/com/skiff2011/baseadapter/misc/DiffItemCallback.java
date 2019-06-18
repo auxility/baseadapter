@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter.misc;
 
-import android.support.v7.util.DiffUtil;
+import androidx.recyclerview.widget.DiffUtil;
 import com.skiff2011.baseadapter.item.DiffItem;
 import com.skiff2011.baseadapter.item.Item;
 import java.util.List;

@@ -1,15 +1,14 @@
 package com.skiff2011.baseadapter.sample
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.skiff2011.baseadapter.sample.databinding.FragmentMainBinding
 
-class MainFragment : Fragment() {
+class MainFragment : androidx.fragment.app.Fragment() {
 
   private lateinit var binding: FragmentMainBinding
 

@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter.misc.function;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.skiff2011.baseadapter.item.Item;
 
 public abstract class AbsFilter<V extends Item> implements Filter<V> {

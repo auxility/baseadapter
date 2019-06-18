@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter.general;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.BR;
 import com.skiff2011.baseadapter.StubItem;

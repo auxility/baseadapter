@@ -1,8 +1,8 @@
 package com.skiff2011.baseadapter;
 
-import android.databinding.Bindable;
-import android.databinding.Observable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
+import androidx.databinding.Bindable;
+import androidx.databinding.Observable;
 import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.view.BaseViewHolder;

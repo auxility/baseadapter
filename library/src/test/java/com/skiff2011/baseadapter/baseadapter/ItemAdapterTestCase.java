@@ -1,6 +1,6 @@
-package com.skiff2011.baseadapter.vmadapter;
+package com.skiff2011.baseadapter.baseadapter;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.skiff2011.baseadapter.AdapterObserver;
 import com.skiff2011.baseadapter.BR;
 import com.skiff2011.baseadapter.BaseItemAdapter;

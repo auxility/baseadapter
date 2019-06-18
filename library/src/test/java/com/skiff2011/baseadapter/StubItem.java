@@ -1,6 +1,6 @@
 package com.skiff2011.baseadapter;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.skiff2011.baseadapter.item.Item;
 import com.skiff2011.baseadapter.utils.ListUtils;
 import java.util.Comparator;
