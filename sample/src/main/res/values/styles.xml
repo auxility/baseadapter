@@ -1,11 +1,24 @@
 <resources>
 
-    <!-- Base application theme. -->
-  <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/primaryColor</item>
+    <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+    <item name="colorOnPrimary">@color/primaryTextColor</item>
+    <item name="colorSecondary">@color/secondaryColor</item>
+    <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+    <item name="colorOnSecondary">@color/primaryTextColor</item>
+    <item name="android:colorBackground">@color/backgroundColor</item>
+    <item name="colorOnBackground">@color/onBackgroundColor</item>
+    <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+    <item name="toolbarStyle">@style/ToolbarStyle</item>
+    <item name="colorSurface">@color/primaryTextColor</item>
+    <item name="colorOnSurface">@color/onBackgroundColor</item>
+  </style>
+
+  <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+    <item name="titleTextColor">@color/primaryTextColor</item>
+  </style>
 
 </resources>

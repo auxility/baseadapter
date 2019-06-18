@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
   <fragment
       android:id="@+id/mainFragment"
       android:name="com.skiff2011.baseadapter.sample.MainFragment"
+      tools:layout="@layout/fragment_main"
       android:label="MainFragment">
     <action
         android:id="@+id/action_mainFragment_to_baseAdapterSampleFragment"
@@ -18,9 +20,11 @@
   <fragment
       android:id="@+id/baseAdapterSampleFragment"
       android:name="com.skiff2011.baseadapter.sample.BaseAdapterSampleFragment"
+      tools:layout="@layout/fragment_tabbed"
       android:label="BaseAdapterSampleFragment"/>
   <fragment
       android:id="@+id/filterableAdapterSampleFragment"
       android:name="com.skiff2011.baseadapter.sample.FilterableAdapterSampleFragment"
+      tools:layout="@layout/fragment_tabbed"
       android:label="FilterableAdapterSampleFragment"/>
 </navigation>

@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="com.skiff2011.baseadapter.sample.BasePagerItem"
+        type="com.skiff2011.baseadapter.sample.FilterablePagerItem"
         />
   </data>
 
@@ -45,7 +45,7 @@
             app:layout_constraintEnd_toStartOf="@+id/addLastBtn"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emptyTV"
+            app:layout_constraintTop_toBottomOf="@+id/filterTV"
             />
 
         <Button
@@ -59,7 +59,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/removeLastBtn"
-            app:layout_constraintTop_toBottomOf="@+id/emptyTV"
             />
 
         <TextView
@@ -75,20 +74,46 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="current size = 10"
             />
+
         <TextView
             android:id="@+id/emptyTV"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/countTV"
             android:layout_marginTop="8dp"
-            android:layout_toStartOf="@id/addLastBtn"
-            android:layout_toEndOf="@id/removeLastBtn"
             android:gravity="center"
             android:text='@{@string/is_empty(item.adapter.empty)}'
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/countTV"
             tools:text="is empty = false"
+            />
+
+        <TextView
+            android:id="@+id/realSizeTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/countTV"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text='@{@string/real_size(item.realCount)}'
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emptyTV"
+            tools:text="is empty = false"
+            />
+
+        <TextView
+            android:id="@+id/filterTV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/countTV"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="filter: index % 2 == 0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/realSizeTV"
             />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
