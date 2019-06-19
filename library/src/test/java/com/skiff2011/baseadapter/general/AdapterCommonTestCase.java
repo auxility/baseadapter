@@ -3,7 +3,8 @@ package com.skiff2011.baseadapter.general;
 import androidx.databinding.ViewDataBinding;
 import com.skiff2011.baseadapter.AbstractItemAdapter;
 import com.skiff2011.baseadapter.BR;
-import com.skiff2011.baseadapter.StubItem;
+import com.skiff2011.baseadapter.ItemAdapter;
+import com.skiff2011.baseadapter.TestItem;
 import com.skiff2011.baseadapter.utils.TestUtils;
 import com.skiff2011.baseadapter.view.BaseViewHolder;
 import java.util.ArrayList;
@@ -27,36 +28,36 @@ import static org.mockito.Mockito.when;
 
 public abstract class AdapterCommonTestCase {
 
-  private AbstractItemAdapter<StubItem> adapter;
-  private StubItem vm1;
-  private StubItem vm2;
-  private StubItem vm3;
-  private StubItem vm4;
-  private StubItem vm5;
-  private StubItem vm6;
+  private ItemAdapter<TestItem> adapter;
+  private TestItem item1;
+  private TestItem item2;
+  private TestItem item3;
+  private TestItem item4;
+  private TestItem item5;
+  private TestItem item6;
 
   @Before
   public void setUp() {
-    vm1 = new StubItem(1);
-    vm2 = new StubItem(2);
-    vm3 = new StubItem(3);
-    vm4 = new StubItem(4);
-    vm5 = new StubItem(5);
-    vm6 = new StubItem(6);
-    adapter = provideAdapter(listOf(vm1, vm2, vm3, vm4, vm5));
+    item1 = new TestItem(1);
+    item2 = new TestItem(2);
+    item3 = new TestItem(3);
+    item4 = new TestItem(4);
+    item5 = new TestItem(5);
+    item6 = new TestItem(6);
+    adapter = provideAdapter(listOf(item1, item2, item3, item4, item5));
   }
 
   @Test
   public void testContains() {
-    assertTrue(adapter.contains(vm1));
-    assertFalse(adapter.contains(vm6));
+    assertTrue(adapter.contains(item1));
+    assertFalse(adapter.contains(item6));
   }
 
   @Test
   public void testContainsAll() {
-    List<StubItem> testCollection1 = Arrays.asList(vm3, vm1, vm2);
-    List<StubItem> testCollection2 = Collections.emptyList();
-    List<StubItem> testCollection3 = Arrays.asList(vm3, vm6, vm2);
+    List<TestItem> testCollection1 = Arrays.asList(item3, item1, item2);
+    List<TestItem> testCollection2 = Collections.emptyList();
+    List<TestItem> testCollection3 = Arrays.asList(item3, item6, item2);
     assertTrue(adapter.containsAll(testCollection1));
     assertTrue(adapter.containsAll(testCollection2));
     assertFalse(adapter.containsAll(testCollection3));
@@ -64,80 +65,82 @@ public abstract class AdapterCommonTestCase {
 
   @Test
   public void testIndexOf() {
-    adapter.add(vm2);
-    assertEquals(1, adapter.indexOf(vm2));
-    assertEquals(-1, adapter.indexOf(vm6));
+    adapter.add(item2);
+    assertEquals(1, adapter.indexOf(item2));
+    assertEquals(-1, adapter.indexOf(item6));
   }
 
   @Test
   public void testLastIndexOf() {
-    adapter.add(vm2);
-    assertEquals(5, adapter.lastIndexOf(vm2));
-    assertEquals(-1, adapter.lastIndexOf(vm6));
+    adapter.add(item2);
+    assertEquals(5, adapter.lastIndexOf(item2));
+    assertEquals(-1, adapter.lastIndexOf(item6));
   }
 
+  //items collection returned by adapter.items must be immutable to save adapter intended behaviour
   @Test
   public void testVms() {
-    assertEquals(new ArrayList<>(Arrays.asList(vm1, vm2, vm3, vm4, vm5)), adapter.vms());
+    assertEquals(new ArrayList<>(Arrays.asList(item1, item2, item3, item4, item5)),
+        adapter.items());
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().add(new StubItem(0));
+        adapter.items().add(new TestItem(0));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().add(0, new StubItem(0));
+        adapter.items().add(0, new TestItem(0));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().set(0, new StubItem(0));
+        adapter.items().set(0, new TestItem(0));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().remove(vm1);
+        adapter.items().remove(item1);
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().remove(0);
+        adapter.items().remove(0);
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().clear();
+        adapter.items().clear();
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().removeAll(Arrays.asList(vm1, vm2));
+        adapter.items().removeAll(Arrays.asList(item1, item2));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.vms().sort(new StubItem.StubVmComparator());
+        adapter.items().sort(new TestItem.StubVmComparator());
       }
     });
-    final List<StubItem> subList = adapter.vms().subList(0, 4);
+    final List<TestItem> subList = adapter.items().subList(0, 4);
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        subList.add(new StubItem(0));
-      }
-    });
-    TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
-      @Override public void run() {
-        subList.add(0, new StubItem(0));
+        subList.add(new TestItem(0));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        subList.set(0, new StubItem(0));
+        subList.add(0, new TestItem(0));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        subList.remove(vm1);
+        subList.set(0, new TestItem(0));
+      }
+    });
+    TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
+      @Override public void run() {
+        subList.remove(item1);
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
@@ -152,40 +155,40 @@ public abstract class AdapterCommonTestCase {
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        subList.removeAll(Arrays.asList(vm1, vm2));
+        subList.removeAll(Arrays.asList(item1, item2));
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        subList.sort(new StubItem.StubVmComparator());
+        subList.sort(new TestItem.StubVmComparator());
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        Iterator<StubItem> iterator = adapter.vms().iterator();
+        Iterator<TestItem> iterator = adapter.items().iterator();
         iterator.next();
         iterator.remove();
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        ListIterator<StubItem> iterator = adapter.vms().listIterator();
+        ListIterator<TestItem> iterator = adapter.items().listIterator();
         iterator.next();
         iterator.remove();
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        ListIterator<StubItem> iterator = adapter.vms().listIterator();
+        ListIterator<TestItem> iterator = adapter.items().listIterator();
         iterator.next();
-        iterator.set(vm6);
+        iterator.set(item6);
       }
     });
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {
       @Override public void run() {
-        ListIterator<StubItem> iterator = adapter.vms().listIterator();
+        ListIterator<TestItem> iterator = adapter.items().listIterator();
         iterator.next();
-        iterator.add(vm6);
+        iterator.add(item6);
       }
     });
   }
@@ -195,15 +198,16 @@ public abstract class AdapterCommonTestCase {
     final ViewDataBinding binding = Mockito.mock(ViewDataBinding.class);
     BaseViewHolder viewHolder = Mockito.mock(BaseViewHolder.class);
     when(viewHolder.getBinding()).thenReturn(binding);
+    final TestItem item = adapter.get(0);
     doAnswer(new Answer() {
       @Override public Void answer(InvocationOnMock invocation) {
-        binding.setVariable(BR.item, vm1);
+        binding.setVariable(BR.item, item);
         return null;
       }
-    }).when(viewHolder).bindViewModel(vm1);
+    }).when(viewHolder).bindViewModel(item);
     adapter.bindViewHolder(viewHolder, 0);
-    Mockito.verify(binding).setVariable(BR.item, vm1);
+    Mockito.verify(binding).setVariable(BR.item, item1);
   }
 
-  protected abstract AbstractItemAdapter<StubItem> provideAdapter(List<StubItem> vms);
+  protected abstract AbstractItemAdapter<TestItem> provideAdapter(List<TestItem> vms);
 }

@@ -57,7 +57,7 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @Override public void clear(boolean withDiffUtil) {
-    List<V> oldVms = vms();
+    List<V> oldVms = items();
     this.vms.clear();
     updateSize();
     if (withDiffUtil) {
@@ -76,7 +76,7 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
     boolean returnValue = vms.addAll(index, c);
     updateSize();
-    notifyItemRangeInserted(index, c.size());
+    notifyItemRangeInserted(index, index + c.size());
     return returnValue;
   }
 
@@ -84,8 +84,8 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
     return vms.get(index);
   }
 
-  //to avoid vms list modification
-  @NonNull @Override public List<V> vms() {
+  //to avoid items list modification
+  @NonNull @Override public List<V> items() {
     return Collections.unmodifiableList(vms);
   }
 
@@ -126,7 +126,7 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @Override public void set(@NonNull Collection<? extends V> c, boolean withDiffUtil) {
-    List<V> oldVms = vms();
+    List<V> oldVms = items();
     vms = new ArrayList<>(c);
     updateSize();
     if (withDiffUtil) {
@@ -202,6 +202,8 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @Override public void refresh() {
+    notifyPropertyChanged(BR.size);
+    notifyPropertyChanged(BR.empty);
     notifyDataSetChanged();
   }
 

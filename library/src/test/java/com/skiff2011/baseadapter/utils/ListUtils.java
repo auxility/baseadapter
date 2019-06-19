@@ -1,5 +1,6 @@
 package com.skiff2011.baseadapter.utils;
 
+import com.skiff2011.baseadapter.misc.function.Predicate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,16 @@ public abstract class ListUtils {
 
   @SafeVarargs public static <T> List<T> listOf(T... items) {
     return new ArrayList<>(Arrays.asList(items));
+  }
+
+  public static <T> List<T> filter(List<T> list, Predicate<T> predicate) {
+    List<T> filteredList = new ArrayList<>();
+    for (T item : list) {
+      if (predicate.apply(item)) {
+        filteredList.add(item);
+      }
+    }
+    return filteredList;
   }
 
   public interface Mapper<T, V> {

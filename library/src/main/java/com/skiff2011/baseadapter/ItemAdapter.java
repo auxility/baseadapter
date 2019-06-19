@@ -50,7 +50,7 @@ public interface ItemAdapter<V extends Item> extends Observable,
 
   @NonNull V get(int index);
 
-  @NonNull List<V> vms();
+  @NonNull List<V> items();
 
   //CRUD
 

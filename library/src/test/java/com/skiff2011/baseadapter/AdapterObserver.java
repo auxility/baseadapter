@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AdapterObserver<V extends Item> implements AdapterDataObserver {
 
-  public List<V> vms;
+  public List<V> items;
   private AbstractItemAdapter<V> adapter;
 
   public AdapterObserver(AbstractItemAdapter<V> adapter) {
@@ -20,19 +20,19 @@ public class AdapterObserver<V extends Item> implements AdapterDataObserver {
   }
 
   @Override public void notifyOnItemInserted(int position) {
-    this.vms.add(position, this.adapter.get(position));
+    this.items.add(position, this.adapter.get(position));
   }
 
   @Override public void notifyOnItemRangeInserted(int positionStart, int positionEnd) {
-    this.vms.addAll(positionStart, getRange(positionStart, positionEnd));
+    this.items.addAll(positionStart, getRange(positionStart, positionEnd));
   }
 
   @Override public void notifyOnItemRemoved(int position) {
-    this.vms.remove(position);
+    this.items.remove(position);
   }
 
   @Override public void notifyOnItemRangeRemoved(int positionStart, int itemCount) {
-    this.vms.subList(positionStart, itemCount).clear();
+    this.items.subList(positionStart, itemCount).clear();
   }
 
   @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
@@ -41,13 +41,13 @@ public class AdapterObserver<V extends Item> implements AdapterDataObserver {
   }
 
   @Override public void notifyOnItemChanged(int position) {
-    this.vms.set(position, this.adapter.get(position));
+    this.items.set(position, this.adapter.get(position));
   }
 
   private void updateDataFromAdapter() {
-    this.vms = new ArrayList<>();
+    this.items = new ArrayList<>();
     for (int i = 0; i < this.adapter.getSize(); i++) {
-      this.vms.add(this.adapter.get(i));
+      this.items.add(this.adapter.get(i));
     }
   }
 

@@ -22,7 +22,7 @@ public class FilterableListAdapter extends ListAdapter implements Filterable {
 
     @Override protected FilterResults performFiltering(CharSequence constraint) {
       FilterResults filterResults = new FilterResults();
-      filterResults.values = adapter.vms();
+      filterResults.values = adapter.items();
       filterResults.count = adapter.getSize();
       return filterResults;
     }

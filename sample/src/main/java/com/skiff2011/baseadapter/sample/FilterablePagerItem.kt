@@ -13,15 +13,15 @@ class FilterablePagerItem : TitledItem {
     item.index % 2 == 0
   }
 
-  val realCount: ObservableInt = ObservableInt(adapter.vms().size)
+  val realCount: ObservableInt = ObservableInt(adapter.items().size)
 
   fun removeLast(view: View) {
-    adapter.remove(adapter.vms().size - 1)
+    adapter.remove(adapter.items().size - 1)
     realCount.set(realCount.get() - 1)
   }
 
   fun addToTheEnd(view: View) {
-    adapter.add(PagerSampleItem(adapter.vms().size))
+    adapter.add(PagerSampleItem(adapter.items().size))
     realCount.set(realCount.get() + 1)
   }
 

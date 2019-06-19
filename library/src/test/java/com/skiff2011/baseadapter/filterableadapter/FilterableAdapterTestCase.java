@@ -3,7 +3,7 @@ package com.skiff2011.baseadapter.filterableadapter;
 import com.skiff2011.baseadapter.AdapterObserver;
 import com.skiff2011.baseadapter.BR;
 import com.skiff2011.baseadapter.FilterableItemAdapter;
-import com.skiff2011.baseadapter.StubItem;
+import com.skiff2011.baseadapter.TestItem;
 import com.skiff2011.baseadapter.misc.ListUtils;
 import com.skiff2011.baseadapter.utils.TestUtils;
 import java.util.Collections;
@@ -21,35 +21,35 @@ import static org.mockito.Mockito.verify;
 
 public class FilterableAdapterTestCase {
 
-  private FilterableItemAdapter<StubItem> adapter;
-  private AdapterObserver<StubItem> observer;
-  private StubItem vm1;
-  private StubItem vm2;
-  private StubItem vm3;
-  private StubItem vm4;
-  private StubItem vm5;
-  private StubItem vm6;
-  private StubItem vm7;
-  private StubItem vm8;
-  private StubItem vm9;
-  private StubItem vm10;
+  private FilterableItemAdapter<TestItem> adapter;
+  private AdapterObserver<TestItem> observer;
+  private TestItem vm1;
+  private TestItem vm2;
+  private TestItem vm3;
+  private TestItem vm4;
+  private TestItem vm5;
+  private TestItem vm6;
+  private TestItem vm7;
+  private TestItem vm8;
+  private TestItem vm9;
+  private TestItem vm10;
 
-  private List<StubItem> generateVmsList() {
+  private List<TestItem> generateVmsList() {
     return listOf(vm1, vm2, vm3, vm4, vm5, vm6);
   }
 
   @Before
   public void setUp() {
-    vm1 = new StubItem(1);
-    vm2 = new StubItem(2);
-    vm3 = new StubItem(3);
-    vm4 = new StubItem(4);
-    vm5 = new StubItem(5);
-    vm6 = new StubItem(6);
-    vm7 = new StubItem(7);
-    vm8 = new StubItem(8);
-    vm9 = new StubItem(9);
-    vm10 = new StubItem(10);
+    vm1 = new TestItem(1);
+    vm2 = new TestItem(2);
+    vm3 = new TestItem(3);
+    vm4 = new TestItem(4);
+    vm5 = new TestItem(5);
+    vm6 = new TestItem(6);
+    vm7 = new TestItem(7);
+    vm8 = new TestItem(8);
+    vm9 = new TestItem(9);
+    vm10 = new TestItem(10);
     adapter = spy(new FilterableItemAdapter<>(generateVmsList(), new TestPredicate()));
     observer = spy(new AdapterObserver<>(adapter));
     adapter.registerObserver(observer);
@@ -64,7 +64,7 @@ public class FilterableAdapterTestCase {
     });
     assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.get(adapter.vms().size());
+        adapter.get(adapter.items().size());
       }
     });
     assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
@@ -73,7 +73,7 @@ public class FilterableAdapterTestCase {
             new TestPredicate()).size());
       }
     });
-    StubItem vm = adapter.get(
+    TestItem vm = adapter.get(
         adapter.indexOf(ListUtils.filter(generateVmsList(),
             new TestPredicate()).get(0)));
     assertEquals(vm, vm1);
@@ -82,7 +82,7 @@ public class FilterableAdapterTestCase {
   @Test
   public void testInitialFilter() {
     assertEquals(ListUtils.filter(generateVmsList(),
-        new TestPredicate()), observer.vms);
+        new TestPredicate()), observer.items);
   }
 
   @Test
@@ -101,26 +101,26 @@ public class FilterableAdapterTestCase {
     });
     assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.remove(adapter.vms().size());
+        adapter.remove(adapter.items().size());
       }
     });
   }
 
   @Test
   public void testRemoveByIndexContent() {
-    StubItem removedVm = adapter.remove(adapter.indexOf(vm2));
+    TestItem removedVm = adapter.remove(adapter.indexOf(vm2));
     //Test correct Item removed
     assertEquals(vm2, removedVm);
-    //Test vms to be displayed after removal
-    assertEquals(listOf(vm1, vm3, vm5), observer.vms);
+    //Test items to be displayed after removal
+    assertEquals(listOf(vm1, vm3, vm5), observer.items);
     //Test correct notify method was called
     verify(observer, times(0)).notifyOnItemRemoved(anyInt());
     verify(adapter, times(0)).notifyPropertyChanged(BR.empty);
-    StubItem removedVmFiltered = adapter.remove(adapter.indexOf(vm3));
+    TestItem removedVmFiltered = adapter.remove(adapter.indexOf(vm3));
     //Test correct Item removed
     assertEquals(vm3, removedVmFiltered);
-    //Test vms to be displayed after removal
-    assertEquals(listOf(vm1, vm5), observer.vms);
+    //Test items to be displayed after removal
+    assertEquals(listOf(vm1, vm5), observer.items);
     //Test correct notify method was called
     verify(observer, times(1)).notifyOnItemRemoved(1);
     //verify(adapter.adapter, times(0)).notifyPropertyChanged(BR.empty);
@@ -129,25 +129,25 @@ public class FilterableAdapterTestCase {
   @Test
   public void testRemoveByIndexSizeAndEmptyAll() {
     int filteredItemsSize = adapter.getSize();
-    int i = adapter.vms().size();
+    int i = adapter.items().size();
     while (i > 0) {
       adapter.remove(0);
       i--;
     }
     verify(adapter, times(filteredItemsSize)).notifyPropertyChanged(BR.size);
     verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
-    assertEquals(Collections.emptyList(), observer.vms);
+    assertEquals(Collections.emptyList(), observer.items);
   }
 
   @Test
   public void testRemoveByIndexSizeAndEmptyOnlyFiltered() {
     int filteredItemsSize = adapter.getSize();
-    List<StubItem> filteredVms = ListUtils.filter(adapter.vms(), new TestPredicate());
-    for (StubItem stubVm : filteredVms) {
+    List<TestItem> filteredVms = ListUtils.filter(adapter.items(), new TestPredicate());
+    for (TestItem stubVm : filteredVms) {
       adapter.remove(adapter.indexOf(stubVm));
     }
     verify(adapter, times(filteredItemsSize)).notifyPropertyChanged(BR.size);
     verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
-    assertEquals(Collections.emptyList(), observer.vms);
+    assertEquals(Collections.emptyList(), observer.items);
   }
 }

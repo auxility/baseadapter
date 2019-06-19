@@ -97,7 +97,7 @@ public class ListAdapter<V extends Item> extends BaseAdapter implements AdapterD
     if (getCount() == 0) {
       return;
     }
-    for (Object object : adapter.vms()) {
+    for (Object object : adapter.items()) {
       Item item = (Item) object;
       if (!viewTypes.contains(item.getLayoutId())) {
         viewTypes.add(item.getLayoutId());

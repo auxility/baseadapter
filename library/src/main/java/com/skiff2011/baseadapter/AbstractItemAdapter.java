@@ -13,19 +13,19 @@ public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
     implements ItemAdapter<V> {
 
   public int indexOf(@NonNull V vm) {
-    return vms().indexOf(vm);
+    return items().indexOf(vm);
   }
 
   public int lastIndexOf(@NonNull V vm) {
-    return vms().lastIndexOf(vm);
+    return items().lastIndexOf(vm);
   }
 
   public boolean contains(@NonNull V vm) {
-    return vms().contains(vm);
+    return items().contains(vm);
   }
 
   public boolean containsAll(@NonNull Collection<? extends V> c) {
-    return vms().containsAll(c);
+    return items().containsAll(c);
   }
 
   @NonNull public ListIterator<V> listIterator() {
@@ -47,11 +47,11 @@ public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
   }
 
   public void add(@NonNull V vm) {
-    add(vms().size(), vm);
+    add(items().size(), vm);
   }
 
   public boolean addAll(@NonNull Collection<? extends V> c) {
-    return addAll(vms().size(), c);
+    return addAll(items().size(), c);
   }
 
   public boolean removeIf(@NonNull Predicate<V> predicate) {

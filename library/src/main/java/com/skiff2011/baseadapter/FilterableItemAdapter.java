@@ -159,7 +159,7 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     return getAdapter().get(index);
   }
 
-  @NonNull @Override public List<V> vms() {
+  @NonNull @Override public List<V> items() {
     return Collections.unmodifiableList(this.vms);
   }
 
