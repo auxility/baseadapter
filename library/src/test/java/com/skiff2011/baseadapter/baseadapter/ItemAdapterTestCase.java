@@ -9,7 +9,9 @@ import com.skiff2011.baseadapter.misc.function.Predicate;
 import com.skiff2011.baseadapter.utils.ListUtils;
 import com.skiff2011.baseadapter.utils.TestUtils;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -750,5 +752,70 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems, false);
     verify(adapter, never()).notifyPropertyChanged(BR.empty);
+  }
+
+  @Test
+  public void testIteratorHasNextNotEmpty() {
+    assertTrue(adapter.iterator().hasNext());
+  }
+
+  @Test
+  public void testIteratorHasNextEmpty() {
+    adapter.clear();
+    assertFalse(adapter.iterator().hasNext());
+  }
+
+  @Test
+  public void testIteratorNextNotEmpty() {
+    TestItem item = adapter.get(0);
+    assertEquals(item, adapter.iterator().next());
+  }
+
+  @Test
+  public void testIteratorNextEmpty() {
+    adapter.clear();
+    assertThrows(NoSuchElementException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.iterator().next();
+      }
+    });
+  }
+
+  @Test
+  public void testIteratorRemoveException() {
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.iterator().remove();
+      }
+    });
+  }
+
+  @Test
+  public void testIteratorRemoveContent() {
+    List<TestItem> items = new ArrayList<>(adapter.items());
+    items.remove(0);
+    Iterator<TestItem> iterator = adapter.iterator();
+    iterator.next();
+    iterator.remove();
+    assertEquals(items, adapter.items());
+    assertEquals(items, observer.items);
+  }
+
+  @Test
+  public void testIteratorRemoveSize() {
+    Iterator<TestItem> iterator = adapter.iterator();
+    iterator.next();
+    iterator.remove();
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+  }
+
+  @Test
+  public void testIteratorRemoveEmpty() {
+    Iterator<TestItem> iterator = adapter.iterator();
+    while (iterator.hasNext()) {
+      iterator.next();
+      iterator.remove();
+    }
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
   }
 }
