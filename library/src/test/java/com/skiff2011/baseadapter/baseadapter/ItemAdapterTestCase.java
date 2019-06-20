@@ -11,6 +11,7 @@ import com.skiff2011.baseadapter.utils.TestUtils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import org.junit.Before;
 import org.junit.Test;
@@ -767,7 +768,7 @@ public class ItemAdapterTestCase {
 
   @Test
   public void testIteratorNextNotEmpty() {
-    TestItem item = adapter.get(0);
+    TestItem item = adapter.items().get(0);
     assertEquals(item, adapter.iterator().next());
   }
 
@@ -817,5 +818,233 @@ public class ItemAdapterTestCase {
       iterator.remove();
     }
     verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+  }
+
+  @Test
+  public void testListIteratorHasNextNotEmpty() {
+    assertTrue(adapter.listIterator().hasNext());
+  }
+
+  @Test
+  public void testListIteratorHasNextEmpty() {
+    adapter.clear();
+    assertFalse(adapter.listIterator().hasNext());
+  }
+
+  @Test
+  public void testListIteratorNextNotEmpty() {
+    TestItem item = adapter.get(0);
+    assertEquals(item, adapter.listIterator().next());
+  }
+
+  @Test
+  public void testListIteratorNextEmpty() {
+    adapter.clear();
+    assertThrows(NoSuchElementException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.listIterator().next();
+      }
+    });
+  }
+
+  @Test
+  public void testListIteratorNextIndex() {
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    assertEquals(1, listIterator.nextIndex());
+  }
+
+  @Test
+  public void testListIteratorNextIndexEnd() {
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    while (listIterator.hasNext()) {
+      listIterator.next();
+    }
+    assertEquals(adapter.getSize(), listIterator.nextIndex());
+  }
+
+  @Test
+  public void testListIteratorNextIndexEmpty() {
+    adapter.clear();
+    assertEquals(0, adapter.listIterator().nextIndex());
+  }
+
+  @Test
+  public void testListIteratorRemoveContent() {
+    List<TestItem> items = new ArrayList<>(adapter.items());
+    items.remove(0);
+    ListIterator<TestItem> iterator = adapter.listIterator();
+    iterator.next();
+    iterator.remove();
+    assertEquals(items, adapter.items());
+    assertEquals(items, observer.items);
+  }
+
+  @Test
+  public void testListIteratorRemoveSize() {
+    ListIterator<TestItem> iterator = adapter.listIterator();
+    iterator.next();
+    iterator.remove();
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+  }
+
+  @Test
+  public void testListIteratorRemoveEmpty() {
+    ListIterator<TestItem> iterator = adapter.listIterator();
+    while (iterator.hasNext()) {
+      iterator.next();
+      iterator.remove();
+    }
+    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+  }
+
+  @Test
+  public void testListIteratorHasPrevious() {
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    assertTrue(listIterator.hasPrevious());
+  }
+
+  @Test
+  public void testListIteratorHasNotPrevious() {
+    assertFalse(adapter.listIterator().hasPrevious());
+  }
+
+  @Test
+  public void testListIteratorPreviousHasNotPrevious() {
+    assertThrows(NoSuchElementException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.listIterator().previous();
+      }
+    });
+  }
+
+  @Test
+  public void testListIteratorPreviousHasPrevious() {
+    TestItem item = adapter.get(0);
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    assertEquals(item, listIterator.previous());
+  }
+
+  @Test
+  public void testListIteratorPreviousIndex() {
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    assertEquals(0, listIterator.previousIndex());
+  }
+
+  @Test
+  public void testListIteratorPreviousIndexBeginning() {
+    assertEquals(-1, adapter.listIterator().previousIndex());
+  }
+
+  @Test
+  public void testListIteratorAddContent() {
+    TestItem item = new TestItem(Integer.MAX_VALUE);
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    List<TestItem> items = new ArrayList<>(adapter.items());
+    items.add(1, item);
+    listIterator.next();
+    int prevIndex = listIterator.previousIndex();
+    int nextIndex = listIterator.nextIndex();
+    listIterator.add(item);
+    assertEquals(items, adapter.items());
+    assertEquals(items, observer.items);
+    assertEquals(listIterator.nextIndex(), nextIndex + 1);
+    assertEquals(listIterator.previousIndex(), prevIndex + 1);
+    assertEquals(item, listIterator.previous());
+  }
+
+  @Test
+  public void testListIteratorAddSize() {
+    adapter.listIterator().add(new TestItem(Integer.MAX_VALUE));
+    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+  }
+
+  @Test
+  public void testListIteratorAddEmpty() {
+    adapter.clear();
+    adapter.listIterator().add(new TestItem(Integer.MAX_VALUE));
+    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+  }
+
+  @Test
+  public void testListIteratorSetExceptions() {
+    final TestItem item = new TestItem(Integer.MAX_VALUE);
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        adapter.listIterator().set(item);
+      }
+    });
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        ListIterator<TestItem> listIterator = adapter.listIterator();
+        listIterator.next();
+        listIterator.remove();
+        listIterator.set(new TestItem(Integer.MAX_VALUE));
+      }
+    });
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        ListIterator<TestItem> listIterator = adapter.listIterator();
+        listIterator.next();
+        listIterator.add(new TestItem(Integer.MAX_VALUE));
+        listIterator.set(new TestItem(Integer.MAX_VALUE));
+      }
+    });
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        ListIterator<TestItem> listIterator = adapter.listIterator();
+        listIterator.next();
+        listIterator.next();
+        listIterator.previous();
+        listIterator.remove();
+        listIterator.set(new TestItem(Integer.MAX_VALUE));
+      }
+    });
+    assertThrows(IllegalStateException.class, new TestUtils.Block() {
+      @Override public void run() {
+        ListIterator<TestItem> listIterator = adapter.listIterator();
+        listIterator.next();
+        listIterator.next();
+        listIterator.previous();
+        listIterator.add(new TestItem(Integer.MAX_VALUE));
+        listIterator.set(new TestItem(Integer.MAX_VALUE));
+      }
+    });
+  }
+
+  @Test
+  public void testListIteratorSetContentChangedNext() {
+    List<TestItem> items = new ArrayList<>(adapter.items());
+    TestItem newItem = new TestItem(Integer.MAX_VALUE);
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    listIterator.set(newItem);
+    items.set(0, newItem);
+    assertEquals(items, adapter.items());
+    assertEquals(items, observer.items);
+  }
+
+  @Test
+  public void testListIteratorSetContentChangedPrevious() {
+    List<TestItem> items = new ArrayList<>(adapter.items());
+    TestItem newItem = new TestItem(Integer.MAX_VALUE);
+    ListIterator<TestItem> listIterator = adapter.listIterator();
+    listIterator.next();
+    listIterator.previous();
+    listIterator.set(newItem);
+    items.set(0, newItem);
+    assertEquals(items, adapter.items());
+    assertEquals(items, observer.items);
+  }
+
+  @Test
+  public void testListIteratorInitialIndex() {
+    ListIterator<TestItem> listIterator = adapter.listIterator(3);
+    TestItem item = adapter.items().get(3);
+    assertEquals(item, listIterator.next());
+    assertEquals(item, listIterator.previous());
   }
 }

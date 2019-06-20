@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import com.skiff2011.baseadapter.item.Item;
 import java.util.Iterator;
 
-//TODO test
 public class AdapterIterator<V extends Item> implements Iterator<V> {
 
   @NonNull private final Iterator<V> iterator;

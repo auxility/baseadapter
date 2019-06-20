@@ -10,6 +10,8 @@ public class AdapterListIterator<V extends Item> extends AdapterIterator<V>
   @NonNull private final ListIterator<V> listIterator;
   @NonNull private final AdapterListIteratorListener<V> listListener;
 
+  private boolean forwardDirection = false;
+
   public AdapterListIterator(@NonNull ListIterator<V> iterator,
       @NonNull
           AdapterListIteratorListener<V> listener) {
@@ -22,7 +24,7 @@ public class AdapterListIterator<V extends Item> extends AdapterIterator<V>
       @NonNull
           AdapterListIteratorListener<V> listener, int index) {
     this(iterator, listener);
-    this.position = index;
+    this.position = index - 1;
   }
 
   @Override public boolean hasPrevious() {
@@ -30,9 +32,15 @@ public class AdapterListIterator<V extends Item> extends AdapterIterator<V>
   }
 
   @Override public V previous() {
+    forwardDirection = false;
     currentItem = this.listIterator.previous();
     this.position--;
     return currentItem;
+  }
+
+  @Override public V next() {
+    forwardDirection = true;
+    return super.next();
   }
 
   @Override public int nextIndex() {
@@ -45,11 +53,18 @@ public class AdapterListIterator<V extends Item> extends AdapterIterator<V>
 
   @Override public void set(V v) {
     this.listIterator.set(v);
-    listListener.onItemChanged(this.position, v, currentItem);
+    int index;
+    if (forwardDirection) {
+      index = position;
+    } else {
+      index = position + 1;
+    }
+    listListener.onItemChanged(index, v, currentItem);
   }
 
   @Override public void add(V v) {
     this.listIterator.add(v);
+    this.position++;
     listListener.onItemAdded(this.position, currentItem);
   }
 
