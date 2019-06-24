@@ -33,7 +33,7 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
   public FilterableItemAdapter(
       @NonNull List<V> vms,
       @NonNull SerializablePredicate<V> filter) {
-    this(new BaseItemAdapter<V>(), vms, filter);
+    this(new BaseItemAdapter<>(ListUtils.filter(vms, filter)), vms, filter);
   }
 
   public FilterableItemAdapter(
@@ -99,19 +99,18 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     return true;
   }
 
-  //TODO test with beginIndex == endIndex
   @Override public List<V> removeRange(int beginIndex, int endIndex) {
     List<V> itemsToRemove = vms.subList(beginIndex, endIndex);
     List<V> itemsToReturn = new ArrayList<>(itemsToRemove);
     itemsToRemove.clear();
     V firstVm = ListUtils.first(itemsToReturn, new Predicate<V>() {
       @Override public Boolean apply(@NonNull V object) {
-        return null;
+        return filter.apply(object);
       }
     });
-    V lastVm = ListUtils.first(itemsToReturn, new Predicate<V>() {
+    V lastVm = ListUtils.last(itemsToReturn, new Predicate<V>() {
       @Override public Boolean apply(@NonNull V object) {
-        return null;
+        return filter.apply(object);
       }
     });
     if (firstVm != null && lastVm != null) {
@@ -132,6 +131,7 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     getAdapter().clear(withDiffUtil);
   }
 
+  //TODO optimize
   @Override public void add(int index, @NonNull V element) {
     this.vms.add(index, element);
     if (filter.apply(element)) {
@@ -143,6 +143,7 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     }
   }
 
+  //TODO optimize
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
     List<V> newVms = new ArrayList<>(c);
     boolean returnValue = this.vms.addAll(index, newVms);
@@ -163,9 +164,10 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     return Collections.unmodifiableList(this.vms);
   }
 
+  //TODO optimize
   @NonNull @Override public V set(int index, @NonNull V element) {
     V prevVm = this.vms.set(index, element);
-    if (this.filter.apply(element)) {
+    if (filter.apply(prevVm) || filter.apply(element)) {
       refresh();
     }
     return prevVm;
@@ -211,8 +213,13 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
     return this.vms.hashCode() * 1000 + getAdapter().hashCode();
   }
 
+  @Override public void notifyPropertyChanged(int fieldId) {
+    super.notifyPropertyChanged(fieldId);
+  }
+
   private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
 
+    //TODO optimize
     @Override public void onItemRemoved(int position, V item) {
       if (filter.apply(item)) {
         getAdapter().remove(item);
@@ -223,12 +230,14 @@ public class FilterableItemAdapter<V extends Item> extends AbstractItemAdapterDe
   private class AdapterListIteratorListenerImpl extends AdapterIteratorListenerImpl implements
       AdapterListIterator.AdapterListIteratorListener<V> {
 
+    //TODO optimize
     @Override public void onItemAdded(int position, V item) {
       if (filter.apply(item)) {
         refresh();
       }
     }
 
+    //TODO optimize
     @Override public void onItemChanged(int position, V item, V oldItem) {
       boolean itemFiltered = filter.apply(item);
       boolean prevFiltered = filter.apply(oldItem);

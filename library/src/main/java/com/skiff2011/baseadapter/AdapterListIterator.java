@@ -65,7 +65,7 @@ public class AdapterListIterator<V extends Item> extends AdapterIterator<V>
   @Override public void add(V v) {
     this.listIterator.add(v);
     this.position++;
-    listListener.onItemAdded(this.position, currentItem);
+    listListener.onItemAdded(this.position, v);
   }
 
   public interface AdapterListIteratorListener<V extends Item> extends AdapterIteratorListener<V> {

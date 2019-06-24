@@ -79,7 +79,7 @@ public abstract class AdapterCommonTestCase {
 
   //items collection returned by adapter.items must be immutable to save adapter intended behaviour
   @Test
-  public void testVms() {
+  public void testItems() {
     assertEquals(new ArrayList<>(Arrays.asList(item1, item2, item3, item4, item5)),
         adapter.items());
     TestUtils.assertThrows(UnsupportedOperationException.class, new TestUtils.Block() {

@@ -1,6 +1,7 @@
 package com.skiff2011.baseadapter.baseadapter;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.Observable;
 import com.skiff2011.baseadapter.AdapterObserver;
 import com.skiff2011.baseadapter.BR;
 import com.skiff2011.baseadapter.BaseItemAdapter;
@@ -22,8 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -56,21 +57,23 @@ public class ItemAdapterTestCase {
     }
   };
 
+  private Observable.OnPropertyChangedCallback fakeObservable;
+
   @Before
   public void setUp() {
-    adapter = spy(new BaseItemAdapter<>(
-            listOf(
-                new TestItem(1),
-                new TestItem(2),
-                new TestItem(3),
-                new TestItem(4),
-                new TestItem(5),
-                new TestItem(6)
-            )
+    adapter = new BaseItemAdapter<>(
+        listOf(
+            new TestItem(1),
+            new TestItem(2),
+            new TestItem(3),
+            new TestItem(4),
+            new TestItem(5),
+            new TestItem(6)
         )
     );
-    observer = spy(new AdapterObserver<>(adapter));
-    adapter.registerObserver(observer);
+    observer = new AdapterObserver<>(adapter);
+    fakeObservable = mock(Observable.OnPropertyChangedCallback.class);
+    adapter.addOnPropertyChangedCallback(fakeObservable);
   }
 
   @Test
@@ -89,7 +92,7 @@ public class ItemAdapterTestCase {
     });
     assertThrows(IndexOutOfBoundsException.class, new TestUtils.Block() {
       @Override public void run() {
-        adapter.remove(adapter.getSize());
+        adapter.remove(adapter.items().size());
       }
     });
   }
@@ -115,7 +118,7 @@ public class ItemAdapterTestCase {
       i--;
     }
     //verify size property changed if item was removed
-    verify(adapter, times(size)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(size)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -126,7 +129,7 @@ public class ItemAdapterTestCase {
       i--;
     }
     //verify empty property changed if item was removed
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -146,10 +149,10 @@ public class ItemAdapterTestCase {
   public void testRemoveByVmSize() {
     adapter.remove(new TestItem(Integer.MAX_VALUE));
     //verify size property is not changed if absent item removal has attempted
-    verify(adapter, times(0)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
     adapter.remove(adapter.items().get(0));
     //verify size property changed if item removed
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -161,7 +164,7 @@ public class ItemAdapterTestCase {
       size--;
     }
     //verify empty property changed if item removed
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   //TODO test diffUtil flag correct behaviour
@@ -179,20 +182,20 @@ public class ItemAdapterTestCase {
   public void testRemovePredicateSize() {
     //verify no size property change if no item removed
     adapter.removeIf(falsePredicate);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
     //verify size property change if some items removed
     adapter.removeIf(evenPredicate);
-    verify(adapter, atLeastOnce()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, atLeastOnce()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testRemovePredicateEmpty() {
     //verify no empty property change if not all items removed
     adapter.removeIf(evenPredicate);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
     //verify empty property change if all items removed
     adapter.removeIf(truePredicate);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -208,20 +211,20 @@ public class ItemAdapterTestCase {
   public void testRemovePredicateDiffTrueSize() {
     //verify no size property change if no item removed
     adapter.removeIf(falsePredicate, true);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
     //verify size property change if some items removed
     adapter.removeIf(evenPredicate, true);
-    verify(adapter, atLeastOnce()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, atLeastOnce()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testRemovePredicateDiffTrueEmpty() {
     //verify no empty property change if not all items removed
     adapter.removeIf(evenPredicate, true);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
     //verify empty property change if all items removed
     adapter.removeIf(truePredicate, true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -237,20 +240,20 @@ public class ItemAdapterTestCase {
   public void testRemovePredicateDiffFalseSize() {
     //verify no size property change if no item removed
     adapter.removeIf(falsePredicate, false);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
     //verify size property change if some items removed
     adapter.removeIf(evenPredicate, false);
-    verify(adapter, atLeastOnce()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, atLeastOnce()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testRemovePredicateDiffFalseEmpty() {
     //verify no empty property change if not all items removed
     adapter.removeIf(evenPredicate, false);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
     //verify empty property change if all items removed
     adapter.removeIf(truePredicate, false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -283,15 +286,15 @@ public class ItemAdapterTestCase {
   @Test
   public void testRemoveRangeSize() {
     adapter.removeRange(0, adapter.items().size() - 2);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testRemoveRangeEmpty() {
     adapter.removeRange(0, 2);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
     adapter.removeRange(0, adapter.items().size());
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -305,14 +308,14 @@ public class ItemAdapterTestCase {
   public void testClearSize() {
     adapter.clear();
     adapter.clear();
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testClearEmpty() {
     adapter.clear();
     adapter.clear();
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -326,14 +329,14 @@ public class ItemAdapterTestCase {
   public void testClearDiffTrueSize() {
     adapter.clear(true);
     adapter.clear(true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testClearDiffTrueEmpty() {
     adapter.clear(true);
     adapter.clear(true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -347,14 +350,14 @@ public class ItemAdapterTestCase {
   public void testClearDiffFalseSize() {
     adapter.clear(false);
     adapter.clear(false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testClearDiffFalseEmpty() {
     adapter.clear(false);
     adapter.clear(false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -403,7 +406,7 @@ public class ItemAdapterTestCase {
   @Test
   public void testAddSize() {
     adapter.add(new TestItem(Integer.MAX_VALUE));
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -412,7 +415,7 @@ public class ItemAdapterTestCase {
     List<TestItem> items = listOf(item);
     adapter.clear();
     adapter.add(item);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
     assertEquals(items, adapter.items());
     assertEquals(items, observer.items);
   }
@@ -445,7 +448,7 @@ public class ItemAdapterTestCase {
   public void testAddByIndexSize() {
     TestItem item = new TestItem(Integer.MAX_VALUE);
     adapter.add(0, item);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -453,7 +456,7 @@ public class ItemAdapterTestCase {
     TestItem item = new TestItem(Integer.MAX_VALUE);
     adapter.clear();
     adapter.add(0, item);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -473,14 +476,14 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems =
         listOf(new TestItem(Integer.MAX_VALUE), new TestItem(Integer.MAX_VALUE));
     adapter.addAll(newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testAddAllSizeNotChanged() {
     List<TestItem> newItems = listOf();
     adapter.addAll(newItems);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -489,7 +492,7 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems =
         listOf(new TestItem(Integer.MAX_VALUE), new TestItem(Integer.MAX_VALUE));
     adapter.addAll(newItems);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -497,7 +500,7 @@ public class ItemAdapterTestCase {
     adapter.clear();
     List<TestItem> newItems = listOf();
     adapter.addAll(newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -533,14 +536,14 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems =
         listOf(new TestItem(Integer.MAX_VALUE), new TestItem(Integer.MAX_VALUE));
     adapter.addAll(0, newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testAddAllByIndexSizeNotChanged() {
     List<TestItem> newItems = listOf();
     adapter.addAll(0, newItems);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -549,7 +552,7 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems =
         listOf(new TestItem(Integer.MAX_VALUE), new TestItem(Integer.MAX_VALUE));
     adapter.addAll(0, newItems);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -557,7 +560,7 @@ public class ItemAdapterTestCase {
     adapter.clear();
     List<TestItem> newItems = listOf();
     adapter.addAll(0, newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -602,7 +605,7 @@ public class ItemAdapterTestCase {
   public void testSetCollectionSizeChanged() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -612,7 +615,7 @@ public class ItemAdapterTestCase {
       newItems.add(new TestItem(10 + i));
     }
     adapter.set(newItems);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -620,7 +623,7 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.clear();
     adapter.set(newItems);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -628,21 +631,21 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf();
     adapter.clear();
     adapter.set(newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndChanged() {
     List<TestItem> newItems = listOf();
     adapter.set(newItems);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndUnChanged() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -657,7 +660,7 @@ public class ItemAdapterTestCase {
   public void testSetCollectionSizeChangedTrueDiffUtil() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems, true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -667,7 +670,7 @@ public class ItemAdapterTestCase {
       newItems.add(new TestItem(10 + i));
     }
     adapter.set(newItems, true);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -675,7 +678,7 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.clear();
     adapter.set(newItems, true);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -683,21 +686,21 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf();
     adapter.clear();
     adapter.set(newItems, true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndChangedTrueDiffUtil() {
     List<TestItem> newItems = listOf();
     adapter.set(newItems, true);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndUnChangedTrueDiffUtil() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems, true);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -712,7 +715,7 @@ public class ItemAdapterTestCase {
   public void testSetCollectionSizeChangedFalseDiffUtil() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems, false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -722,7 +725,7 @@ public class ItemAdapterTestCase {
       newItems.add(new TestItem(10 + i));
     }
     adapter.set(newItems, false);
-    verify(adapter, never()).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -730,7 +733,7 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.clear();
     adapter.set(newItems, false);
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -738,21 +741,21 @@ public class ItemAdapterTestCase {
     List<TestItem> newItems = listOf();
     adapter.clear();
     adapter.set(newItems, false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndChangedFalseDiffUtil() {
     List<TestItem> newItems = listOf();
     adapter.set(newItems, false);
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
   public void testSetCollectionEmptyWasNotAndUnChangedFalseDiffUtil() {
     List<TestItem> newItems = listOf(new TestItem(0), new TestItem(1));
     adapter.set(newItems, false);
-    verify(adapter, never()).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, never()).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -807,7 +810,7 @@ public class ItemAdapterTestCase {
     Iterator<TestItem> iterator = adapter.iterator();
     iterator.next();
     iterator.remove();
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -817,7 +820,7 @@ public class ItemAdapterTestCase {
       iterator.next();
       iterator.remove();
     }
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -885,7 +888,7 @@ public class ItemAdapterTestCase {
     ListIterator<TestItem> iterator = adapter.listIterator();
     iterator.next();
     iterator.remove();
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
@@ -895,7 +898,7 @@ public class ItemAdapterTestCase {
       iterator.next();
       iterator.remove();
     }
-    verify(adapter, times(1)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
@@ -959,14 +962,14 @@ public class ItemAdapterTestCase {
   @Test
   public void testListIteratorAddSize() {
     adapter.listIterator().add(new TestItem(Integer.MAX_VALUE));
-    verify(adapter, times(1)).notifyPropertyChanged(BR.size);
+    verify(fakeObservable, times(1)).onPropertyChanged(adapter, BR.size);
   }
 
   @Test
   public void testListIteratorAddEmpty() {
     adapter.clear();
     adapter.listIterator().add(new TestItem(Integer.MAX_VALUE));
-    verify(adapter, times(2)).notifyPropertyChanged(BR.empty);
+    verify(fakeObservable, times(2)).onPropertyChanged(adapter, BR.empty);
   }
 
   @Test
