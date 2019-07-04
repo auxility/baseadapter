@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="com.skiff2011.baseadapter.sample.BaseRVItem"
+        type="ca.auxility.baseadapter.sample.BaseRVItem"
         />
   </data>
 

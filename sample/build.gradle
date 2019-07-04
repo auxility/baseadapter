@@ -13,7 +13,7 @@ ext {
 android {
     compileSdkVersion compileVersion
     defaultConfig {
-        applicationId "com.skiff2011.baseadapter.sample"
+        applicationId "ca.auxility.baseadapter.sample"
         minSdkVersion minVersion
         targetSdkVersion targetVersion
         versionCode 1

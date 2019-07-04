@@ -3,7 +3,7 @@
   <data>
     <variable
         name="item"
-        type="com.skiff2011.baseadapter.sample.PagerSampleItem"
+        type="ca.auxility.baseadapter.sample.PagerSampleItem"
         />
   </data>
 

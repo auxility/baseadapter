@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="com.skiff2011.baseadapter.sample.FilterableRVItem"
+        type="ca.auxility.baseadapter.sample.FilterableRVItem"
         />
   </data>
 
