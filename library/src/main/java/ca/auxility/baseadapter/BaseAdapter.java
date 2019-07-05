@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.databinding.Bindable;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.misc.function.Predicate;
+import ca.auxility.baseadapter.misc.iterator.AdapterIterator;
+import ca.auxility.baseadapter.misc.iterator.AdapterListIterator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,23 +14,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
+public class BaseAdapter<V extends Item> extends AbstractAdapter<V> {
 
   @NonNull private final ObservableAdapterImpl observableAdapterDelegate =
       new ObservableAdapterImpl();
 
-  @NonNull private List<V> vms;
+  @NonNull private List<V> items;
 
   private int size;
 
   private boolean isEmpty;
 
-  public BaseItemAdapter(@NonNull List<V> vms) {
-    this.vms = vms;
+  public BaseAdapter(@NonNull List<V> items) {
+    this.items = items;
     updateSize();
   }
 
-  public BaseItemAdapter() {
+  public BaseAdapter() {
     this(new ArrayList<V>());
   }
 
@@ -41,75 +43,76 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @NonNull @Override public Iterator<V> iterator() {
-    return new AdapterIterator<>(this.vms.iterator(), new AdapterIteratorListenerImpl());
+    return new AdapterIterator<>(this.items.iterator(), new AdapterIteratorListenerImpl());
   }
 
   @NonNull @Override public ListIterator<V> listIterator(int index) {
-    return new AdapterListIterator<>(vms.listIterator(index), new AdapterListIteratorListenerImpl(),
+    return new AdapterListIterator<>(items.listIterator(index),
+        new AdapterListIteratorListenerImpl(),
         index);
   }
 
   @NonNull @Override public V remove(int index) {
-    V e = vms.remove(index);
+    V e = items.remove(index);
     updateSize();
     notifyItemRemoved(index);
     return e;
   }
 
   @Override public void clear(boolean withDiffUtil) {
-    List<V> oldVms = items();
-    this.vms.clear();
+    List<V> oldItems = items();
+    this.items.clear();
     updateSize();
     if (withDiffUtil) {
-      notifyDataSetChanged((List<Item>) oldVms, (List<Item>) vms);
+      notifyDataSetChanged(oldItems, items);
     } else {
       notifyDataSetChanged();
     }
   }
 
   @Override public void add(int index, @NonNull V element) {
-    vms.add(index, element);
+    items.add(index, element);
     updateSize();
     notifyItemInserted(index);
   }
 
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
-    boolean returnValue = vms.addAll(index, c);
+    boolean returnValue = items.addAll(index, c);
     updateSize();
     notifyItemRangeInserted(index, index + c.size());
     return returnValue;
   }
 
   @NonNull @Override public V get(int index) {
-    return vms.get(index);
+    return items.get(index);
   }
 
   //to avoid items list modification
   @NonNull @Override public List<V> items() {
-    return Collections.unmodifiableList(vms);
+    return Collections.unmodifiableList(items);
   }
 
   @NonNull @Override public V set(int index, @NonNull V element) {
-    V returnValue = vms.set(index, element);
+    V returnValue = items.set(index, element);
     notifyItemChanged(index);
     return returnValue;
   }
 
   @Override public boolean removeIf(@NonNull Predicate<V> predicate, boolean withDiffUtil) {
-    Iterator<V> iterator = vms.iterator();
-    List<V> oldvms = new ArrayList<>(vms);
+    Iterator<V> iterator = items.iterator();
+    List<V> olditems = new ArrayList<>(items);
     while (iterator.hasNext()) {
-      V vm = iterator.next();
-      if (predicate.apply(vm)) {
+      V item = iterator.next();
+      if (predicate.apply(item)) {
         iterator.remove();
       }
     }
-    if (oldvms.size() == vms.size()) {
+    if (olditems.size() == items.size()) {
       return false;
     }
     updateSize();
     if (withDiffUtil) {
-      notifyDataSetChanged(oldvms, vms);
+      notifyDataSetChanged(olditems, items);
     } else {
       notifyDataSetChanged();
     }
@@ -117,7 +120,7 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @Override public List<V> removeRange(int beginIndex, int endIndex) {
-    List<V> itemsToRemove = vms.subList(beginIndex, endIndex);
+    List<V> itemsToRemove = items.subList(beginIndex, endIndex);
     List<V> itemsToReturn = new ArrayList<>(itemsToRemove);
     itemsToRemove.clear();
     updateSize();
@@ -126,11 +129,11 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   @Override public void set(@NonNull Collection<? extends V> c, boolean withDiffUtil) {
-    List<V> oldVms = items();
-    vms = new ArrayList<>(c);
+    List<V> olditems = items();
+    items = new ArrayList<>(c);
     updateSize();
     if (withDiffUtil) {
-      notifyDataSetChanged(oldVms, vms);
+      notifyDataSetChanged(olditems, items);
     } else {
       notifyDataSetChanged();
     }
@@ -165,8 +168,8 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   }
 
   private void notifyDataSetChanged(@NonNull List<? extends Item> oldItems,
-      @NonNull List<? extends Item> newVms) {
-    this.observableAdapterDelegate.notifyOnDataSetChanged(oldItems, newVms);
+      @NonNull List<? extends Item> newitems) {
+    this.observableAdapterDelegate.notifyOnDataSetChanged(oldItems, newitems);
   }
 
   private void notifyItemChanged(int position) {
@@ -175,10 +178,10 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
 
   //TODO test
   private void updateSize() {
-    int newSize = vms.size();
+    int newSize = items.size();
     if (newSize != size) {
       if (size == 0 || newSize == 0) {
-        isEmpty = vms.isEmpty();
+        isEmpty = items.isEmpty();
         notifyPropertyChanged(BR.empty);
       }
       size = newSize;
@@ -190,15 +193,15 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
     if (obj == this) {
       return true;
     }
-    if (!(obj instanceof BaseItemAdapter)) {
+    if (!(obj instanceof BaseAdapter)) {
       return false;
     }
-    BaseItemAdapter other = (BaseItemAdapter) obj;
-    return this.vms.equals(other.vms);
+    BaseAdapter other = (BaseAdapter) obj;
+    return this.items.equals(other.items);
   }
 
   @Override public int hashCode() {
-    return this.vms.hashCode();
+    return this.items.hashCode();
   }
 
   @Override public void refresh() {
@@ -210,8 +213,8 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
   private class AdapterIteratorListenerImpl implements AdapterIterator.AdapterIteratorListener<V> {
 
     @Override public void onItemRemoved(int position, V item) {
-      BaseItemAdapter.this.updateSize();
-      BaseItemAdapter.this.notifyItemRemoved(position);
+      BaseAdapter.this.updateSize();
+      BaseAdapter.this.notifyItemRemoved(position);
     }
   }
 
@@ -219,12 +222,12 @@ public class BaseItemAdapter<V extends Item> extends AbstractItemAdapter<V> {
       AdapterListIterator.AdapterListIteratorListener<V> {
 
     @Override public void onItemAdded(int position, V item) {
-      BaseItemAdapter.this.updateSize();
-      BaseItemAdapter.this.notifyItemInserted(position);
+      BaseAdapter.this.updateSize();
+      BaseAdapter.this.notifyItemInserted(position);
     }
 
     @Override public void onItemChanged(int position, V item, V oldItem) {
-      BaseItemAdapter.this.notifyItemChanged(position);
+      BaseAdapter.this.notifyItemChanged(position);
     }
   }
 }

@@ -9,19 +9,19 @@ import ca.auxility.baseadapter.view.BaseViewHolder;
 import java.util.Collection;
 import java.util.ListIterator;
 
-public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
-    implements ItemAdapter<V> {
+public abstract class AbstractAdapter<V extends Item> extends BaseObservable
+    implements Adapter<V> {
 
-  public int indexOf(@NonNull V vm) {
-    return items().indexOf(vm);
+  public int indexOf(@NonNull V item) {
+    return items().indexOf(item);
   }
 
-  public int lastIndexOf(@NonNull V vm) {
-    return items().lastIndexOf(vm);
+  public int lastIndexOf(@NonNull V item) {
+    return items().lastIndexOf(item);
   }
 
-  public boolean contains(@NonNull V vm) {
-    return items().contains(vm);
+  public boolean contains(@NonNull V item) {
+    return items().contains(item);
   }
 
   public boolean containsAll(@NonNull Collection<? extends V> c) {
@@ -32,8 +32,8 @@ public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
     return listIterator(0);
   }
 
-  public boolean remove(@NonNull V vm) {
-    int index = indexOf(vm);
+  public boolean remove(@NonNull V item) {
+    int index = indexOf(item);
     if (index < 0) {
       return false;
     } else {
@@ -46,8 +46,8 @@ public abstract class AbstractItemAdapter<V extends Item> extends BaseObservable
     clear(false);
   }
 
-  public void add(@NonNull V vm) {
-    add(items().size(), vm);
+  public void add(@NonNull V item) {
+    add(items().size(), item);
   }
 
   public boolean addAll(@NonNull Collection<? extends V> c) {

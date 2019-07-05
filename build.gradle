@@ -3,13 +3,17 @@
 buildscript {
 
   ext {
-    supportVersion = '28.0.0'
-    toolsVersion = '28.0.3'
     compileVersion = 28
     targetVersion = 28
-    minVersion = 19
-    gradlePluginVer = '3.5.0-beta04'
-    kotlin_version = '1.3.31'
+    minVersion = 14
+    gradlePluginVersion = '3.5.0-beta04'
+    kotlinVersion = '1.3.31'
+    materialVersion = '1.0.0'
+    versionerVersion = '0.4.1'
+    jUnitVersion = '4.12'
+    jUnitTestExtVersion = '1.1.1'
+    espressoVersion = '3.2.0'
+    mockitoVersion = '2.19.0'
   }
 
   repositories {
@@ -17,14 +21,21 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath "com.android.tools.build:gradle:$gradlePluginVer"
+    classpath "com.android.tools.build:gradle:$gradlePluginVersion"
     classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
     // NOTE: Do not place your application dependencies here; they belong
     // in the individual module build.gradle files
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "com.pascalwelsch.gitversioner:gitversioner:$versionerVersion"
   }
 }
+
+apply plugin: 'com.pascalwelsch.gitversioner'
+gitVersioner {
+  baseBranch 'develop'
+}
+
 
 allprojects {
   repositories {

@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import ca.auxility.baseadapter.AbstractItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
 import ca.auxility.baseadapter.AdapterDataObserver;
 import ca.auxility.baseadapter.R;
 import ca.auxility.baseadapter.item.Item;
@@ -16,10 +16,10 @@ public class SpinnerAdapter<V extends Item> extends BaseAdapter implements Adapt
 
   private boolean isHintEnabled;
   @Nullable
-  private AbstractItemAdapter<V> adapter;
+  private AbstractAdapter<V> adapter;
 
   public SpinnerAdapter(
-      @Nullable AbstractItemAdapter<V> adapter, boolean isHintEnabled) {
+      @Nullable AbstractAdapter<V> adapter, boolean isHintEnabled) {
     this.adapter = adapter;
     this.isHintEnabled = isHintEnabled;
   }

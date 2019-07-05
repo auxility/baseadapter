@@ -5,8 +5,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.auxility.baseadapter.Adapter;
 import ca.auxility.baseadapter.AdapterDataObserver;
-import ca.auxility.baseadapter.ItemAdapter;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.misc.DiffItemCallback;
 import java.util.List;
@@ -15,9 +15,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHol
     implements AdapterDataObserver {
 
   @NonNull
-  private ItemAdapter adapter;
+  private Adapter adapter;
 
-  RecyclerViewAdapter(@NonNull ItemAdapter adapter) {
+  RecyclerViewAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
   }
 
@@ -55,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHol
     adapter.unregisterObserver(this);
   }
 
-  @NonNull public ItemAdapter getAdapter() {
+  @NonNull public Adapter getAdapter() {
     return adapter;
   }
 

@@ -2,14 +2,14 @@ package ca.auxility.baseadapter.sample
 
 import android.view.View
 import androidx.databinding.ObservableInt
-import ca.auxility.baseadapter.FilterableItemAdapter
+import ca.auxility.baseadapter.FilterableAdapter
 import ca.auxility.baseadapter.item.TitledItem
 import ca.auxility.baseadapter.sample.R.layout
 
 class FilterablePagerItem : TitledItem {
 
-  val adapter: FilterableItemAdapter<PagerSampleItem> =
-    FilterableItemAdapter(List(10) { index ->
+  val adapter: FilterableAdapter<PagerSampleItem> =
+    FilterableAdapter(List(10) { index ->
       PagerSampleItem(index)
     }) { item ->
       item.index % 2 == 0

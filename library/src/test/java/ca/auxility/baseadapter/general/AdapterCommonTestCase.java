@@ -1,12 +1,12 @@
 package ca.auxility.baseadapter.general;
 
 import androidx.databinding.ViewDataBinding;
-import ca.auxility.baseadapter.AbstractItemAdapter;
-import ca.auxility.baseadapter.ItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
+import ca.auxility.baseadapter.Adapter;
+import ca.auxility.baseadapter.BR;
 import ca.auxility.baseadapter.TestItem;
 import ca.auxility.baseadapter.utils.TestUtils;
 import ca.auxility.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.BR;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 
 public abstract class AdapterCommonTestCase {
 
-  private ItemAdapter<TestItem> adapter;
+  private Adapter<TestItem> adapter;
   private TestItem item1;
   private TestItem item2;
   private TestItem item3;
@@ -209,5 +209,5 @@ public abstract class AdapterCommonTestCase {
     Mockito.verify(binding).setVariable(BR.item, item1);
   }
 
-  protected abstract AbstractItemAdapter<TestItem> provideAdapter(List<TestItem> vms);
+  protected abstract AbstractAdapter<TestItem> provideAdapter(List<TestItem> vms);
 }

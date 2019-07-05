@@ -3,7 +3,7 @@ package ca.auxility.baseadapter.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import ca.auxility.baseadapter.sample.R.layout
+import ca.auxility.baseadapter.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     binding = DataBindingUtil.setContentView(
         this,
-        layout.activity_main
+        R.layout.activity_main
     )
   }
 }

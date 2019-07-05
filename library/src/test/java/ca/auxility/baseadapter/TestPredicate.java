@@ -1,7 +1,6 @@
-package ca.auxility.baseadapter.filterableadapter;
+package ca.auxility.baseadapter;
 
 import androidx.annotation.NonNull;
-import ca.auxility.baseadapter.TestItem;
 import ca.auxility.baseadapter.misc.function.SerializablePredicate;
 
 public class TestPredicate implements SerializablePredicate<TestItem> {

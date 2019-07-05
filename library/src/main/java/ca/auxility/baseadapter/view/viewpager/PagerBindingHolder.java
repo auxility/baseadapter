@@ -6,16 +6,16 @@ import android.view.ViewGroup;
 import androidx.annotation.LayoutRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import ca.auxility.baseadapter.BR;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.BR;
 
 class PagerBindingHolder<V extends Item> implements BaseViewHolder<V> {
 
   private static final String TAG = PagerBindingHolder.class.getSimpleName();
 
   private ViewDataBinding binding;
-  private V vm;
+  private V item;
 
   private PagerBindingHolder(ViewDataBinding binding) {
     this.binding = binding;
@@ -33,9 +33,9 @@ class PagerBindingHolder<V extends Item> implements BaseViewHolder<V> {
   }
 
   @Override
-  public void bindViewModel(V VM) {
-    this.vm = VM;
-    binding.setVariable(BR.item, VM);
+  public void bindViewModel(V item) {
+    this.item = item;
+    binding.setVariable(BR.item, item);
     binding.executePendingBindings();
   }
 
@@ -44,7 +44,7 @@ class PagerBindingHolder<V extends Item> implements BaseViewHolder<V> {
     return binding;
   }
 
-  public V getVM() {
-    return vm;
+  public V getItem() {
+    return item;
   }
 }

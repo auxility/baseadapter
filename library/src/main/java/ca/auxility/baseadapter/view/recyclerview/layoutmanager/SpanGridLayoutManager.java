@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import ca.auxility.baseadapter.ItemAdapter;
+import ca.auxility.baseadapter.Adapter;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.item.SpanItem;
 import ca.auxility.baseadapter.view.recyclerview.RecyclerViewAdapter;
@@ -20,29 +20,29 @@ public class SpanGridLayoutManager extends GridLayoutManager {
     init(null);
   }
 
-  public SpanGridLayoutManager(Context context, int spanCount, ItemAdapter adapter) {
+  public SpanGridLayoutManager(Context context, int spanCount, Adapter adapter) {
     super(context, spanCount);
     init(adapter);
   }
 
-  public SpanGridLayoutManager(Context context, ItemAdapter adapter) {
+  public SpanGridLayoutManager(Context context, Adapter adapter) {
     super(context, DEFAULT_MAX_SPAN_COUNT);
     init(adapter);
   }
 
   public SpanGridLayoutManager(Context context, int spanCount, int orientation,
-      boolean reverseLayout, ItemAdapter adapter) {
+      boolean reverseLayout, Adapter adapter) {
     super(context, spanCount, orientation, reverseLayout);
     init(adapter);
   }
 
   public SpanGridLayoutManager(Context context, int orientation,
-      boolean reverseLayout, ItemAdapter adapter) {
+      boolean reverseLayout, Adapter adapter) {
     super(context, DEFAULT_MAX_SPAN_COUNT, orientation, reverseLayout);
     init(adapter);
   }
 
-  private void init(final ItemAdapter adapter) {
+  private void init(final Adapter adapter) {
     setSpanSizeLookup(new SpanSizeLookup() {
       @Override public int getSpanSize(int i) {
         if (adapter == null) {
@@ -64,15 +64,15 @@ public class SpanGridLayoutManager extends GridLayoutManager {
       @Nullable RecyclerView.Adapter newAdapter) {
     //TODO test equal adapters change
     super.onAdapterChanged(oldAdapter, newAdapter);
-    ItemAdapter prevItemAdapter = null;
-    ItemAdapter newItemAdapter = null;
+    Adapter prevAdapter = null;
+    Adapter newItemAdapter = null;
     if (oldAdapter instanceof RecyclerViewAdapter) {
-      prevItemAdapter = ((RecyclerViewAdapter) oldAdapter).getAdapter();
+      prevAdapter = ((RecyclerViewAdapter) oldAdapter).getAdapter();
     }
     if (newAdapter instanceof RecyclerViewAdapter) {
       newItemAdapter = ((RecyclerViewAdapter) newAdapter).getAdapter();
     }
-    if (newItemAdapter != prevItemAdapter) {
+    if (newItemAdapter != prevAdapter) {
       init(newItemAdapter);
     }
   }

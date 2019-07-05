@@ -1,4 +1,4 @@
-package ca.auxility.baseadapter;
+package ca.auxility.baseadapter.misc.iterator;
 
 import androidx.annotation.NonNull;
 import ca.auxility.baseadapter.item.Item;

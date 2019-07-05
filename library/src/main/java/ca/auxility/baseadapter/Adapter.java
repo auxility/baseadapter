@@ -11,26 +11,26 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 
-public interface ItemAdapter<V extends Item> extends Observable,
+public interface Adapter<V extends Item> extends Observable,
     Serializable,
     ObservableAdapter,
     Iterable<V> {
 
-  int indexOf(@NonNull V vm);
+  int indexOf(@NonNull V item);
 
-  int lastIndexOf(@NonNull V vm);
+  int lastIndexOf(@NonNull V item);
 
-  boolean contains(@NonNull V vm);
+  boolean contains(@NonNull V item);
 
   boolean containsAll(@NonNull Collection<? extends V> c);
 
   @NonNull ListIterator<V> listIterator();
 
-  boolean remove(@NonNull V vm);
+  boolean remove(@NonNull V item);
 
   void clear();
 
-  void add(@NonNull V vm);
+  void add(@NonNull V item);
 
   boolean addAll(@NonNull Collection<? extends V> c);
 

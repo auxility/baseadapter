@@ -1,4 +1,4 @@
-package ca.auxility.baseadapter.filterableadapter;
+package ca.auxility.baseadapter;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

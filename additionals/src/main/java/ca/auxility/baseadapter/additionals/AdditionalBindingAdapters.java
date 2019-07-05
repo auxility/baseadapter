@@ -6,14 +6,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
-import ca.auxility.baseadapter.AbstractItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
 import ca.auxility.baseadapter.AdapterDataObserver;
+import ca.auxility.baseadapter.view.viewpager.ViewPagerAdapter;
+import com.google.android.material.tabs.TabLayout;
 
 abstract public class AdditionalBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AdapterView adapterView,
-      @Nullable final AbstractItemAdapter adapter) {
+      @Nullable final AbstractAdapter adapter) {
     //if adapter instance was changed while adapterView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = adapterView.getAdapter();
@@ -47,7 +49,7 @@ abstract public class AdditionalBindingAdapters {
 
   @BindingAdapter(value = { "adapter", "hintEnabled" }, requireAll = false)
   public static void _bindAdapter(final Spinner spinner,
-      @Nullable final AbstractItemAdapter adapter,
+      @Nullable final AbstractAdapter adapter,
       boolean hintEnabled) {
     //if adapter instance was changed while spinner was attached to screen
     // we have to unsubscribe the previous adapter
@@ -81,7 +83,7 @@ abstract public class AdditionalBindingAdapters {
 
   @BindingAdapter("adapter")
   public static void _bindAdapter(final AutoCompleteTextView autoCompleteTextView,
-      @Nullable final AbstractItemAdapter adapter) {
+      @Nullable final AbstractAdapter adapter) {
     //if adapter instance was changed while autoCompleteTextView was attached to screen
     // we have to unsubscribe the previous adapter
     android.widget.Adapter prevAdapter = autoCompleteTextView.getAdapter();
@@ -100,6 +102,37 @@ abstract public class AdditionalBindingAdapters {
       adapter.registerObserver(decorator);
     }
     autoCompleteTextView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+      @Override
+      public void onViewAttachedToWindow(View v) {
+        adapter.registerObserver(decorator);
+      }
+
+      @Override
+      public void onViewDetachedFromWindow(View v) {
+        adapter.unregisterObserver(decorator);
+      }
+    });
+  }
+
+  @BindingAdapter("adapter")
+  public static void _bindAdapter(final TabLayout tabLayout,
+      @Nullable final AbstractAdapter adapter) {
+    Object prevAdapter = tabLayout.getTag();
+    if (adapter instanceof AdapterDataObserver && prevAdapter instanceof AdapterDataObserver) {
+      adapter.unregisterObserver((AdapterDataObserver) prevAdapter);
+    }
+    if (adapter == null) {
+      //Although this method is deprecated it does exactly what we need (populating new data when pager adapter changes)
+      tabLayout.setTabsFromPagerAdapter(null);
+      return;
+    }
+    final ViewPagerAdapter decorator = new ViewPagerAdapter(adapter);
+    //Attention you must update tabLayout on viewpager scroll by yourself
+    tabLayout.setTabsFromPagerAdapter(decorator);
+    if (tabLayout.getWindowToken() != null) {
+      adapter.registerObserver(decorator);
+    }
+    tabLayout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
       @Override
       public void onViewAttachedToWindow(View v) {
         adapter.registerObserver(decorator);

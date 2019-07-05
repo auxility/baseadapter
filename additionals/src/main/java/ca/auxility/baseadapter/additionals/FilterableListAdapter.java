@@ -3,14 +3,14 @@ package ca.auxility.baseadapter.additionals;
 import android.widget.Filter;
 import android.widget.Filterable;
 import androidx.annotation.NonNull;
-import ca.auxility.baseadapter.AbstractItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
 
 public class FilterableListAdapter extends ListAdapter implements Filterable {
 
   private Filter filter = new EmptyFilter();
 
   public FilterableListAdapter(
-      @NonNull AbstractItemAdapter adapter) {
+      @NonNull AbstractAdapter adapter) {
     super(adapter);
   }
 

@@ -4,16 +4,16 @@ import androidx.annotation.NonNull;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.misc.SuperObservable;
 
-abstract public class AbstractItemAdapterDecorator<V extends Item> extends AbstractItemAdapter<V> {
+abstract public class AbstractAdapterDecorator<V extends Item> extends AbstractAdapter<V> {
 
-  @NonNull private SuperObservable<AbstractItemAdapter<V>> decoratedAdapter;
+  @NonNull private SuperObservable<AbstractAdapter<V>> decoratedAdapter;
 
-  public AbstractItemAdapterDecorator(
-      @NonNull AbstractItemAdapter<V> decoratedAdapter) {
+  public AbstractAdapterDecorator(
+      @NonNull AbstractAdapter<V> decoratedAdapter) {
     this.decoratedAdapter = new SuperObservable<>(decoratedAdapter, this);
   }
 
-  protected AbstractItemAdapter<V> getAdapter() {
+  protected AbstractAdapter<V> getAdapter() {
     return decoratedAdapter.getValue();
   }
 

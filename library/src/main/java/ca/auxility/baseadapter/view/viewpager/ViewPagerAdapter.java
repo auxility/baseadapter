@@ -9,24 +9,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
+import ca.auxility.baseadapter.Adapter;
 import ca.auxility.baseadapter.AdapterDataObserver;
-import ca.auxility.baseadapter.ItemAdapter;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.item.TitledItem;
 import java.util.ArrayList;
 import java.util.List;
 
-class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
+public class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   private static final String STATES_COUNT_TAG = "STATES_COUNT";
   private static final String STATE_TAG = "VIEW_STATE_";
   private SparseArray<PagerBindingHolder> activeHolders = new SparseArray<>();
 
   @NonNull
-  private ItemAdapter adapter;
+  private Adapter adapter;
   private List<SparseArray<Parcelable>> states;
 
-  ViewPagerAdapter(@NonNull ItemAdapter adapter) {
+  public ViewPagerAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
     states = new ArrayList<>(adapter.getSize());
     for (int i = 0; i < adapter.getSize(); i++) {
@@ -54,18 +54,18 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   @Override
   public Object instantiateItem(@NonNull ViewGroup container, int position) {
     Item Item = adapter.get(position);
-    PagerBindingHolder vmPagerBindingHolder =
+    PagerBindingHolder holder =
         PagerBindingHolder.create(LayoutInflater.from(container.getContext()), Item.getLayoutId(),
             container);
-    adapter.bindViewHolder(vmPagerBindingHolder, position);
+    adapter.bindViewHolder(holder, position);
     if ((states != null) && (states.size() > position)) {
       SparseArray<Parcelable> savedState = states.get(position);
       if (savedState != null) {
-        vmPagerBindingHolder.getBinding().getRoot().restoreHierarchyState(savedState);
+        holder.getBinding().getRoot().restoreHierarchyState(savedState);
       }
     }
-    activeHolders.put(position, vmPagerBindingHolder);
-    return vmPagerBindingHolder;
+    activeHolders.put(position, holder);
+    return holder;
   }
 
   @Override
@@ -80,7 +80,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
       }
       /*we have to avoid state saving in case if item removed
        * for example if current item is last item and it was removed from adapter*/
-      if (adapter.getSize() > position && adapter.get(position) == pagerBindingHolder.getVM()) {
+      if (adapter.getSize() > position && adapter.get(position) == pagerBindingHolder.getItem()) {
         SparseArray<Parcelable> state = new SparseArray<>();
         pagerBindingHolder.getBinding().getRoot().saveHierarchyState(state);
         states.set(position, state);
@@ -133,7 +133,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   public int getItemPosition(@NonNull Object object) {
     if (object instanceof PagerBindingHolder) {
       PagerBindingHolder pagerBindingHolder = (PagerBindingHolder) object;
-      int position = adapter.indexOf(pagerBindingHolder.getVM());
+      int position = adapter.indexOf(pagerBindingHolder.getItem());
       return position == -1 ? POSITION_NONE : position;
     } else {
       throw new IllegalStateException("PagerBindingHolder or its inheritors must be used");
@@ -145,8 +145,8 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
   public CharSequence getPageTitle(int position) {
     Item item = adapter.get(position);
     if (item instanceof TitledItem) {
-      TitledItem tvm = (TitledItem) item;
-      return tvm.getTitle();
+      TitledItem titledItem = (TitledItem) item;
+      return titledItem.getTitle();
     } else {
       return "Untitled";
     }
@@ -199,7 +199,7 @@ class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserver {
 
   @Override
   public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
-      @NonNull List<? extends Item> newVms) {
+      @NonNull List<? extends Item> newItems) {
     notifyOnDataSetChanged();
   }
 }

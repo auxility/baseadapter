@@ -7,9 +7,9 @@ import androidx.annotation.LayoutRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
+import ca.auxility.baseadapter.BR;
 import ca.auxility.baseadapter.item.Item;
 import ca.auxility.baseadapter.view.BaseViewHolder;
-import com.skiff2011.baseadapter.BR;
 
 class RecyclerBindingHolder<V extends Item> extends RecyclerView.ViewHolder
     implements BaseViewHolder<V> {

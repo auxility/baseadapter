@@ -5,7 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import androidx.annotation.NonNull;
-import ca.auxility.baseadapter.AbstractItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
 import ca.auxility.baseadapter.AdapterDataObserver;
 import ca.auxility.baseadapter.item.Item;
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.List;
 public class ListAdapter<V extends Item> extends BaseAdapter implements AdapterDataObserver {
 
   @NonNull
-  protected AbstractItemAdapter<V> adapter;
+  protected AbstractAdapter<V> adapter;
   private List<Integer> viewTypes;
 
-  public ListAdapter(@NonNull AbstractItemAdapter<V> adapter) {
+  public ListAdapter(@NonNull AbstractAdapter<V> adapter) {
     this.adapter = adapter;
     invalidateViewType();
   }

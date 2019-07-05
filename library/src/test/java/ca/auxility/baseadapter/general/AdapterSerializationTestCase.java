@@ -1,7 +1,7 @@
 package ca.auxility.baseadapter.general;
 
-import ca.auxility.baseadapter.AbstractItemAdapter;
-import ca.auxility.baseadapter.ItemAdapter;
+import ca.auxility.baseadapter.AbstractAdapter;
+import ca.auxility.baseadapter.Adapter;
 import ca.auxility.baseadapter.TestItem;
 import ca.auxility.baseadapter.utils.ListUtils;
 import ca.auxility.baseadapter.utils.SerializationUtils;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 //Test correct serialization/deserialization required by some specific architectures
 public abstract class AdapterSerializationTestCase {
 
-  private ItemAdapter<TestItem> adapter;
+  private Adapter<TestItem> adapter;
 
   @Before
   public void setUp() {
@@ -38,10 +38,10 @@ public abstract class AdapterSerializationTestCase {
   public void testInstance() throws IOException, ClassNotFoundException {
     byte[] serialized = SerializationUtils.serialize(adapter);
     Object deserialized = SerializationUtils.deserialize(serialized);
-    assertTrue(deserialized instanceof ItemAdapter<?>);
-    assertTrue(((AbstractItemAdapter<?>) deserialized).items().get(0) instanceof TestItem);
+    assertTrue(deserialized instanceof Adapter<?>);
+    assertTrue(((AbstractAdapter<?>) deserialized).items().get(0) instanceof TestItem);
     assertEquals(adapter, deserialized);
   }
 
-  protected abstract ItemAdapter<TestItem> getAdapter(List<TestItem> items);
+  protected abstract Adapter<TestItem> getAdapter(List<TestItem> items);
 }

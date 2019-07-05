@@ -8,9 +8,9 @@ import java.util.List;
 public class AdapterObserver<V extends Item> implements AdapterDataObserver {
 
   public List<V> items;
-  private ItemAdapter<V> adapter;
+  private Adapter<V> adapter;
 
-  public AdapterObserver(ItemAdapter<V> adapter) {
+  public AdapterObserver(Adapter<V> adapter) {
     this.adapter = adapter;
     adapter.registerObserver(this);
     updateDataFromAdapter();

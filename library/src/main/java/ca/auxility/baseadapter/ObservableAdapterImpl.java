@@ -69,10 +69,10 @@ public class ObservableAdapterImpl implements ObservableAdapter, AdapterDataObse
   }
 
   @Override public void notifyOnDataSetChanged(@NonNull List<? extends Item> oldItems,
-      @NonNull List<? extends Item> newVms) {
+      @NonNull List<? extends Item> newItems) {
     if (observers != null) {
       for (AdapterDataObserver observer : observers) {
-        observer.notifyOnDataSetChanged(oldItems, newVms);
+        observer.notifyOnDataSetChanged(oldItems, newItems);
       }
     }
   }
