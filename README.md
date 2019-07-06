@@ -1,3 +1,5 @@
+<a href="https://auxility.dev"><img src="https://user-images.githubusercontent.com/11277453/60760845-aa0e8300-a001-11e9-951b-cff54cec546f.png" alt="AUXILITY - Custom Software Development" width="400px"/></a>
+
 # BaseAdapter
 **_A single adapter for all ViewGroups._**
 Have you ever seen Android project with dozens of RecyclerView or ViewPager Adapters? 
