@@ -182,22 +182,20 @@ public class YourViewModel {
 ```
 You can use all types of adapters with other `ViewGroup`s (only `ViewPager` by now)
 ```
-...
 <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        adapter="@{item.adapter}"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-        ...
+    android:id="@+id/pager"
+    adapter="@{item.adapter}"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    />
 ```
 
 Adapter and its successors support `TabLayout` integration with `ViewPager`. This requires implementing ```TitledItem``` interface instead of ```Item``` and overriding ```String getTitle()``` method.
 ```Java
-  ...
+  // ...
   Viewpager pager;
   TabLayout tabLayout;
-  ...
+  // ...
   tabLayout.setupWithViewPager(pager);
 ```
 
