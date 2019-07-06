@@ -1,59 +1,64 @@
 # BaseAdapter
-**_Use one adapter for all common ViewGroups._**
+**_A single adapter for all ViewGroups._**
 Have you ever seen Android project with dozens of RecyclerView or ViewPager Adapters? 
 Using BaseAdapter allows you to get rid of boilerplate code and focus mainly on ViewGroups items' logic.
 Designed to be used with Android Databinding Library. 
 You don't have to create Different Adapters for different ViewGroups, 
 just create BaseAdapter and bind to it via xml or corresponding static method and thats all. No more boilerplate adapters in your project.
+
 ## Quick overview
-- Simple and extendible API similiar to List
-- androidx support
-- Supports RecyclerView, ViewPager
-- Multiple ViewTypes support
-- All notify methods of RecyclerView support
-- BaseAdapter for simple cases
-- FilterableAdapter for more complex cases if filtering is required
-- Supports RecyclerView DiffUtil.Callback
-- Supports TabLayout integration with ViewPager in case of using TitledItem
-- Simple variable grid for RecyclerView with SpanGridLayoutManager and SpanItem
-- Supports ViewPager item`s view state save/restore
-- Bindable properties for Adapter size and empty flag
-- Supports Serialization
+- A layer of abstraction on top of `Adapter` and `LayoutManager`
+- Simple and extensible API similiar to List
+- `androidx` support
+- Support for `RecyclerView` and `ViewPager`
+- Multiple `ViewType`s support
+- Support for all `RecyclerView` notification methods
+- `BaseAdapter` for simple use cases
+- `FilterableAdapter` for complex list filtering 
+- Support for `DiffUtil.Callback`
+- Support for `TabLayout` with `ViewPager`
+- Support for staggered layouts for `RecyclerView`
+- Supports `ViewPager` item's view state save/restore
+- Bindable properties for Adapter `size` and `empty` flags
+- Serializable
+
 ## Installation ##
 
 **DataBinding must be enabled for module you are using adapter in.**
 
-You can add library to your project via Gradle
+You can add the library to your project via `Gradle`
 
-Step 1: Add in your root build.gradle of your project
-```
+Step 1: Add in your root `build.gradle` of your project
+```Groovy
 allprojects {
     repositories {
-      ...
+      // ...
       maven { url 'https://jitpack.io' }
     }
   }
 ```
 Step 2: Add the dependency to your app gradle file
-```
+```Groovy
 dependencies {
-  ...
+  // ...
   implementation 'ca.auxility.baseadapter:$latestVersion'
-  ...
+  // ...
 }
 ```
-## Usage ##
-1. Create item`s layout xml file and place it under layout directory
-```
+
+## Usage
+1. Create item's layout xml file and place it under layout directory
+```XML
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
   <YourViews>
-  ...
+  // ...
   </YourViews>
 </layout>
 ```
-2. Create class implementing Item interface or its successors and override ```getLayoutId``` method
-```
+
+2. Create a class implementing Item interface or its successors and override `getLayoutId` method
+```Java
 public class YourItem implements Item {
 
    @Override public int getLayoutId() {
@@ -62,8 +67,8 @@ public class YourItem implements Item {
   
 }
 ```
-3. Add variable with name **item** (it is important) and type of class you created in previous step
-```
+3. Add variable with name **item** (it is important) and type of class you created in the previous step:
+```XML
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
   <data>
@@ -73,12 +78,12 @@ public class YourItem implements Item {
         />
   </data>
   <YourViews>
-  ...
+    <!-- ... -->
   </YourViews>
 </layout>
 ```
-4. Create Adapter instance and pass vms to display
-```
+4. Create Adapter instance and populate it with item view models:
+```Java
 public class YourViewModel {
   
   Adapter<YourItem> adapter;
@@ -89,9 +94,9 @@ public class YourViewModel {
   ...
 }
 ```
-5. Bind view to adapter with a help of predefined Binding Adapters in xml 
-or corresponding static method from code in Fragment or Activity for example
-```
+5. Bind view to adapter with the help of predefined Binding Adapters in xml 
+or corresponding static method from code in your `Fragment` or `Activity` for example
+```XML
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
   <data>
@@ -101,7 +106,7 @@ or corresponding static method from code in Fragment or Activity for example
         />
   </data>
   
-  ...
+  <!-- ... -->
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerView"
@@ -111,12 +116,12 @@ or corresponding static method from code in Fragment or Activity for example
       app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
       />
       
-  ...
+  <!-- ... -->
 
 </layout>
 ```
-Alternatively
-```
+Alternatively:
+```Java
 ...
 import ca.auxility.baseadapter.view.recyclerview.RecyclerViewBindingAdapter;
 ...
@@ -128,7 +133,7 @@ RecyclerViewBindingAdapter._bindAdapter(rv, adapter);
 
 You can use different Item types inside BaseAdapter
 
-```
+```Java
 public class YourItem1 implements SpanItem {
 
    @Override public int getLayoutId() {
@@ -137,7 +142,7 @@ public class YourItem1 implements SpanItem {
 }
 ```
 
-```
+```Java
 public class YourItem implements SpanItem {
 
    @Override public int getLayoutId() {
@@ -146,7 +151,7 @@ public class YourItem implements SpanItem {
 }
 ```
 
-```
+```Java
 public class YourViewModel {
   
   Adapter<Item> adapter;
@@ -159,8 +164,8 @@ public class YourViewModel {
 }
 ```
 
-Using ```FilterableAdapter``` looks the same, except adapter initialization
-```
+Using ```FilterableAdapter``` is the same, except the initialization:
+```Java
 public class YourViewModel {
   
   Adapter<YourItem> adapter;
@@ -169,13 +174,13 @@ public class YourViewModel {
   items.add(new YourItem());
   adapter = new FilterableAdapter(items, new SerializablePredicate<YourItem>() {
       @Override public Boolean apply(@NonNull YourItem item) {
-        ... //implement filtering logic
+        ... // implement filtering logic
       }
     });
   ...
 }
 ```
-You can use all types of adapters with other ViewGroups (only ViewPager by now)
+You can use all types of adapters with other `ViewGroup`s (only `ViewPager` by now)
 ```
 ...
 <androidx.viewpager.widget.ViewPager
@@ -187,9 +192,8 @@ You can use all types of adapters with other ViewGroups (only ViewPager by now)
         ...
 ```
 
-Adapter and its successors support TabLayout integration with ViewPager 
-in case of implementing ```TitledItem``` interface instead of ```Item``` and overriding ```String getTitle()``` method
-```
+Adapter and its successors support `TabLayout` integration with `ViewPager`. This requires implementing ```TitledItem``` interface instead of ```Item``` and overriding ```String getTitle()``` method.
+```Java
   ...
   Viewpager pager;
   TabLayout tabLayout;
@@ -197,13 +201,13 @@ in case of implementing ```TitledItem``` interface instead of ```Item``` and ove
   tabLayout.setupWithViewPager(pager);
 ```
 
-Sometimes it is required to use ```GridLayoutManager``` for RecyclerView with different span sizes (variable grid). 
-In this case you can impelement ```SpanItem``` instead of ```Item``` and override ```int getSpanSize()``` method 
-along with ```SpanGridLayoutManager``` as layout manager for RecyclerView. 
-This number represents the relative size of current item in RecyclerView, 
-where maximum span size is passed to as a constructor parameter SpanGridLayoutManager.
+Sometimes it is required to use `GridLayoutManager` for RecyclerView with different span sizes (variable grid). 
+In this case you can impelement `SpanItem` instead of ```Item``` and override `int getSpanSize()` method 
+along with ```SpanGridLayoutManager``` as layout manager for `RecyclerView`. 
+This number represents the relative size of current item in `RecyclerView`, 
+where maximum span size is passed to as a constructor parameter `SpanGridLayoutManager`.
 
-```
+```Java
 public class YourItem1 implements SpanItem {
 
    @Override public int getLayoutId() {
@@ -217,7 +221,7 @@ public class YourItem1 implements SpanItem {
 }
 ```
 
-```
+```Java
 public class YourItem implements SpanItem {
 
    @Override public int getLayoutId() {
@@ -231,7 +235,7 @@ public class YourItem implements SpanItem {
 }
 ```
 
-```
+```Java
 public class MyFragment extends Fragment {
 
   RecyclerView rv;
@@ -239,16 +243,17 @@ public class MyFragment extends Fragment {
 
   @Override
   public View onCreateView(...) {
-    ...
+    // ...
     //adapter initialization with instances of YourItem and YourItem1
     RecyclerView.LayoutManager gridManager = SpanGridLayoutManager(getContext(), 3, adapter)
-    //adapter binding
-    ...
+    // adapter binding
+    // ...
   }
 
 }
 ```
-As a result YourItem will take 1/3 and YourItem1 2/3 of RecyclerView width or height depending on orientation.
+As a result, `YourItem` will take 1/3 and `YourItem1` 2/3 of the parent's width or height depending on orientation.
+
 ## Coming Soon ###
 - TabLayout complete support
 - PagingAdapter
