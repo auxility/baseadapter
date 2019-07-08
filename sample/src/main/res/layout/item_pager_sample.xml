@@ -3,7 +3,7 @@
   <data>
     <variable
         name="item"
-        type="ca.auxility.baseadapter.sample.PagerSampleItem"
+        type="dev.auxility.baseadapter.sample.PagerSampleItem"
         />
   </data>
 

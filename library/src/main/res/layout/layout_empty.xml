@@ -3,7 +3,7 @@
   <data>
     <variable
         name="item"
-        type="ca.auxility.baseadapter.item.Item"
+        type="dev.auxility.baseadapter.item.Item"
         />
   </data>
   <View xmlns:android="http://schemas.android.com/apk/res/android"

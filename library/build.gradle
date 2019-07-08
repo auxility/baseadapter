@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-group = 'ca.auxility'
+group = 'dev.auxility'
 
 android {
   compileSdkVersion compileVersion
@@ -8,8 +8,9 @@ android {
   defaultConfig {
     minSdkVersion minVersion
     targetSdkVersion targetVersion
-    versionCode 1
+    versionCode gitVersioner.versionCode
     versionName "2.0.0"
+    println('VERSION_CODE: ' + gitVersioner.versionCode)
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }

@@ -5,7 +5,7 @@
   <data>
     <variable
         name="viewModel"
-        type="ca.auxility.baseadapter.sample.TabbedViewModel"
+        type="dev.auxility.baseadapter.sample.TabbedViewModel"
         />
   </data>
 
@@ -39,7 +39,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ca.auxility.baseadapter.sample.NonSwipeableViewPager
+    <dev.auxility.baseadapter.sample.NonSwipeableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="ca.auxility.baseadapter.sample.FilterableRVItem"
+        type="dev.auxility.baseadapter.sample.FilterableRVItem"
         />
   </data>
 

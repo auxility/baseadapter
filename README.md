@@ -38,7 +38,7 @@ Step 2: Add the dependency to your app gradle file
 ```
 dependencies {
   ...
-  implementation 'ca.auxility.baseadapter:$latestVersion'
+  implementation 'dev.auxility.baseadapter:$latestVersion'
   ...
 }
 ```
@@ -118,7 +118,7 @@ or corresponding static method from code in Fragment or Activity for example
 Alternatively
 ```
 ...
-import ca.auxility.baseadapter.view.recyclerview.RecyclerViewBindingAdapter;
+import dev.auxility.baseadapter.view.recyclerview.RecyclerViewBindingAdapter;
 ...
 RecyclerView rv;
 Adapter<YourItem> adapter;
