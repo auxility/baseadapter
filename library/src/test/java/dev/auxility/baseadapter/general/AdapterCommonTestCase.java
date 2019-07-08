@@ -1,7 +1,7 @@
 package dev.auxility.baseadapter.general;
 
 import androidx.databinding.ViewDataBinding;
-import ca.auxility.baseadapter.BR;
+import dev.auxility.baseadapter.BR;
 import dev.auxility.baseadapter.AbstractAdapter;
 import dev.auxility.baseadapter.Adapter;
 import dev.auxility.baseadapter.TestItem;
