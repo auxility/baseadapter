@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import dev.auxility.baseadapter.sample.R.layout
+import dev.auxility.baseadapter.sample.databinding.FragmentMainBinding
 
 class MainFragment : androidx.fragment.app.Fragment() {
 

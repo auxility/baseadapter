@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.LayoutRes;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
-import com.skiff2011.baseadapter.BR;
+import dev.auxility.baseadapter.BR;
 import dev.auxility.baseadapter.item.Item;
 import dev.auxility.baseadapter.view.BaseViewHolder;
 

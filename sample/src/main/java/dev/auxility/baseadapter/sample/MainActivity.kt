@@ -3,6 +3,7 @@ package dev.auxility.baseadapter.sample
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import dev.auxility.baseadapter.sample.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
