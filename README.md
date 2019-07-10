@@ -42,9 +42,9 @@ allprojects {
 Step 2: Add the dependency to your app gradle file
 ```Groovy
 dependencies {
-  // ...
-  implementation 'ca.auxility.baseadapter:$latestVersion'
-  // ...
+  //...
+  implementation 'dev.auxility.baseadapter:$latestVersion'
+  //...
 }
 ```
 
@@ -125,7 +125,7 @@ or corresponding static method from code in your `Fragment` or `Activity` for ex
 Alternatively:
 ```Java
 ...
-import ca.auxility.baseadapter.view.recyclerview.RecyclerViewBindingAdapter;
+import dev.auxility.baseadapter.view.recyclerview.RecyclerViewBindingAdapter;
 ...
 RecyclerView rv;
 Adapter<YourItem> adapter;

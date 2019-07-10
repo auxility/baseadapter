@@ -7,7 +7,7 @@
   <data>
     <variable
         name="item"
-        type="ca.auxility.baseadapter.sample.FilterablePagerItem"
+        type="dev.auxility.baseadapter.sample.FilterablePagerItem"
         />
   </data>
 

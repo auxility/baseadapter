@@ -7,7 +7,7 @@
 
   <fragment
       android:id="@+id/mainFragment"
-      android:name="ca.auxility.baseadapter.sample.MainFragment"
+      android:name="dev.auxility.baseadapter.sample.MainFragment"
       tools:layout="@layout/fragment_main"
       android:label="MainFragment">
     <action
@@ -19,12 +19,12 @@
   </fragment>
   <fragment
       android:id="@+id/baseAdapterSampleFragment"
-      android:name="ca.auxility.baseadapter.sample.BaseAdapterSampleFragment"
+      android:name="dev.auxility.baseadapter.sample.BaseAdapterSampleFragment"
       tools:layout="@layout/fragment_tabbed"
       android:label="BaseAdapterSampleFragment"/>
   <fragment
       android:id="@+id/filterableAdapterSampleFragment"
-      android:name="ca.auxility.baseadapter.sample.FilterableAdapterSampleFragment"
+      android:name="dev.auxility.baseadapter.sample.FilterableAdapterSampleFragment"
       tools:layout="@layout/fragment_tabbed"
       android:label="FilterableAdapterSampleFragment"/>
 </navigation>
