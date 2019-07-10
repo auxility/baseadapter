@@ -13,11 +13,11 @@ android:
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
     - android-$ANDROID_API_LEVEL
     - extra-android-m2repository
-    - extra-google-google_play_services
     - extra-google-m2repository
 licenses:
   - android-sdk-license-.+
   - google-gdk-license-.+
+  - android-sdk-preview-license-52d11cd2
 script:
   - ./gradlew test --stacktrace --no-daemon
 before_install:
