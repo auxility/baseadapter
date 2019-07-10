@@ -43,7 +43,7 @@ Step 2: Add the dependency to your app gradle file
 ```Groovy
 dependencies {
   //...
-  implementation 'dev.auxility.baseadapter:$latestVersion'
+  implementation 'com.github.auxility:baseadapter:$latestVersion'
   //...
 }
 ```
