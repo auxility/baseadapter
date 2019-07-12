@@ -75,7 +75,7 @@ public class ViewPagerAdapter extends PagerAdapter implements AdapterDataObserve
       if (states == null) {
         states = new ArrayList<>();
       }
-      while (states.size() < position) {
+      while (states.size() <= position) {
         states.add(null);
       }
       /*we have to avoid state saving in case if item removed
