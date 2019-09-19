@@ -9,7 +9,7 @@ android {
     minSdkVersion minVersion
     targetSdkVersion targetVersion
     versionCode gitVersioner.versionCode
-    versionName "2.0.0"
+    versionName "2.0.1"
     println('VERSION_CODE: ' + gitVersioner.versionCode)
 
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
