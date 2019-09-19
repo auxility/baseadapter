@@ -79,7 +79,7 @@ public class BaseAdapter<V extends Item> extends AbstractAdapter<V> {
   @Override public boolean addAll(int index, @NonNull Collection<? extends V> c) {
     boolean returnValue = items.addAll(index, c);
     updateSize();
-    notifyItemRangeInserted(index, index + c.size());
+    notifyItemRangeInserted(index, c.size());
     return returnValue;
   }
 

@@ -24,8 +24,8 @@ public class AdapterObserver<V extends Item> implements AdapterDataObserver {
     this.items.add(position, this.adapter.get(position));
   }
 
-  @Override public void notifyOnItemRangeInserted(int positionStart, int positionEnd) {
-    this.items.addAll(positionStart, getRange(positionStart, positionEnd));
+  @Override public void notifyOnItemRangeInserted(int positionStart, int count) {
+    this.items.addAll(positionStart, getRange(positionStart, positionStart + count));
   }
 
   @Override public void notifyOnItemRemoved(int position) {
