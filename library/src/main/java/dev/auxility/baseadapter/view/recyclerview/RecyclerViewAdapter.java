@@ -17,7 +17,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerBindingHol
   @NonNull
   private Adapter adapter;
 
-  RecyclerViewAdapter(@NonNull Adapter adapter) {
+  public RecyclerViewAdapter(@NonNull Adapter adapter) {
     this.adapter = adapter;
   }
 
