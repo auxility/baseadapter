@@ -16,6 +16,9 @@
     <action
         android:id="@+id/action_mainFragment_to_filterableAdapterSampleFragment"
         app:destination="@id/filterableAdapterSampleFragment"/>
+    <action
+        android:id="@+id/action_mainFragment_to_endlessAdapterSampleFragment"
+        app:destination="@id/endlessAdapterSampleFragment" />
   </fragment>
   <fragment
       android:id="@+id/baseAdapterSampleFragment"
@@ -27,4 +30,9 @@
       android:name="dev.auxility.baseadapter.sample.FilterableAdapterSampleFragment"
       tools:layout="@layout/fragment_tabbed"
       android:label="FilterableAdapterSampleFragment"/>
+  <fragment
+      android:id="@+id/endlessAdapterSampleFragment"
+      android:name="dev.auxility.baseadapter.sample.EndlessAdapterSampleFragment"
+      android:label="EndlessAdapterSampleFragment"
+      tools:layout="@layout/fragment_tabbed" />
 </navigation>
