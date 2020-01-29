@@ -11,29 +11,34 @@ import dev.auxility.baseadapter.sample.databinding.FragmentMainBinding
 
 class MainFragment : androidx.fragment.app.Fragment() {
 
-  private lateinit var binding: FragmentMainBinding
+    private lateinit var binding: FragmentMainBinding
 
-  override fun onCreateView(
-    inflater: LayoutInflater,
-    container: ViewGroup?,
-    savedInstanceState: Bundle?
-  ): View? {
-    binding = DataBindingUtil.inflate(
-        inflater,
-        layout.fragment_main, container, false
-    )
-    binding.baseAdapterBtn.setOnClickListener { btn ->
-      btn.findNavController()
-          .navigate(
-              R.id.action_mainFragment_to_baseAdapterSampleFragment
-          )
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+                inflater,
+                layout.fragment_main, container, false
+        )
+        binding.baseAdapterBtn.setOnClickListener { btn ->
+            btn.findNavController()
+                    .navigate(
+                            R.id.action_mainFragment_to_baseAdapterSampleFragment
+                    )
+        }
+        binding.filterableAdapterBtn.setOnClickListener { btn ->
+            btn.findNavController()
+                    .navigate(
+                            R.id.action_mainFragment_to_filterableAdapterSampleFragment
+                    )
+        }
+        binding.endlessAdapterBtn.setOnClickListener {
+            it.findNavController().navigate(
+                    R.id.action_mainFragment_to_endlessAdapterSampleFragment
+            )
+        }
+        return binding.root
     }
-    binding.filterableAdapterBtn.setOnClickListener { btn ->
-      btn.findNavController()
-          .navigate(
-              R.id.action_mainFragment_to_filterableAdapterSampleFragment
-          )
-    }
-    return binding.root
-  }
 }

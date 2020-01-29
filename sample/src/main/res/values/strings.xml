@@ -3,6 +3,7 @@
   <string name="baseadapter_sample">BaseAdapter Sample</string>
   <string name="sample">Sample</string>
   <string name="filterableadapter_sample">FilterableAdapter Sample</string>
+  <string name="endless_adapter_sample">EndlessAdapter Sample</string>
   <string name="recyclerview">RecyclerView</string>
   <string name="viewpager">ViewPager</string>
   <string name="remove_last">Remove Last</string>
