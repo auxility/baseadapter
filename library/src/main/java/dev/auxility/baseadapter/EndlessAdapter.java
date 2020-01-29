@@ -1,6 +1,7 @@
 package dev.auxility.baseadapter;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.Bindable;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -32,6 +33,7 @@ public class EndlessAdapter<V extends Item> extends AbstractAdapterDecorator<V> 
         this(new BaseAdapter<V>(), threshold, listener);
     }
 
+    @Bindable
     @Override
     public int getSize() {
         int size = getAdapter().getSize();
